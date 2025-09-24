@@ -3,7 +3,7 @@
 
 [logging]
 # 全局日志级别：DEBUG, INFO, WARNING, ERROR, CRITICAL
-level = "INFO"
+level = "DEBUG"
 
 # 日志格式配置
 [logging.format]
@@ -18,7 +18,7 @@ structured = "json"
 [logging.handlers.console]
 enabled = true
 colored = true  # 是否启用彩色输出
-level = "INFO"
+level = "DEBUG"
 
 # 文件处理器
 [logging.handlers.file]
@@ -39,19 +39,19 @@ directory = "./logs"
 
 # 主应用日志
 [logging.loggers.tradingagents]
-level = "INFO"
+level = "DEBUG"
 
 # Web界面日志
 [logging.loggers.web]
-level = "INFO"
+level = "DEBUG"
 
 # 数据流日志
 [logging.loggers.dataflows]
-level = "INFO"
+level = "DEBUG"
 
 # LLM适配器日志
 [logging.loggers.llm_adapters]
-level = "INFO"
+level = "DEBUG"
 
 # 第三方库日志（通常设置为WARNING减少噪音）
 [logging.loggers.streamlit]

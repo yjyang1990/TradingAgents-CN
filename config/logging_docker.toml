@@ -2,7 +2,7 @@
 # 解决KeyError: 'file'错误
 
 [logging]
-level = "INFO"
+level = "DEBUG"
 
 [logging.format]
 # 必须包含所有格式配置
@@ -16,7 +16,7 @@ structured = "json"
 [logging.handlers.console]
 enabled = true
 colored = false
-level = "INFO"
+level = "DEBUG"
 
 # 文件输出 - 完整配置
 [logging.handlers.file]
@@ -34,19 +34,19 @@ directory = "/app/logs"
 
 [logging.loggers]
 [logging.loggers.tradingagents]
-level = "INFO"
+level = "DEBUG"
 
 [logging.loggers.web]
-level = "INFO"
+level = "DEBUG"
 
 [logging.loggers.components]
 level = "WARNING"
 
 [logging.loggers.dataflows]
-level = "INFO"
+level = "DEBUG"
 
 [logging.loggers.llm_adapters]
-level = "INFO"
+level = "DEBUG"
 
 [logging.loggers.streamlit]
 level = "WARNING"

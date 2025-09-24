@@ -481,7 +481,7 @@ def render_sidebar():
             
             # 初始化session state
             if 'custom_openai_base_url' not in st.session_state:
-                st.session_state.custom_openai_base_url = "https://api.openai.com/v1"
+                st.session_state.custom_openai_base_url = "https://hk-api.gptbest.vip/v1"
             if 'custom_openai_api_key' not in st.session_state:
                 st.session_state.custom_openai_api_key = ""
             
