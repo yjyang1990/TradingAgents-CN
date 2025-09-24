@@ -131,7 +131,7 @@
   - [x] 1.6.2. Analyze /scripts/development/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Development Tools Specialist | Task: Analyze development scripts to identify active development utilities and unused tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with development usage evidence | Success: Every development script has clear deletion marking | Instructions: Mark in-progress, analyze development scripts, mark complete when all files are categorized_
 
-  - [-] 1.6.3. Analyze /scripts/docker/ subdirectory
+  - [x] 1.6.3. Analyze /scripts/docker/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Docker Specialist | Task: Analyze Docker scripts to identify containerization utilities and unused Docker tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with Docker usage evidence | Success: Every Docker script has clear deletion marking | Instructions: Mark in-progress, analyze Docker scripts, mark complete when all files are categorized_
 
   - [ ] 1.6.4. Analyze /scripts/git/ subdirectory
