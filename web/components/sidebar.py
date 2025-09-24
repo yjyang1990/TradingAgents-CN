@@ -249,7 +249,7 @@ def render_sidebar():
 
         # 根据提供商显示不同的模型选项
         if llm_provider == "dashscope":
-            dashscope_options = ["qwen-turbo", "qwen-plus-latest", "qwen-max"]
+            dashscope_options = ["qwen-turbo", "qwen-plus-latest", "qwen3-max"]
 
             # 获取当前选择的索引
             current_index = 1  # 默认选择qwen-plus-latest
@@ -263,7 +263,7 @@ def render_sidebar():
                 format_func=lambda x: {
                     "qwen-turbo": "Turbo - 快速",
                     "qwen-plus-latest": "Plus - 平衡",
-                    "qwen-max": "Max - 最强"
+                    "qwen3-max": "Max - 最强"
                 }[x],
                 help="选择用于分析的阿里百炼模型",
                 key="dashscope_model_select"

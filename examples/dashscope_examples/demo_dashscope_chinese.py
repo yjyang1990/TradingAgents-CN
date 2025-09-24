@@ -155,7 +155,7 @@ def compare_models_chinese():
     models = [
         ("qwen-turbo", "通义千问 Turbo"),
         ("qwen-plus", "通义千问 Plus"),
-        ("qwen-max", "通义千问 Max")
+        ("qwen3-max", "通义千问 Max")
     ]
     
     question = "请用一段话总结苹果公司当前的投资价值，包括优势和风险。"

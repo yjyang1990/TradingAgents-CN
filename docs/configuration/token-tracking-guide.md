@@ -151,7 +151,7 @@ from tradingagents.config.config_manager import config_manager, PricingConfig
 # 添加自定义定价
 custom_pricing = PricingConfig(
     provider="dashscope",
-    model_name="qwen-max",
+    model_name="qwen3-max",
     input_price_per_1k=0.02,   # 每1000个输入token的价格（人民币）
     output_price_per_1k=0.06,  # 每1000个输出token的价格（人民币）
     currency="CNY"
@@ -170,7 +170,7 @@ config_manager.save_pricing(pricing_list)
 |------|----------------------|----------------------|
 | qwen-turbo | 0.002 | 0.006 |
 | qwen-plus-latest | 0.004 | 0.012 |
-| qwen-max | 0.02 | 0.06 |
+| qwen3-max | 0.02 | 0.06 |
 
 ### OpenAI
 

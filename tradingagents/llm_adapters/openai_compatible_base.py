@@ -339,8 +339,8 @@ OPENAI_COMPATIBLE_PROVIDERS = {
             "qwen-turbo": {"context_length": 8192, "supports_function_calling": True},
             "qwen-plus": {"context_length": 32768, "supports_function_calling": True},
             "qwen-plus-latest": {"context_length": 32768, "supports_function_calling": True},
-            "qwen-max": {"context_length": 32768, "supports_function_calling": True},
-            "qwen-max-latest": {"context_length": 32768, "supports_function_calling": True}
+            "qwen3-max": {"context_length": 32768, "supports_function_calling": True},
+            "qwen3-max-latest": {"context_length": 32768, "supports_function_calling": True}
         }
     },
     "qianfan": {

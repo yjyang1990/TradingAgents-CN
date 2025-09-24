@@ -108,13 +108,13 @@ DASHSCOPE_OPENAI_MODELS = {
         "supports_function_calling": True,
         "recommended_for": ["最新功能", "复杂分析", "专业任务"]
     },
-    "qwen-max": {
+    "qwen3-max": {
         "description": "通义千问 Max - 最强性能，适合复杂任务",
         "context_length": 32768,
         "supports_function_calling": True,
         "recommended_for": ["复杂推理", "专业分析", "高质量输出"]
     },
-    "qwen-max-latest": {
+    "qwen3-max-latest": {
         "description": "通义千问 Max 最新版 - 最强性能和最新功能",
         "context_length": 32768,
         "supports_function_calling": True,

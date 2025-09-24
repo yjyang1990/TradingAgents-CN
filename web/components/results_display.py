@@ -100,7 +100,7 @@ def render_analysis_info(results):
             model_display = {
                 'qwen-turbo': 'Qwen Turbo',
                 'qwen-plus': 'Qwen Plus',
-                'qwen-max': 'Qwen Max',
+                'qwen3-max': 'Qwen Max',
                 'gemini-2.0-flash': 'Gemini 2.0 Flash',
                 'gemini-1.5-pro': 'Gemini 1.5 Pro',
                 'gemini-1.5-flash': 'Gemini 1.5 Flash',

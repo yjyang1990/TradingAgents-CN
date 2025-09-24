@@ -60,7 +60,7 @@ python -m streamlit run web/app.py
 
 | 供应商 | 模型示例 | 货币 | 说明 |
 |--------|----------|------|------|
-| **阿里百炼** | qwen-turbo, qwen-plus-latest, qwen-max | CNY | 国产模型，推荐使用 |
+| **阿里百炼** | qwen-turbo, qwen-plus-latest, qwen3-max | CNY | 国产模型，推荐使用 |
 | **OpenAI** | gpt-3.5-turbo, gpt-4, gpt-4-turbo | USD | 国际领先模型 |
 | **Google** | gemini-pro, gemini-pro-vision | USD | Google最新模型 |
 | **Anthropic** | claude-3-sonnet, claude-3-opus | USD | 高质量对话模型 |
@@ -108,7 +108,7 @@ python -m streamlit run web/app.py
 |------|----------|----------|------|
 | qwen-turbo | ¥0.002 | ¥0.006 | 快速响应 |
 | qwen-plus | ¥0.004 | ¥0.012 | 平衡性能 |
-| qwen-max | ¥0.020 | ¥0.060 | 最强性能 |
+| qwen3-max | ¥0.020 | ¥0.060 | 最强性能 |
 
 #### **OpenAI (USD/1000 tokens)**
 | 模型 | 输入价格 | 输出价格 | 说明 |

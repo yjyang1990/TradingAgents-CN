@@ -241,7 +241,7 @@ def test_model_comparison():
             "qwen-turbo",
             "qwen-plus",
             "qwen-plus-latest",
-            "qwen-max-latest"
+            "qwen3-max-latest"
         ]
         
         prompt = "请调用get_info工具查询'股票市场今日表现'"

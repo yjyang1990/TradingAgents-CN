@@ -50,7 +50,7 @@ def demo_cost_calculation():
     test_cases = [
         ("dashscope", "qwen-turbo", 1000, 500, "快速分析"),
         ("dashscope", "qwen-plus", 2000, 1000, "标准分析"),
-        ("dashscope", "qwen-max", 3000, 1500, "深度分析"),
+        ("dashscope", "qwen3-max", 3000, 1500, "深度分析"),
         ("openai", "gpt-3.5-turbo", 1000, 500, "GPT-3.5分析"),
         ("google", "gemini-pro", 1000, 500, "Gemini分析"),
     ]

@@ -50,7 +50,7 @@ def test_selections_dictionary_keys():
             mock_depth.return_value = 3
             mock_llm.return_value = ('dashscope', 'http://localhost:8000')
             mock_shallow.return_value = 'qwen-turbo'
-            mock_deep.return_value = 'qwen-max'
+            mock_deep.return_value = 'qwen3-max'
             
             # 调用函数
             selections = get_user_selections()

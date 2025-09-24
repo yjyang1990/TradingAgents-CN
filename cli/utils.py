@@ -184,7 +184,7 @@ def select_shallow_thinking_agent(provider) -> str:
         "阿里百炼 (dashscope)": [
             ("通义千问 Turbo - 快速响应，适合日常对话", "qwen-turbo"),
             ("通义千问 Plus - 平衡性能和成本", "qwen-plus"),
-            ("通义千问 Max - 最强性能", "qwen-max"),
+            ("通义千问 Max - 最强性能", "qwen3-max"),
         ],
         "deepseek v3": [
             ("DeepSeek Chat - 通用对话模型，适合股票投资分析", "deepseek-chat"),
@@ -281,8 +281,8 @@ def select_deep_thinking_agent(provider) -> str:
         "阿里百炼 (dashscope)": [
             ("通义千问 Turbo - 快速响应，适合日常对话", "qwen-turbo"),
             ("通义千问 Plus - 平衡性能和成本", "qwen-plus"),
-            ("通义千问 Max - 最强性能", "qwen-max"),
-            ("通义千问 Max 长文本版 - 支持超长上下文", "qwen-max-longcontext"),
+            ("通义千问 Max - 最强性能", "qwen3-max"),
+            ("通义千问 Max 长文本版 - 支持超长上下文", "qwen3-max-longcontext"),
         ],
         "deepseek v3": [
             ("DeepSeek Chat - 通用对话模型，适合股票投资分析", "deepseek-chat"),

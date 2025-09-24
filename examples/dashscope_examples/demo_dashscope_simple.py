@@ -96,7 +96,7 @@ def test_multiple_models():
     models = [
         ("qwen-turbo", "通义千问 Turbo - 快速响应"),
         ("qwen-plus-latest", "通义千问 Plus - 平衡性能"),
-        ("qwen-max", "通义千问 Max - 最强性能")
+        ("qwen3-max", "通义千问 Max - 最强性能")
     ]
     
     question = "请用一句话总结苹果公司的核心竞争优势。"

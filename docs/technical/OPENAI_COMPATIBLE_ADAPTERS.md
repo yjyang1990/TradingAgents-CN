@@ -177,7 +177,7 @@ from tradingagents.llm_adapters.openai_compatible_base import create_openai_comp
 
 llm = create_openai_compatible_llm(
     provider="dashscope",
-    model="qwen-max-latest",
+    model="qwen3-max-latest",
     temperature=0.0,
     max_tokens=3000
 )
@@ -261,7 +261,7 @@ class EnhancedDashScopeAdapter(ChatDashScopeOpenAI):
 ### 1. 模型选择
 - **快速任务**: qwen-turbo
 - **复杂分析**: qwen-plus-latest
-- **最高质量**: qwen-max-latest
+- **最高质量**: qwen3-max-latest
 
 ### 2. 参数调优
 - **temperature**: 0.1 (分析任务)

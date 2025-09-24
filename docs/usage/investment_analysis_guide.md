@@ -108,7 +108,7 @@ ANALYSIS_DATE = "2024-06-26"  # 修改分析日期
 
 ```python
 # 在配置中选择不同的模型
-"deep_think_llm": "qwen-max",     # 最高质量，适合深度分析
+"deep_think_llm": "qwen3-max",     # 最高质量，适合深度分析
 "quick_think_llm": "qwen-plus",   # 平衡性能，日常使用
 # "qwen-turbo" 适合快速查询
 ```

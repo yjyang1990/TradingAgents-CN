@@ -62,7 +62,7 @@ qwen_models = {
         "recommended_for": ["中文理解", "快速响应", "日常分析"],
         "features": ["中文优化", "响应快速", "理解准确"]
     },
-    "qwen-max": {
+    "qwen3-max": {
         "description": "通义千问Max模型",
         "context_length": 8000,
         "cost_per_1k_tokens": {"input": 0.02, "output": 0.06},

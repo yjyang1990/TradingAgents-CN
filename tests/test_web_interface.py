@@ -70,7 +70,7 @@ def test_model_options():
     print("=" * 60)
     
     # 阿里百炼模型选项
-    dashscope_models = ["qwen-turbo", "qwen-plus", "qwen-max"]
+    dashscope_models = ["qwen-turbo", "qwen-plus", "qwen3-max"]
     print("📊 阿里百炼模型选项:")
     for model in dashscope_models:
         print(f"   ✅ {model}")

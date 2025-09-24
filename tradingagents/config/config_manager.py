@@ -236,7 +236,7 @@ class ConfigManager:
                 # 阿里百炼定价 (人民币)
                 PricingConfig("dashscope", "qwen-turbo", 0.002, 0.006, "CNY"),
                 PricingConfig("dashscope", "qwen-plus-latest", 0.004, 0.012, "CNY"),
-                PricingConfig("dashscope", "qwen-max", 0.02, 0.06, "CNY"),
+                PricingConfig("dashscope", "qwen3-max", 0.02, 0.06, "CNY"),
 
                 # DeepSeek定价 (人民币) - 2025年最新价格
                 PricingConfig("deepseek", "deepseek-chat", 0.0014, 0.0028, "CNY"),

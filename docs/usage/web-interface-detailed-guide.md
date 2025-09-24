@@ -60,7 +60,7 @@ docker-compose ps
 
 #### LLM提供商选择
 - **DashScope (阿里百炼)** ⭐ 推荐中文用户
-  - 模型: qwen-turbo, qwen-plus, qwen-max
+  - 模型: qwen-turbo, qwen-plus, qwen3-max
   - 特点: 中文优化，成本效益高
   
 - **DeepSeek V3**

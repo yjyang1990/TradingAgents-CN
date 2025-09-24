@@ -257,12 +257,12 @@ DASHSCOPE_MODELS = {
         "context_length": 32768,
         "recommended_for": ["复杂分析", "专业任务", "深度思考"]
     },
-    "qwen-max": {
+    "qwen3-max": {
         "description": "通义千问 Max - 最强性能",
         "context_length": 32768,
         "recommended_for": ["最复杂任务", "专业分析", "高质量输出"]
     },
-    "qwen-max-longcontext": {
+    "qwen3-max-longcontext": {
         "description": "通义千问 Max 长文本版 - 支持超长上下文",
         "context_length": 1000000,
         "recommended_for": ["长文档分析", "大量数据处理", "复杂推理"]

@@ -95,8 +95,8 @@ python demo_dashscope.py
 |---------|--------|------|----------|
 | **通义千问 Turbo** | `qwen-turbo` | 快速响应，成本低 | 快速任务、日常对话 |
 | **通义千问 Plus** | `qwen-plus-latest` | 平衡性能和成本 | 复杂分析、专业任务 |
-| **通义千问 Max** | `qwen-max` | 最强性能 | 最复杂任务、高质量输出 |
-| **通义千问 Max 长文本** | `qwen-max-longcontext` | 超长上下文 | 长文档分析、大量数据处理 |
+| **通义千问 Max** | `qwen3-max` | 最强性能 | 最复杂任务、高质量输出 |
+| **通义千问 Max 长文本** | `qwen3-max-longcontext` | 超长上下文 | 长文档分析、大量数据处理 |
 
 ### 推荐配置
 
@@ -114,7 +114,7 @@ config = {
 ```python
 config = {
     "llm_provider": "dashscope", 
-    "deep_think_llm": "qwen-max",       # 深度思考使用Max
+    "deep_think_llm": "qwen3-max",       # 深度思考使用Max
     "quick_think_llm": "qwen-plus",     # 快速任务使用Plus
     "max_debate_rounds": 2,             # 增加辩论轮次
 }
@@ -124,7 +124,7 @@ config = {
 ```python
 config = {
     "llm_provider": "dashscope",
-    "deep_think_llm": "qwen-max-longcontext",  # 使用长文本版本
+    "deep_think_llm": "qwen3-max-longcontext",  # 使用长文本版本
     "quick_think_llm": "qwen-plus",
     "max_debate_rounds": 1,
 }
@@ -157,7 +157,7 @@ print(decision)
 config = DEFAULT_CONFIG.copy()
 config.update({
     "llm_provider": "dashscope",
-    "deep_think_llm": "qwen-max",
+    "deep_think_llm": "qwen3-max",
     "quick_think_llm": "qwen-plus-latest",
     "max_debate_rounds": 2,
     "max_risk_discuss_rounds": 2,
@@ -168,7 +168,7 @@ config.update({
 from tradingagents.llm_adapters import ChatDashScope
 
 custom_llm = ChatDashScope(
-    model="qwen-max",
+    model="qwen3-max",
     temperature=0.1,
     max_tokens=3000,
     top_p=0.9
@@ -180,7 +180,7 @@ custom_llm = ChatDashScope(
 ### 典型使用成本
 - **经济模式**: ¥0.01-0.05/次分析 (使用 qwen-turbo)
 - **标准模式**: ¥0.05-0.15/次分析 (使用 qwen-plus)
-- **高精度模式**: ¥0.10-0.30/次分析 (使用 qwen-max)
+- **高精度模式**: ¥0.10-0.30/次分析 (使用 qwen3-max)
 
 ### 成本优化建议
 1. **合理选择模型**: 根据任务复杂度选择合适的模型

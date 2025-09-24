@@ -74,7 +74,7 @@ streamlit run web/app.py
 
 **技术配置**:
 - **辩论轮次**: 1轮 (研究员) + 2轮 (风险评估)
-- **AI模型**: qwen-plus + qwen-max (质量优先)
+- **AI模型**: qwen-plus + qwen3-max (质量优先)
 - **记忆功能**: ✅ 启用
 - **在线工具**: ✅ 启用
 
@@ -89,7 +89,7 @@ streamlit run web/app.py
 
 **技术配置**:
 - **辩论轮次**: 2轮 (研究员) + 2轮 (风险评估)
-- **AI模型**: qwen-plus + qwen-max (高质量)
+- **AI模型**: qwen-plus + qwen3-max (高质量)
 - **记忆功能**: ✅ 启用
 - **在线工具**: ✅ 启用
 
@@ -104,7 +104,7 @@ streamlit run web/app.py
 
 **技术配置**:
 - **辩论轮次**: 3轮 (研究员) + 3轮 (风险评估)
-- **AI模型**: qwen-max + qwen-max (最高质量)
+- **AI模型**: qwen3-max + qwen3-max (最高质量)
 - **记忆功能**: ✅ 启用
 - **在线工具**: ✅ 启用
 
