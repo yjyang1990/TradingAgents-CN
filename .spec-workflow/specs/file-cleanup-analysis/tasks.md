@@ -54,7 +54,7 @@
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and data flow dependencies
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Pipeline Analyst | Task: Analyze tradingagents/dataflows directory to map data processing dependencies | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with data flow usage evidence | Success: Every dataflow module has clear deletion marking | Instructions: Mark in-progress, analyze dataflows directory, mark complete when all files are categorized_
 
-  - [ ] 1.3.5. Analyze /tradingagents/graph/ subdirectory
+  - [x] 1.3.5. Analyze /tradingagents/graph/ subdirectory
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and graph dependencies
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Graph Analysis Specialist | Task: Analyze tradingagents/graph directory to identify graph processing modules and dependencies | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with graph usage evidence | Success: Every graph module has clear deletion marking | Instructions: Mark in-progress, analyze graph directory, mark complete when all files are categorized_
 
