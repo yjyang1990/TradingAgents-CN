@@ -86,7 +86,7 @@
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and component usage evidence
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Streamlit Component Developer | Task: Analyze web/components directory to identify Streamlit components and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with component usage evidence | Success: Every component has clear deletion marking | Instructions: Mark in-progress, analyze components directory, mark complete when all files are categorized_
 
-  - [ ] 1.4.2. Analyze /web/config/ subdirectory
+  - [-] 1.4.2. Analyze /web/config/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and web config usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Configuration Specialist | Task: Analyze web/config directory to identify web configuration files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with config usage evidence | Success: Every web config has clear deletion marking | Instructions: Mark in-progress, analyze web config directory, mark complete when all files are categorized_
 
@@ -101,7 +101,7 @@
   - [ ] 1.4.5. Analyze /web/utils/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Utility Analyst | Task: Analyze web/utils directory to identify web utilities and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with utility usage evidence | Success: Every web utility has clear deletion marking | Instructions: Mark in-progress, analyze web utils directory, mark complete when all files are categorized_
-- [-] 1.5. Analyze /tests directory
+- [x] 1.5. Analyze /tests directory
 
   - **Subdirectory Analysis Required**: Break down by version directories and individual test files
   - Purpose: Identify test files and match them to source code
@@ -115,7 +115,7 @@
   - [x] 1.5.2. Analyze /tests/integration/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Integration Test Specialist | Task: Analyze integration test directory to identify active integration tests and their coverage | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with integration coverage evidence | Success: Every integration test has clear deletion marking | Instructions: Mark in-progress, analyze integration tests, mark complete when all files are categorized_
 
-  - [-] 1.5.3. Analyze individual test files in /tests/ root
+  - [x] 1.5.3. Analyze individual test files in /tests/ root
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
 - [-] 1.6. Analyze /scripts directory
 
