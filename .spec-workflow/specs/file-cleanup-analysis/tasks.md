@@ -86,7 +86,7 @@
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and component usage evidence
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Streamlit Component Developer | Task: Analyze web/components directory to identify Streamlit components and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with component usage evidence | Success: Every component has clear deletion marking | Instructions: Mark in-progress, analyze components directory, mark complete when all files are categorized_
 
-  - [-] 1.4.2. Analyze /web/config/ subdirectory
+  - [x] 1.4.2. Analyze /web/config/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and web config usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Configuration Specialist | Task: Analyze web/config directory to identify web configuration files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with config usage evidence | Success: Every web config has clear deletion marking | Instructions: Mark in-progress, analyze web config directory, mark complete when all files are categorized_
 
@@ -134,7 +134,7 @@
   - [x] 1.6.3. Analyze /scripts/docker/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Docker Specialist | Task: Analyze Docker scripts to identify containerization utilities and unused Docker tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with Docker usage evidence | Success: Every Docker script has clear deletion marking | Instructions: Mark in-progress, analyze Docker scripts, mark complete when all files are categorized_
 
-  - [ ] 1.6.4. Analyze /scripts/git/ subdirectory
+  - [-] 1.6.4. Analyze /scripts/git/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Git Workflow Specialist | Task: Analyze Git scripts to identify version control utilities and unused Git tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with Git usage evidence | Success: Every Git script has clear deletion marking | Instructions: Mark in-progress, analyze Git scripts, mark complete when all files are categorized_
 
   - [ ] 1.6.5. Analyze /scripts/maintenance/ subdirectory
@@ -145,7 +145,7 @@
 
   - [ ] 1.6.7. Analyze /scripts/validation/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
-- [ ] 1.7. Analyze /docs directory
+- [-] 1.7. Analyze /docs directory
 
   - Purpose: Identify documentation structure and cross-references
   - **Output Format**: List each doc file/directory with KEEP/DELETE/REVIEW/UNKNOWN tag and reference analysis
