@@ -11,7 +11,7 @@
 
 **Subdirectory Requirements:** For directories containing subdirectories, analysis must drill down to each subdirectory level.
 
-**File-by-File Analysis:** analysis-results must be generated for each file in the directory, including subdirectories.
+**File-by-File Analysis:** .spec-workflow/specs/file-cleanup-analysis/analysis-results must be generated for each file in the directory, including subdirectories.
 
 **Git Commit Requirements:** After completing each task and marking it as [x], commit all changes to git with message format: "完成任务 [task-number] - [task-description]"
 
@@ -109,13 +109,13 @@
   - _Leverage: Test naming patterns, source-test matching_
   - _Requirements: 1.2_
 
-  - [-] 1.5.1. Analyze version-specific test directories (e.g., /tests/0.1.14/)
+  - [x] 1.5.1. Analyze version-specific test directories (e.g., /tests/0.1.14/)
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Test Version Manager | Task: Analyze version-specific test directories to identify outdated test suites | Output: For each version directory, provide KEEP/DELETE/REVIEW/UNKNOWN tag with version relevance analysis | Success: Every version test directory has clear deletion marking | Instructions: Mark in-progress, analyze version test directories, mark complete when all are categorized_
 
-  - [ ] 1.5.2. Analyze /tests/integration/ subdirectory
+  - [x] 1.5.2. Analyze /tests/integration/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Integration Test Specialist | Task: Analyze integration test directory to identify active integration tests and their coverage | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with integration coverage evidence | Success: Every integration test has clear deletion marking | Instructions: Mark in-progress, analyze integration tests, mark complete when all files are categorized_
 
-  - [ ] 1.5.3. Analyze individual test files in /tests/ root
+  - [-] 1.5.3. Analyze individual test files in /tests/ root
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
 - [-] 1.6. Analyze /scripts directory
 
@@ -125,13 +125,13 @@
   - _Leverage: Script analysis, dependency checking_
   - _Requirements: 1.2_
 
-  - [-] 1.6.1. Analyze /scripts/deployment/ subdirectory
+  - [x] 1.6.1. Analyze /scripts/deployment/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Deployment Specialist | Task: Analyze deployment scripts to identify active deployment processes and unused scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with deployment usage evidence | Success: Every deployment script has clear deletion marking | Instructions: Mark in-progress, analyze deployment scripts, mark complete when all files are categorized_
 
-  - [ ] 1.6.2. Analyze /scripts/development/ subdirectory
+  - [x] 1.6.2. Analyze /scripts/development/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Development Tools Specialist | Task: Analyze development scripts to identify active development utilities and unused tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with development usage evidence | Success: Every development script has clear deletion marking | Instructions: Mark in-progress, analyze development scripts, mark complete when all files are categorized_
 
-  - [ ] 1.6.3. Analyze /scripts/docker/ subdirectory
+  - [-] 1.6.3. Analyze /scripts/docker/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Docker Specialist | Task: Analyze Docker scripts to identify containerization utilities and unused Docker tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with Docker usage evidence | Success: Every Docker script has clear deletion marking | Instructions: Mark in-progress, analyze Docker scripts, mark complete when all files are categorized_
 
   - [ ] 1.6.4. Analyze /scripts/git/ subdirectory
