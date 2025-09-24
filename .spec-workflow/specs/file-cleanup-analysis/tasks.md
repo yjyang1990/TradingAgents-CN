@@ -11,6 +11,8 @@
 
 **Subdirectory Requirements:** For directories containing subdirectories, analysis must drill down to each subdirectory level.
 
+**Git Commit Requirements:** After completing each task and marking it as [x], commit all changes to git with message format: "完成任务 [task-number] - [task-description]"
+
 ## Phase 1: Directory-by-Directory Analysis
 
 - [x] 1.1. Analyze root directory files
@@ -48,7 +50,7 @@
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and configuration references
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Configuration Analyst | Task: Analyze tradingagents/config directory to identify configuration modules and their usage | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with configuration usage evidence | Success: Every config module has clear deletion marking | Instructions: Mark in-progress, analyze config directory, mark complete when all files are categorized_
 
-  - [ ] 1.3.4. Analyze /tradingagents/dataflows/ subdirectory
+  - [-] 1.3.4. Analyze /tradingagents/dataflows/ subdirectory
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and data flow dependencies
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Pipeline Analyst | Task: Analyze tradingagents/dataflows directory to map data processing dependencies | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with data flow usage evidence | Success: Every dataflow module has clear deletion marking | Instructions: Mark in-progress, analyze dataflows directory, mark complete when all files are categorized_
 
