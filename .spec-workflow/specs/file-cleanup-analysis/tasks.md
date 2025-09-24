@@ -120,8 +120,7 @@
   - [X] 1.5.3. Analyze individual test files in /tests/ root
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
-
-- [-] 1.6. Analyze /scripts directory
+- [X] 1.6. Analyze /scripts directory
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each script category
   - Purpose: Identify utility scripts and their usage contexts
@@ -150,7 +149,6 @@
   - [X] 1.6.7. Analyze /scripts/validation/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
-
 - [X] 1.7. Analyze /docs directory
 
   - Purpose: Identify documentation structure and cross-references
@@ -177,7 +175,7 @@
 
 ## Phase 2: Cross-Reference Analysis and Validation
 
-- [ ] 2.1. Build comprehensive deletion list from all analyses
+- [x] 2.1. Build comprehensive deletion list from all analyses
 
   - Combine all directory analysis results to create master deletion list
   - Purpose: Create unified view of all files marked for deletion with justifications
@@ -185,7 +183,7 @@
   - _Leverage: Results from all directory analyses_
   - _Requirements: 1.3, 2.1_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Engineer specializing in file analysis consolidation | Task: Combine all directory analysis results into comprehensive deletion list showing all files marked as DELETE with justifications | Output: Master deletion list with file paths, reasons, and analysis sources | Restrictions: Include only files explicitly marked as DELETE, maintain traceability to original analysis | Success: Complete deletion list with accurate file identification and justifications | Instructions: Mark in-progress, build deletion list, mark complete when list is validated_
-- [ ] 2.2. Implement safety validation for deletion list
+- [x] 2.2. Implement safety validation for deletion list
 
   - Cross-check all DELETE-marked files against critical file patterns
   - Purpose: Prevent accidental deletion of important files
@@ -196,7 +194,7 @@
 
 ## Phase 3: Execution and Cleanup
 
-- [ ] 3.1. Execute file cleanup using validated deletion list
+- [-] 3.1. Execute file cleanup using validated deletion list
 
   - Delete only safety-validated files from the master deletion list
   - Purpose: Systematically remove unused files while maintaining complete safety
