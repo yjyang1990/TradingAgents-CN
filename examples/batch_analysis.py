@@ -50,7 +50,7 @@ def batch_stock_analysis():
         llm = ChatDashScope(
             model="qwen-turbo",  # 使用快速模型进行批量分析
             temperature=0.1,
-            max_tokens=6400
+            max_tokens=3200
         )
         
         all_results = {}

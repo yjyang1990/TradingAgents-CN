@@ -32,7 +32,7 @@ def test_deepseek_tool_calling():
         deepseek_llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.1,
-            max_tokens=6400
+            max_tokens=3200
         )
         
         # 创建模拟的股票数据工具
@@ -115,7 +115,7 @@ def test_dashscope_tool_calling():
         dashscope_llm = ChatDashScope(
             model="qwen-plus",
             temperature=0.1,
-            max_tokens=6400
+            max_tokens=3200
         )
         
         # 创建相同的模拟工具

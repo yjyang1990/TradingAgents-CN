@@ -13,7 +13,12 @@ config["backend_url"] = "https://hk-api.gptbest.vip/v1"  # Use a different backe
 config["deep_think_llm"] = "gpt-4.1"  # Use a different model
 config["quick_think_llm"] = "gpt-4.1"  # Use a different model
 config["max_debate_rounds"] = 1  # Increase debate rounds
-config["online_tools"] = True  # Increase debate rounds
+config["online_tools"] = True  # Enable online tools
+
+# 启用并行分析师执行 - 新功能!
+config["parallel_analysts"] = True        # 启用并行执行
+config["max_parallel_workers"] = 4        # 4个并行工作线程
+config["analyst_timeout"] = 300           # 5分钟超时
 
 # Initialize with custom config
 ta = TradingAgentsGraph(debug=True, config=config)

@@ -308,10 +308,11 @@ class FinancialSituationMemory:
         else:
             self.embedding = "text-embedding-3-small"
             openai_key = os.getenv('OPENAI_API_KEY')
+            base_url = os.getenv('OPENAI_BASE_URL')
             if openai_key:
                 self.client = OpenAI(
                     api_key=openai_key,
-                    base_url=config["backend_url"]
+                    base_url=base_url
                 )
             else:
                 self.client = "DISABLED"

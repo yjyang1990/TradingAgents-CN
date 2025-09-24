@@ -151,7 +151,7 @@ from tradingagents.llm_adapters import ChatDashScopeOpenAI
 llm = ChatDashScopeOpenAI(
     model="qwen-plus-latest",
     temperature=0.1,
-    max_tokens=6400
+    max_tokens=3200
 )
 
 # 绑定工具

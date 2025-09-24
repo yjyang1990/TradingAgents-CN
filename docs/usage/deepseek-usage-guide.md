@@ -139,7 +139,7 @@ from tradingagents.llm_adapters.deepseek_adapter import ChatDeepSeek
 llm = ChatDeepSeek(
     model="deepseek-chat",
     temperature=0.1,        # 降低随机性
-    max_tokens=6400,        # 适中输出长度
+    max_tokens=3200,        # 适中输出长度
     session_id="my_session" # 会话级别统计
 )
 

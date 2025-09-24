@@ -30,7 +30,7 @@ def test_deepseek_market_analyst():
         deepseek_llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.1,
-            max_tokens=6400
+            max_tokens=3200
         )
         
         # 创建工具包
@@ -104,7 +104,7 @@ def test_dashscope_market_analyst():
         dashscope_llm = ChatDashScope(
             model="qwen-plus",
             temperature=0.1,
-            max_tokens=6400
+            max_tokens=3200
         )
         
         # 创建工具包

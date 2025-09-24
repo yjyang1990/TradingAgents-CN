@@ -721,7 +721,7 @@ def get_latest_analysis_id() -> Optional[str]:
                         continue
 
                 if latest_id:
-                    logger.info(f"📊 [恢复分析] 找到最新分析ID: {latest_id}")
+                    # logger.info(f"📊 [恢复分析] 找到最新分析ID: {latest_id}")
                     return latest_id
 
             except Exception as e:

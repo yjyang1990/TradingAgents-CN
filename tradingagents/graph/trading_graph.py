@@ -82,14 +82,14 @@ class TradingAgentsGraph:
                 base_url=self.config["backend_url"],
                 api_key=siliconflow_api_key,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = ChatOpenAI(
                 model=self.config["quick_think_llm"],
                 base_url=self.config["backend_url"],
                 api_key=siliconflow_api_key,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
         elif self.config["llm_provider"] == "openrouter":
             # OpenRouter支持：优先使用OPENROUTER_API_KEY，否则使用OPENAI_API_KEY
@@ -126,13 +126,13 @@ class TradingAgentsGraph:
                 model=self.config["deep_think_llm"],
                 google_api_key=google_api_key,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = ChatGoogleOpenAI(
                 model=self.config["quick_think_llm"],
                 google_api_key=google_api_key,
                 temperature=0.1,
-                max_tokens=6400,
+                max_tokens=3200,
                 client_options=client_options,
                 transport="rest"
             )
@@ -147,12 +147,12 @@ class TradingAgentsGraph:
             self.deep_thinking_llm = ChatDashScopeOpenAI(
                 model=self.config["deep_think_llm"],
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = ChatDashScopeOpenAI(
                 model=self.config["quick_think_llm"],
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
         elif (self.config["llm_provider"].lower() == "deepseek" or
               "deepseek" in self.config["llm_provider"].lower()):
@@ -172,14 +172,14 @@ class TradingAgentsGraph:
                 api_key=deepseek_api_key,
                 base_url=deepseek_base_url,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = ChatDeepSeek(
                 model=self.config["quick_think_llm"],
                 api_key=deepseek_api_key,
                 base_url=deepseek_base_url,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
                 )
 
             logger.info(f"✅ [DeepSeek] 已启用token统计功能")
@@ -201,14 +201,14 @@ class TradingAgentsGraph:
                 model=self.config["deep_think_llm"],
                 base_url=custom_base_url,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = create_openai_compatible_llm(
                 provider="custom_openai",
                 model=self.config["quick_think_llm"],
                 base_url=custom_base_url,
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             
             logger.info(f"✅ [自定义OpenAI] 已配置自定义端点: {custom_base_url}")
@@ -221,13 +221,13 @@ class TradingAgentsGraph:
                 provider="qianfan",
                 model=self.config["deep_think_llm"],
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             self.quick_thinking_llm = create_openai_compatible_llm(
                 provider="qianfan",
                 model=self.config["quick_think_llm"],
                 temperature=0.1,
-                max_tokens=6400
+                max_tokens=3200
             )
             logger.info("✅ [千帆] 文心一言适配器已配置成功")
         else:
@@ -281,8 +281,13 @@ class TradingAgentsGraph:
         self.ticker = None
         self.log_states_dict = {}  # date to full state dict
 
-        # Set up the graph
-        self.graph = self.graph_setup.setup_graph(selected_analysts)
+        # Set up the graph - 支持并行和串行两种模式
+        if self.config.get("parallel_analysts", False):
+            logger.info("🚀 [TradingGraph] 启用并行分析师执行模式")
+            self.graph = self.graph_setup.setup_parallel_graph(selected_analysts)
+        else:
+            logger.info("🔄 [TradingGraph] 使用串行分析师执行模式")
+            self.graph = self.graph_setup.setup_graph(selected_analysts)
 
     def _create_tool_nodes(self) -> Dict[str, ToolNode]:
         """Create tool nodes for different data sources."""
