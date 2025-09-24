@@ -82,7 +82,7 @@
   - _Leverage: Streamlit patterns, web framework analysis_
   - _Requirements: 1.2_
 
-  - [ ] 1.4.1. Analyze /web/components/ subdirectory
+  - [x] 1.4.1. Analyze /web/components/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and component usage evidence
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Streamlit Component Developer | Task: Analyze web/components directory to identify Streamlit components and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with component usage evidence | Success: Every component has clear deletion marking | Instructions: Mark in-progress, analyze components directory, mark complete when all files are categorized_
 
@@ -101,7 +101,7 @@
   - [ ] 1.4.5. Analyze /web/utils/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Utility Analyst | Task: Analyze web/utils directory to identify web utilities and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with utility usage evidence | Success: Every web utility has clear deletion marking | Instructions: Mark in-progress, analyze web utils directory, mark complete when all files are categorized_
-- [ ] 1.5. Analyze /tests directory
+- [-] 1.5. Analyze /tests directory
 
   - **Subdirectory Analysis Required**: Break down by version directories and individual test files
   - Purpose: Identify test files and match them to source code
@@ -109,7 +109,7 @@
   - _Leverage: Test naming patterns, source-test matching_
   - _Requirements: 1.2_
 
-  - [ ] 1.5.1. Analyze version-specific test directories (e.g., /tests/0.1.14/)
+  - [-] 1.5.1. Analyze version-specific test directories (e.g., /tests/0.1.14/)
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: QA Test Version Manager | Task: Analyze version-specific test directories to identify outdated test suites | Output: For each version directory, provide KEEP/DELETE/REVIEW/UNKNOWN tag with version relevance analysis | Success: Every version test directory has clear deletion marking | Instructions: Mark in-progress, analyze version test directories, mark complete when all are categorized_
 
   - [ ] 1.5.2. Analyze /tests/integration/ subdirectory
@@ -117,7 +117,7 @@
 
   - [ ] 1.5.3. Analyze individual test files in /tests/ root
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
-- [ ] 1.6. Analyze /scripts directory
+- [-] 1.6. Analyze /scripts directory
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each script category
   - Purpose: Identify utility scripts and their usage contexts
@@ -125,7 +125,7 @@
   - _Leverage: Script analysis, dependency checking_
   - _Requirements: 1.2_
 
-  - [ ] 1.6.1. Analyze /scripts/deployment/ subdirectory
+  - [-] 1.6.1. Analyze /scripts/deployment/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Deployment Specialist | Task: Analyze deployment scripts to identify active deployment processes and unused scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with deployment usage evidence | Success: Every deployment script has clear deletion marking | Instructions: Mark in-progress, analyze deployment scripts, mark complete when all files are categorized_
 
   - [ ] 1.6.2. Analyze /scripts/development/ subdirectory
