@@ -35,7 +35,7 @@ from components.sidebar import render_sidebar
 from components.header import render_header
 from components.analysis_form import render_analysis_form
 from components.results_display import render_results
-from components.login import render_login_form, check_authentication, render_user_info, render_sidebar_user_info, render_sidebar_logout, require_permission
+# from components.login import render_login_form, check_authentication, render_user_info, render_sidebar_user_info, render_sidebar_logout, require_permission
 from components.user_activity_dashboard import render_user_activity_dashboard, render_activity_summary_widget
 from utils.api_checker import check_api_keys
 from utils.analysis_runner import run_stock_analysis, validate_analysis_params, format_analysis_results
@@ -43,8 +43,8 @@ from utils.progress_tracker import SmartStreamlitProgressDisplay, create_smart_p
 from utils.async_progress_tracker import AsyncProgressTracker
 from components.async_progress_display import display_unified_progress
 from utils.smart_session_manager import get_persistent_analysis_id, set_persistent_analysis_id
-from utils.auth_manager import auth_manager
-from utils.user_activity_logger import user_activity_logger
+# from utils.auth_manager import auth_manager
+# from utils.user_activity_logger import user_activity_logger
 
 # 设置页面配置
 st.set_page_config(
@@ -318,13 +318,13 @@ st.markdown("""
 
 def initialize_session_state():
     """初始化会话状态"""
-    # 初始化认证相关状态
-    if 'authenticated' not in st.session_state:
-        st.session_state.authenticated = False
-    if 'user_info' not in st.session_state:
-        st.session_state.user_info = None
-    if 'login_time' not in st.session_state:
-        st.session_state.login_time = None
+    # 初始化认证相关状态 (已禁用)
+    # if 'authenticated' not in st.session_state:
+    #     st.session_state.authenticated = False
+    # if 'user_info' not in st.session_state:
+    #     st.session_state.user_info = None
+    # if 'login_time' not in st.session_state:
+    #     st.session_state.login_time = None
     
     # 初始化分析相关状态
     if 'analysis_results' not in st.session_state:
@@ -414,182 +414,182 @@ def initialize_session_state():
     except Exception as e:
         logger.warning(f"⚠️ [配置恢复] 表单配置恢复失败: {e}")
 
-def check_frontend_auth_cache():
-    """检查前端缓存并尝试恢复登录状态"""
-    from utils.auth_manager import auth_manager
-    
-    logger.info("🔍 开始检查前端缓存恢复")
-    logger.info(f"📊 当前认证状态: {st.session_state.get('authenticated', False)}")
-    logger.info(f"🔗 URL参数: {dict(st.query_params)}")
-    
-    # 如果已经认证，确保状态同步
-    if st.session_state.get('authenticated', False):
-        # 确保auth_manager也知道用户已认证
-        if not auth_manager.is_authenticated() and st.session_state.get('user_info'):
-            logger.info("🔄 同步认证状态到auth_manager")
-            try:
-                auth_manager.login_user(
-                    st.session_state.user_info, 
-                    st.session_state.get('login_time', time.time())
-                )
-                logger.info("✅ 认证状态同步成功")
-            except Exception as e:
-                logger.warning(f"⚠️ 认证状态同步失败: {e}")
-        else:
-            logger.info("✅ 用户已认证，跳过缓存检查")
-        return
-    
-    # 检查URL参数中是否有恢复信息
-    try:
-        import base64
-        restore_data = st.query_params.get('restore_auth')
-        
-        if restore_data:
-            logger.info("📥 发现URL中的恢复参数，开始恢复登录状态")
-            # 解码认证数据
-            auth_data = json.loads(base64.b64decode(restore_data).decode())
-            
-            # 兼容旧格式（直接是用户信息）和新格式（包含loginTime）
-            if 'userInfo' in auth_data:
-                user_info = auth_data['userInfo']
-                # 使用当前时间作为新的登录时间，避免超时问题
-                # 因为前端已经验证了lastActivity没有超时
-                login_time = time.time()
-            else:
-                # 旧格式兼容
-                user_info = auth_data
-                login_time = time.time()
-                
-            logger.info(f"✅ 成功解码用户信息: {user_info.get('username', 'Unknown')}")
-            logger.info(f"🕐 使用当前时间作为登录时间: {login_time}")
-            
-            # 恢复登录状态
-            if auth_manager.restore_from_cache(user_info, login_time):
-                # 清除URL参数
-                del st.query_params['restore_auth']
-                logger.info(f"✅ 从前端缓存成功恢复用户 {user_info['username']} 的登录状态")
-                logger.info("🧹 已清除URL恢复参数")
-                # 立即重新运行以应用恢复的状态
-                logger.info("🔄 触发页面重新运行")
-                st.rerun()
-            else:
-                logger.error("❌ 恢复登录状态失败")
-                # 恢复失败，清除URL参数
-                del st.query_params['restore_auth']
-        else:
-            # 如果没有URL参数，注入前端检查脚本
-            logger.info("📝 没有URL恢复参数，注入前端检查脚本")
-            inject_frontend_cache_check()
-    except Exception as e:
-        logger.warning(f"⚠️ 处理前端缓存恢复失败: {e}")
-        # 如果恢复失败，清除可能损坏的URL参数
-        if 'restore_auth' in st.query_params:
-            del st.query_params['restore_auth']
+# def check_frontend_auth_cache():
+#     """检查前端缓存并尝试恢复登录状态"""
+#     from utils.auth_manager import auth_manager
+#
+#     logger.info("🔍 开始检查前端缓存恢复")
+#     logger.info(f"📊 当前认证状态: {st.session_state.get('authenticated', False)}")
+#     logger.info(f"🔗 URL参数: {dict(st.query_params)}")
+#
+#     # 如果已经认证，确保状态同步
+#     if st.session_state.get('authenticated', False):
+#         # 确保auth_manager也知道用户已认证
+#         if not auth_manager.is_authenticated() and st.session_state.get('user_info'):
+#             logger.info("🔄 同步认证状态到auth_manager")
+#             try:
+#                 auth_manager.login_user(
+#                     st.session_state.user_info,
+#                     st.session_state.get('login_time', time.time())
+#                 )
+#                 logger.info("✅ 认证状态同步成功")
+#             except Exception as e:
+#                 logger.warning(f"⚠️ 认证状态同步失败: {e}")
+#         else:
+#             logger.info("✅ 用户已认证，跳过缓存检查")
+#         return
+#
+#     # 检查URL参数中是否有恢复信息
+#     try:
+#         import base64
+#         restore_data = st.query_params.get('restore_auth')
+#
+#         if restore_data:
+#             logger.info("📥 发现URL中的恢复参数，开始恢复登录状态")
+#             # 解码认证数据
+#             auth_data = json.loads(base64.b64decode(restore_data).decode())
+#
+#             # 兼容旧格式（直接是用户信息）和新格式（包含loginTime）
+#             if 'userInfo' in auth_data:
+#                 user_info = auth_data['userInfo']
+#                 # 使用当前时间作为新的登录时间，避免超时问题
+#                 # 因为前端已经验证了lastActivity没有超时
+#                 login_time = time.time()
+#             else:
+#                 # 旧格式兼容
+#                 user_info = auth_data
+#                 login_time = time.time()
+#
+#             logger.info(f"✅ 成功解码用户信息: {user_info.get('username', 'Unknown')}")
+#             logger.info(f"🕐 使用当前时间作为登录时间: {login_time}")
+#
+#             # 恢复登录状态
+#             if auth_manager.restore_from_cache(user_info, login_time):
+#                 # 清除URL参数
+#                 del st.query_params['restore_auth']
+#                 logger.info(f"✅ 从前端缓存成功恢复用户 {user_info['username']} 的登录状态")
+#                 logger.info("🧹 已清除URL恢复参数")
+#                 # 立即重新运行以应用恢复的状态
+#                 logger.info("🔄 触发页面重新运行")
+#                 st.rerun()
+#             else:
+#                 logger.error("❌ 恢复登录状态失败")
+#                 # 恢复失败，清除URL参数
+#                 del st.query_params['restore_auth']
+#         else:
+#             # 如果没有URL参数，注入前端检查脚本
+#             logger.info("📝 没有URL恢复参数，注入前端检查脚本")
+#             inject_frontend_cache_check()
+#     except Exception as e:
+#         logger.warning(f"⚠️ 处理前端缓存恢复失败: {e}")
+#         # 如果恢复失败，清除可能损坏的URL参数
+#         if 'restore_auth' in st.query_params:
+#             del st.query_params['restore_auth']
 
-def inject_frontend_cache_check():
-    """注入前端缓存检查脚本"""
-    logger.info("📝 准备注入前端缓存检查脚本")
-    
-    # 如果已经注入过，不重复注入
-    if st.session_state.get('cache_script_injected', False):
-        logger.info("⚠️ 前端脚本已注入，跳过重复注入")
-        return
-    
-    # 标记已注入
-    st.session_state.cache_script_injected = True
-    logger.info("✅ 标记前端脚本已注入")
-    
-    cache_check_js = """
-    <script>
-    // 前端缓存检查和恢复
-    function checkAndRestoreAuth() {
-        console.log('🚀 开始执行前端缓存检查');
-        console.log('📍 当前URL:', window.location.href);
-        
-        try {
-            // 检查URL中是否已经有restore_auth参数
-            const currentUrl = new URL(window.location);
-            if (currentUrl.searchParams.has('restore_auth')) {
-                console.log('🔄 URL中已有restore_auth参数，跳过前端检查');
-                return;
-            }
-            
-            const authData = localStorage.getItem('tradingagents_auth');
-            console.log('🔍 检查localStorage中的认证数据:', authData ? '存在' : '不存在');
-            
-            if (!authData) {
-                console.log('🔍 前端缓存中没有登录状态');
-                return;
-            }
-            
-            const data = JSON.parse(authData);
-            console.log('📊 解析的认证数据:', data);
-            
-            // 验证数据结构
-            if (!data.userInfo || !data.userInfo.username) {
-                console.log('❌ 认证数据结构无效，清除缓存');
-                localStorage.removeItem('tradingagents_auth');
-                return;
-            }
-            
-            const now = Date.now();
-            const timeout = 10 * 60 * 1000; // 10分钟
-            const timeSinceLastActivity = now - data.lastActivity;
-            
-            console.log('⏰ 时间检查:', {
-                now: new Date(now).toLocaleString(),
-                lastActivity: new Date(data.lastActivity).toLocaleString(),
-                timeSinceLastActivity: Math.round(timeSinceLastActivity / 1000) + '秒',
-                timeout: Math.round(timeout / 1000) + '秒'
-            });
-            
-            // 检查是否超时
-            if (timeSinceLastActivity > timeout) {
-                localStorage.removeItem('tradingagents_auth');
-                console.log('⏰ 登录状态已过期，自动清除');
-                return;
-            }
-            
-            // 更新最后活动时间
-            data.lastActivity = now;
-            localStorage.setItem('tradingagents_auth', JSON.stringify(data));
-            console.log('🔄 更新最后活动时间');
-            
-            console.log('✅ 从前端缓存恢复登录状态:', data.userInfo.username);
-            
-            // 保留现有的URL参数，只添加restore_auth参数
-            // 传递完整的认证数据，包括原始登录时间
-            const restoreData = {
-                userInfo: data.userInfo,
-                loginTime: data.loginTime
-            };
-            const restoreParam = btoa(JSON.stringify(restoreData));
-            console.log('📦 生成恢复参数:', restoreParam);
-            
-            // 保留所有现有参数
-            const existingParams = new URLSearchParams(currentUrl.search);
-            existingParams.set('restore_auth', restoreParam);
-            
-            // 构建新URL，保留现有参数
-            const newUrl = currentUrl.origin + currentUrl.pathname + '?' + existingParams.toString();
-            console.log('🔗 准备跳转到:', newUrl);
-            console.log('📋 保留的URL参数:', Object.fromEntries(existingParams));
-            
-            window.location.href = newUrl;
-            
-        } catch (e) {
-            console.error('❌ 前端缓存恢复失败:', e);
-            localStorage.removeItem('tradingagents_auth');
-        }
-    }
-    
-    // 延迟执行，确保页面完全加载
-    console.log('⏱️ 设置1000ms延迟执行前端缓存检查');
-    setTimeout(checkAndRestoreAuth, 1000);
-    </script>
-    """
-    
-    st.components.v1.html(cache_check_js, height=0)
+# def inject_frontend_cache_check():
+#     """注入前端缓存检查脚本"""
+#     logger.info("📝 准备注入前端缓存检查脚本")
+#
+#     # 如果已经注入过，不重复注入
+#     if st.session_state.get('cache_script_injected', False):
+#         logger.info("⚠️ 前端脚本已注入，跳过重复注入")
+#         return
+#
+#     # 标记已注入
+#     st.session_state.cache_script_injected = True
+#     logger.info("✅ 标记前端脚本已注入")
+#
+#     cache_check_js = """
+#     <script>
+#     // 前端缓存检查和恢复
+#     function checkAndRestoreAuth() {
+#         console.log('🚀 开始执行前端缓存检查');
+#         console.log('📍 当前URL:', window.location.href);
+#
+#         try {
+#             // 检查URL中是否已经有restore_auth参数
+#             const currentUrl = new URL(window.location);
+#             if (currentUrl.searchParams.has('restore_auth')) {
+#                 console.log('🔄 URL中已有restore_auth参数，跳过前端检查');
+#                 return;
+#             }
+#
+#             const authData = localStorage.getItem('tradingagents_auth');
+#             console.log('🔍 检查localStorage中的认证数据:', authData ? '存在' : '不存在');
+#
+#             if (!authData) {
+#                 console.log('🔍 前端缓存中没有登录状态');
+#                 return;
+#             }
+#
+#             const data = JSON.parse(authData);
+#             console.log('📊 解析的认证数据:', data);
+#
+#             // 验证数据结构
+#             if (!data.userInfo || !data.userInfo.username) {
+#                 console.log('❌ 认证数据结构无效，清除缓存');
+#                 localStorage.removeItem('tradingagents_auth');
+#                 return;
+#             }
+#
+#             const now = Date.now();
+#             const timeout = 10 * 60 * 1000; // 10分钟
+#             const timeSinceLastActivity = now - data.lastActivity;
+#
+#             console.log('⏰ 时间检查:', {
+#                 now: new Date(now).toLocaleString(),
+#                 lastActivity: new Date(data.lastActivity).toLocaleString(),
+#                 timeSinceLastActivity: Math.round(timeSinceLastActivity / 1000) + '秒',
+#                 timeout: Math.round(timeout / 1000) + '秒'
+#             });
+#
+#             // 检查是否超时
+#             if (timeSinceLastActivity > timeout) {
+#                 localStorage.removeItem('tradingagents_auth');
+#                 console.log('⏰ 登录状态已过期，自动清除');
+#                 return;
+#             }
+#
+#             // 更新最后活动时间
+#             data.lastActivity = now;
+#             localStorage.setItem('tradingagents_auth', JSON.stringify(data));
+#             console.log('🔄 更新最后活动时间');
+#
+#             console.log('✅ 从前端缓存恢复登录状态:', data.userInfo.username);
+#
+#             // 保留现有的URL参数，只添加restore_auth参数
+#             // 传递完整的认证数据，包括原始登录时间
+#             const restoreData = {
+#                 userInfo: data.userInfo,
+#                 loginTime: data.loginTime
+#             };
+#             const restoreParam = btoa(JSON.stringify(restoreData));
+#             console.log('📦 生成恢复参数:', restoreParam);
+#
+#             // 保留所有现有参数
+#             const existingParams = new URLSearchParams(currentUrl.search);
+#             existingParams.set('restore_auth', restoreParam);
+#
+#             // 构建新URL，保留现有参数
+#             const newUrl = currentUrl.origin + currentUrl.pathname + '?' + existingParams.toString();
+#             console.log('🔗 准备跳转到:', newUrl);
+#             console.log('📋 保留的URL参数:', Object.fromEntries(existingParams));
+#
+#             window.location.href = newUrl;
+#
+#         } catch (e) {
+#             console.error('❌ 前端缓存恢复失败:', e);
+#             localStorage.removeItem('tradingagents_auth');
+#         }
+#     }
+#
+#     // 延迟执行，确保页面完全加载
+#     console.log('⏱️ 设置1000ms延迟执行前端缓存检查');
+#     setTimeout(checkAndRestoreAuth, 1000);
+#     </script>
+#     """
+#
+#     st.components.v1.html(cache_check_js, height=0)
 
 def main():
     """主应用程序"""
@@ -597,29 +597,29 @@ def main():
     # 初始化会话状态
     initialize_session_state()
 
-    # 检查前端缓存恢复
-    check_frontend_auth_cache()
+    # 检查前端缓存恢复 (已禁用认证)
+    # check_frontend_auth_cache()
 
-    # 检查用户认证状态
-    if not auth_manager.is_authenticated():
-        # 最后一次尝试从session state恢复认证状态
-        if (st.session_state.get('authenticated', False) and 
-            st.session_state.get('user_info') and 
-            st.session_state.get('login_time')):
-            logger.info("🔄 从session state恢复认证状态")
-            try:
-                auth_manager.login_user(
-                    st.session_state.user_info, 
-                    st.session_state.login_time
-                )
-                logger.info(f"✅ 成功从session state恢复用户 {st.session_state.user_info.get('username', 'Unknown')} 的认证状态")
-            except Exception as e:
-                logger.warning(f"⚠️ 从session state恢复认证状态失败: {e}")
-        
-        # 如果仍然未认证，显示登录页面
-        if not auth_manager.is_authenticated():
-            render_login_form()
-            return
+    # 检查用户认证状态 (已禁用认证)
+    # if not auth_manager.is_authenticated():
+    #     # 最后一次尝试从session state恢复认证状态
+    #     if (st.session_state.get('authenticated', False) and
+    #         st.session_state.get('user_info') and
+    #         st.session_state.get('login_time')):
+    #         logger.info("🔄 从session state恢复认证状态")
+    #         try:
+    #             auth_manager.login_user(
+    #                 st.session_state.user_info,
+    #                 st.session_state.login_time
+    #             )
+    #             logger.info(f"✅ 成功从session state恢复用户 {st.session_state.user_info.get('username', 'Unknown')} 的认证状态")
+    #         except Exception as e:
+    #             logger.warning(f"⚠️ 从session state恢复认证状态失败: {e}")
+    #
+    #     # 如果仍然未认证，显示登录页面
+    #     if not auth_manager.is_authenticated():
+    #         render_login_form()
+    #         return
 
     # 全局侧边栏CSS样式 - 确保所有页面一致
     st.markdown("""
@@ -894,8 +894,8 @@ def main():
     st.sidebar.title("🤖 TradingAgents-CN")
     st.sidebar.markdown("---")
     
-    # 页面导航 - 在标题下方显示用户信息
-    render_sidebar_user_info()
+    # 页面导航 - 在标题下方显示用户信息 (已禁用认证)
+    # render_sidebar_user_info()
 
     # 在用户信息和功能导航之间添加分隔线
     st.sidebar.markdown("---")
@@ -909,27 +909,27 @@ def main():
         label_visibility="collapsed"
     )
     
-    # 记录页面访问活动
-    try:
-        user_activity_logger.log_page_visit(
-            page_name=page,
-            page_params={
-                "page_url": f"/app?page={page.split(' ')[1] if ' ' in page else page}",
-                "page_type": "main_navigation",
-                "access_method": "sidebar_selectbox"
-            }
-        )
-    except Exception as e:
-        logger.warning(f"记录页面访问活动失败: {e}")
+    # 记录页面访问活动 (已禁用认证)
+    # try:
+    #     user_activity_logger.log_page_visit(
+    #         page_name=page,
+    #         page_params={
+    #             "page_url": f"/app?page={page.split(' ')[1] if ' ' in page else page}",
+    #             "page_type": "main_navigation",
+    #             "access_method": "sidebar_selectbox"
+    #         }
+    #     )
+    # except Exception as e:
+    #     logger.warning(f"记录页面访问活动失败: {e}")
 
     # 在功能选择和AI模型配置之间添加分隔线
     st.sidebar.markdown("---")
 
     # 根据选择的页面渲染不同内容
     if page == "⚙️ 配置管理":
-        # 检查配置权限
-        if not require_permission("config"):
-            return
+        # 检查配置权限 (已禁用认证)
+        # if not require_permission("config"):
+        #     return
         try:
             from modules.config_management import render_config_management
             render_config_management()
@@ -938,9 +938,9 @@ def main():
             st.info("请确保已安装所有依赖包")
         return
     elif page == "💾 缓存管理":
-        # 检查管理员权限
-        if not require_permission("admin"):
-            return
+        # 检查管理员权限 (已禁用认证)
+        # if not require_permission("admin"):
+        #     return
         try:
             from modules.cache_management import main as cache_main
             cache_main()
@@ -948,9 +948,9 @@ def main():
             st.error(f"缓存管理页面加载失败: {e}")
         return
     elif page == "💰 Token统计":
-        # 检查配置权限
-        if not require_permission("config"):
-            return
+        # 检查配置权限 (已禁用认证)
+        # if not require_permission("config"):
+        #     return
         try:
             from modules.token_statistics import render_token_statistics
             render_token_statistics()
@@ -959,9 +959,9 @@ def main():
             st.info("请确保已安装所有依赖包")
         return
     elif page == "📋 操作日志":
-        # 检查管理员权限
-        if not require_permission("admin"):
-            return
+        # 检查管理员权限 (已禁用认证)
+        # if not require_permission("admin"):
+        #     return
         try:
             from components.operation_logs import render_operation_logs
             render_operation_logs()
@@ -970,9 +970,9 @@ def main():
             st.info("请确保已安装所有依赖包")
         return
     elif page == "📈 分析结果":
-        # 检查分析权限
-        if not require_permission("analysis"):
-            return
+        # 检查分析权限 (已禁用认证)
+        # if not require_permission("analysis"):
+        #     return
         try:
             from components.analysis_results import render_analysis_results
             render_analysis_results()
@@ -981,17 +981,17 @@ def main():
             st.info("请确保已安装所有依赖包")
         return
     elif page == "🔧 系统状态":
-        # 检查管理员权限
-        if not require_permission("admin"):
-            return
+        # 检查管理员权限 (已禁用认证)
+        # if not require_permission("admin"):
+        #     return
         st.header("🔧 系统状态")
         st.info("系统状态功能开发中...")
         return
 
     # 默认显示股票分析页面
-    # 检查分析权限
-    if not require_permission("analysis"):
-        return
+    # 检查分析权限 (已禁用认证)
+    # if not require_permission("analysis"):
+    #     return
         
     # 检查API密钥
     api_status = check_api_keys()
@@ -1082,8 +1082,8 @@ def main():
         st.sidebar.success("✅ 分析状态已清理")
         st.rerun()
 
-    # 在侧边栏底部添加退出按钮
-    render_sidebar_logout()
+    # 在侧边栏底部添加退出按钮 (已禁用认证)
+    # render_sidebar_logout()
 
     # 主内容区域 - 根据是否显示指南调整布局
     if show_guide:

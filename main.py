@@ -8,10 +8,10 @@ logger = get_logger('default')
 
 # Create a custom config
 config = DEFAULT_CONFIG.copy()
-config["llm_provider"] = "google"  # Use a different model
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1"  # Use a different backend
-config["deep_think_llm"] = "gemini-2.0-flash"  # Use a different model
-config["quick_think_llm"] = "gemini-2.0-flash"  # Use a different model
+config["llm_provider"] = "openai"  # Use a different model
+config["backend_url"] = "https://hk-api.gptbest.vip/v1"  # Use a different backend
+config["deep_think_llm"] = "gpt-4.1"  # Use a different model
+config["quick_think_llm"] = "gpt-4.1"  # Use a different model
 config["max_debate_rounds"] = 1  # Increase debate rounds
 config["online_tools"] = True  # Increase debate rounds
 
