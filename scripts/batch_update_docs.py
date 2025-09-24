@@ -27,7 +27,7 @@ class DocumentationUpdater:
         if version_file.exists():
             self.current_version = version_file.read_text().strip()
         else:
-            self.current_version = "cn-0.1.13-preview"
+            self.current_version = "cn-0.1.15-preview"
         
         self.current_date = datetime.now().strftime('%Y-%m-%d')
         
