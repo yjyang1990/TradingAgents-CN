@@ -90,7 +90,7 @@
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and web config usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Configuration Specialist | Task: Analyze web/config directory to identify web configuration files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with config usage evidence | Success: Every web config has clear deletion marking | Instructions: Mark in-progress, analyze web config directory, mark complete when all files are categorized_
 
-  - [-] 1.4.3. Analyze /web/data/ subdirectory
+  - [x] 1.4.3. Analyze /web/data/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and data file usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Data Analyst | Task: Analyze web/data directory to identify web data files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with data usage evidence | Success: Every web data file has clear deletion marking | Instructions: Mark in-progress, analyze web data directory, mark complete when all files are categorized_
 
