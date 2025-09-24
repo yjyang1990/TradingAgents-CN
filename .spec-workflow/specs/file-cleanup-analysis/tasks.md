@@ -33,7 +33,7 @@
   - _Leverage: Configuration file analysis patterns_
   - _Requirements: 1.1_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Configuration Management Specialist | Task: Analyze all files in /config directory to identify which configuration files are referenced by the application | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with reference evidence from code/docs | Restrictions: Check references in Python code and documentation, mark all config files as KEEP unless proven unused | Success: Every config file has clear deletion marking with reference evidence | Instructions: Mark in-progress, analyze config directory, mark complete when all files are categorized_
-- [ ] 1.3. Analyze /tradingagents package (main source code)
+- [X] 1.3. Analyze /tradingagents package (main source code)
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each subdirectory
   - Purpose: Map all Python module dependencies and imports
@@ -76,7 +76,7 @@
 
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility function usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Utility Analysis Specialist | Task: Analyze tradingagents/utils directory to identify utility modules and their usage across the codebase | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with utility usage evidence | Success: Every utility module has clear deletion marking | Instructions: Mark in-progress, analyze utils directory, mark complete when all files are categorized_
-- [ ] 1.4. Analyze /web directory (Streamlit web interface)
+- [X] 1.4. Analyze /web directory (Streamlit web interface)
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each subdirectory
   - Purpose: Identify web-specific files and their usage patterns
@@ -99,7 +99,6 @@
 
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and module usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Module Analyst | Task: Analyze web/modules directory to identify web modules and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with module usage evidence | Success: Every web module has clear deletion marking | Instructions: Mark in-progress, analyze web modules directory, mark complete when all files are categorized_
-
   - [X] 1.4.5. Analyze /web/utils/ subdirectory
 
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility usage
@@ -122,7 +121,7 @@
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
 
-- [x] 1.6. Analyze /scripts directory
+- [-] 1.6. Analyze /scripts directory
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each script category
   - Purpose: Identify utility scripts and their usage contexts
@@ -145,12 +144,10 @@
   - [X] 1.6.5. Analyze /scripts/maintenance/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Maintenance Specialist | Task: Analyze maintenance scripts to identify system maintenance utilities and unused scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with maintenance usage evidence | Success: Every maintenance script has clear deletion marking | Instructions: Mark in-progress, analyze maintenance scripts, mark complete when all files are categorized_
-
-  - [x] 1.6.6. Analyze /scripts/setup/ subdirectory
+  - [X] 1.6.6. Analyze /scripts/setup/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Setup Specialist | Task: Analyze setup scripts to identify installation and configuration utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with setup usage evidence | Success: Every setup script has clear deletion marking | Instructions: Mark in-progress, analyze setup scripts, mark complete when all files are categorized_
-
-  - [x] 1.6.7. Analyze /scripts/validation/ subdirectory
+  - [X] 1.6.7. Analyze /scripts/validation/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
 
@@ -169,7 +166,7 @@
   - _Leverage: Example code analysis, documentation references_
   - _Requirements: 1.2_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Developer Relations Engineer | Task: Analyze examples directory to identify which examples are referenced in documentation or still relevant | Output: For each example, provide KEEP/DELETE/REVIEW/UNKNOWN tag with documentation reference evidence | Restrictions: Check references in README, docs, and code comments, identify outdated examples | Success: Every example has clear deletion marking with reference tracking | Instructions: Mark in-progress, analyze examples directory, mark complete when all examples are categorized_
-- [x] 1.12. Analyze miscellaneous files
+- [ ] 1.12. Analyze miscellaneous files
 
   - Files: .env.example, .gitignore, .python-version, VERSION, Dockerfile, docker-compose.yml, etc.
   - Purpose: Identify configuration and deployment files
