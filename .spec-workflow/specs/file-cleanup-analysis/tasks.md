@@ -11,6 +11,8 @@
 
 **Subdirectory Requirements:** For directories containing subdirectories, analysis must drill down to each subdirectory level.
 
+**File-by-File Analysis:** analysis-results must be generated for each file in the directory, including subdirectories.
+
 **Git Commit Requirements:** After completing each task and marking it as [x], commit all changes to git with message format: "完成任务 [task-number] - [task-description]"
 
 ## Phase 1: Directory-by-Directory Analysis
@@ -70,7 +72,7 @@
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and tool usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Tools Analysis Specialist | Task: Analyze tradingagents/tools directory to identify tool modules and their usage by agents | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with tool usage evidence | Success: Every tool module has clear deletion marking | Instructions: Mark in-progress, analyze tools directory, mark complete when all files are categorized_
 
-  - [ ] 1.3.9. Analyze /tradingagents/utils/ subdirectory
+  - [x] 1.3.9. Analyze /tradingagents/utils/ subdirectory
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility function usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Utility Analysis Specialist | Task: Analyze tradingagents/utils directory to identify utility modules and their usage across the codebase | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with utility usage evidence | Success: Every utility module has clear deletion marking | Instructions: Mark in-progress, analyze utils directory, mark complete when all files are categorized_
 - [ ] 1.4. Analyze /web directory (Streamlit web interface)
