@@ -22,9 +22,10 @@ try:
     from tradingagents.utils.logging_manager import get_logger
     logger = get_logger('web')
 except ImportError:
-    # 如果无法导入，使用标准logging
+    # 如果无法导入，使用标准logging，从环境变量获取日志级别
     import logging
-    logging.basicConfig(level=logging.INFO)
+    log_level = os.getenv('TRADINGAGENTS_LOG_LEVEL', 'DEBUG').upper()
+    logging.basicConfig(level=getattr(logging, log_level))
     logger = logging.getLogger('web')
 
 # 加载环境变量

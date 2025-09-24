@@ -24,9 +24,8 @@ class SmartConfigManager:
         self.redis_available = False
         self.detection_results = {}
         
-        # 设置日志
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+        # 使用统一日志管理器
+        self.logger = get_logger(__name__)
         
         # 执行检测
         self._detect_services()

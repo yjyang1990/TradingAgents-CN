@@ -32,9 +32,8 @@ class AdaptiveCacheManager:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
-        # 设置日志
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
+        # 使用统一日志管理器
+        self.logger = get_logger(__name__)
         
         # 获取智能配置
         self._load_smart_config()
