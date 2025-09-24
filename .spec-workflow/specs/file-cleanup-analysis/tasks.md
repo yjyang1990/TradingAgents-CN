@@ -146,7 +146,7 @@
   - [x] 1.6.5. Analyze /scripts/maintenance/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Maintenance Specialist | Task: Analyze maintenance scripts to identify system maintenance utilities and unused scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with maintenance usage evidence | Success: Every maintenance script has clear deletion marking | Instructions: Mark in-progress, analyze maintenance scripts, mark complete when all files are categorized_
 
-  - [ ] 1.6.6. Analyze /scripts/setup/ subdirectory
+  - [-] 1.6.6. Analyze /scripts/setup/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Setup Specialist | Task: Analyze setup scripts to identify installation and configuration utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with setup usage evidence | Success: Every setup script has clear deletion marking | Instructions: Mark in-progress, analyze setup scripts, mark complete when all files are categorized_
   - [ ] 1.6.7. Analyze /scripts/validation/ subdirectory
@@ -182,7 +182,7 @@
   - [ ] 1.8.4. Analyze /data/scripts/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Script Analyst | Task: Analyze data processing scripts to identify active vs unused data scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with usage evidence | Success: Every data script has clear deletion marking | Instructions: Mark in-progress, analyze data scripts, mark complete when all files are categorized_
-- [-] 1.9. Analyze /examples directory
+- [x] 1.9. Analyze /examples directory
 
   - Purpose: Identify example files and their educational value
   - **Output Format**: List each example file/directory with KEEP/DELETE/REVIEW/UNKNOWN tag and documentation references
