@@ -122,7 +122,7 @@
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Unit Test Analyst | Task: Analyze individual test files to match them with corresponding source code modules | Output: For each test file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with source mapping evidence | Success: Every test file has clear deletion marking with source mapping | Instructions: Mark in-progress, analyze individual tests, mark complete when all files are categorized_
 
-- [-] 1.6. Analyze /scripts directory
+- [x] 1.6. Analyze /scripts directory
 
   - **Subdirectory Analysis Required**: Break down into separate tasks for each script category
   - Purpose: Identify utility scripts and their usage contexts
