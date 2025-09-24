@@ -56,7 +56,7 @@ from tradingagents.llm_adapters.deepseek_adapter import ChatDeepSeek
 llm = ChatDeepSeek(
     model="deepseek-chat",
     temperature=0.1,
-    max_tokens=2000
+    max_tokens=6400
 )
 
 # 调用模型

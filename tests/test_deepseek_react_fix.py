@@ -35,7 +35,7 @@ def test_deepseek_react_market_analyst():
         deepseek_llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.1,
-            max_tokens=2000
+            max_tokens=6400
         )
         
         # 创建工具包

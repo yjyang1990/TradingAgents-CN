@@ -103,7 +103,7 @@ def test_technical_analysis_with_new_adapter():
         llm = ChatDashScopeOpenAI(
             model="qwen-plus-latest",
             temperature=0.1,
-            max_tokens=2000
+            max_tokens=6400
         )
         
         print("✅ 新适配器创建成功")

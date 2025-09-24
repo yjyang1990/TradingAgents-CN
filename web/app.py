@@ -7,7 +7,6 @@ TradingAgents-CN Streamlit Web界面
 import streamlit as st
 import os
 import sys
-import json
 from pathlib import Path
 import datetime
 import time
@@ -37,10 +36,8 @@ from components.header import render_header
 from components.analysis_form import render_analysis_form
 from components.results_display import render_results
 # from components.login import render_login_form, check_authentication, render_user_info, render_sidebar_user_info, render_sidebar_logout, require_permission
-from components.user_activity_dashboard import render_user_activity_dashboard, render_activity_summary_widget
 from utils.api_checker import check_api_keys
-from utils.analysis_runner import run_stock_analysis, validate_analysis_params, format_analysis_results
-from utils.progress_tracker import SmartStreamlitProgressDisplay, create_smart_progress_callback
+from utils.analysis_runner import run_stock_analysis, validate_analysis_params
 from utils.async_progress_tracker import AsyncProgressTracker
 from components.async_progress_display import display_unified_progress
 from utils.smart_session_manager import get_persistent_analysis_id, set_persistent_analysis_id
@@ -1339,7 +1336,7 @@ def main():
                     st.warning(f"⚠️ 分析状态未知: {current_analysis_id}")
 
             # 显示进度（根据状态决定是否显示刷新控件）
-            progress_col1, progress_col2 = st.columns([4, 1])
+            progress_col1, _ = st.columns([4, 1])
             with progress_col1:
                 st.markdown("### 📊 分析进度")
 

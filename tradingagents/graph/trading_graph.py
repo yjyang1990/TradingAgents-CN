@@ -82,14 +82,14 @@ class TradingAgentsGraph:
                 base_url=self.config["backend_url"],
                 api_key=siliconflow_api_key,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = ChatOpenAI(
                 model=self.config["quick_think_llm"],
                 base_url=self.config["backend_url"],
                 api_key=siliconflow_api_key,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
         elif self.config["llm_provider"] == "openrouter":
             # OpenRouter支持：优先使用OPENROUTER_API_KEY，否则使用OPENAI_API_KEY
@@ -126,13 +126,13 @@ class TradingAgentsGraph:
                 model=self.config["deep_think_llm"],
                 google_api_key=google_api_key,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = ChatGoogleOpenAI(
                 model=self.config["quick_think_llm"],
                 google_api_key=google_api_key,
                 temperature=0.1,
-                max_tokens=2000,
+                max_tokens=6400,
                 client_options=client_options,
                 transport="rest"
             )
@@ -147,12 +147,12 @@ class TradingAgentsGraph:
             self.deep_thinking_llm = ChatDashScopeOpenAI(
                 model=self.config["deep_think_llm"],
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = ChatDashScopeOpenAI(
                 model=self.config["quick_think_llm"],
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
         elif (self.config["llm_provider"].lower() == "deepseek" or
               "deepseek" in self.config["llm_provider"].lower()):
@@ -172,14 +172,14 @@ class TradingAgentsGraph:
                 api_key=deepseek_api_key,
                 base_url=deepseek_base_url,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = ChatDeepSeek(
                 model=self.config["quick_think_llm"],
                 api_key=deepseek_api_key,
                 base_url=deepseek_base_url,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
                 )
 
             logger.info(f"✅ [DeepSeek] 已启用token统计功能")
@@ -191,7 +191,7 @@ class TradingAgentsGraph:
             if not custom_api_key:
                 raise ValueError("使用自定义OpenAI端点需要设置CUSTOM_OPENAI_API_KEY环境变量")
             
-            custom_base_url = self.config.get("custom_openai_base_url", "https://api.openai.com/v1")
+            custom_base_url = os.getenv("CUSTOM_OPENAI_BASE_URL", "https://api.openai.com/v1")
             
             logger.info(f"🔧 [自定义OpenAI] 使用端点: {custom_base_url}")
             
@@ -201,14 +201,14 @@ class TradingAgentsGraph:
                 model=self.config["deep_think_llm"],
                 base_url=custom_base_url,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = create_openai_compatible_llm(
                 provider="custom_openai",
                 model=self.config["quick_think_llm"],
                 base_url=custom_base_url,
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             
             logger.info(f"✅ [自定义OpenAI] 已配置自定义端点: {custom_base_url}")
@@ -221,13 +221,13 @@ class TradingAgentsGraph:
                 provider="qianfan",
                 model=self.config["deep_think_llm"],
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             self.quick_thinking_llm = create_openai_compatible_llm(
                 provider="qianfan",
                 model=self.config["quick_think_llm"],
                 temperature=0.1,
-                max_tokens=2000
+                max_tokens=6400
             )
             logger.info("✅ [千帆] 文心一言适配器已配置成功")
         else:

@@ -161,7 +161,7 @@ def test_gemini_25_pro_complex_reasoning():
         llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-pro",
             temperature=0.1,
-            max_tokens=2000,
+            max_tokens=6400,
             google_api_key=os.getenv('GOOGLE_API_KEY')
         )
         

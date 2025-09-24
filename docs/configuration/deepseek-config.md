@@ -125,7 +125,7 @@ print(result["output"])
 adapter = create_deepseek_adapter(
     model="deepseek-chat",
     temperature=0.1,  # 降低随机性，提高一致性
-    max_tokens=2000   # 适中的输出长度
+    max_tokens=6400   # 适中的输出长度
 )
 ```
 

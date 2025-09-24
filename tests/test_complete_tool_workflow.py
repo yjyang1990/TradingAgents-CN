@@ -29,7 +29,7 @@ def test_deepseek_complete_workflow():
         deepseek_llm = ChatDeepSeek(
             model="deepseek-chat",
             temperature=0.1,
-            max_tokens=2000
+            max_tokens=6400
         )
         
         # 创建模拟工具
@@ -153,7 +153,7 @@ def test_dashscope_react_agent():
         dashscope_llm = ChatDashScope(
             model="qwen-plus",
             temperature=0.1,
-            max_tokens=2000
+            max_tokens=6400
         )
         
         # 创建工具

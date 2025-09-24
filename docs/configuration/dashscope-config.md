@@ -293,7 +293,7 @@ config = {
 llm = ChatDashScopeOpenAI(
     model="qwen-plus-latest",
     temperature=0.1,        # 降低随机性
-    max_tokens=2000,        # 确保完整输出
+    max_tokens=6400,        # 确保完整输出
 )
 ```
 

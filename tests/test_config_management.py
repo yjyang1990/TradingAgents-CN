@@ -36,7 +36,7 @@ def test_config_manager():
             provider="test_provider",
             model_name="test_model",
             api_key="test_key_123",
-            max_tokens=2000,
+            max_tokens=6400,
             temperature=0.5
         )
         
