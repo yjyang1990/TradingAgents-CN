@@ -95,12 +95,12 @@
 
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and data file usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Data Analyst | Task: Analyze web/data directory to identify web data files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with data usage evidence | Success: Every web data file has clear deletion marking | Instructions: Mark in-progress, analyze web data directory, mark complete when all files are categorized_
-
-  - [-] 1.4.4. Analyze /web/modules/ subdirectory
+  - [X] 1.4.4. Analyze /web/modules/ subdirectory
 
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and module usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Module Analyst | Task: Analyze web/modules directory to identify web modules and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with module usage evidence | Success: Every web module has clear deletion marking | Instructions: Mark in-progress, analyze web modules directory, mark complete when all files are categorized_
-  - [-] 1.4.5. Analyze /web/utils/ subdirectory
+
+  - [X] 1.4.5. Analyze /web/utils/ subdirectory
 
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and utility usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Utility Analyst | Task: Analyze web/utils directory to identify web utilities and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with utility usage evidence | Success: Every web utility has clear deletion marking | Instructions: Mark in-progress, analyze web utils directory, mark complete when all files are categorized_
@@ -142,14 +142,15 @@
   - [X] 1.6.4. Analyze /scripts/git/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Git Workflow Specialist | Task: Analyze Git scripts to identify version control utilities and unused Git tools | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with Git usage evidence | Success: Every Git script has clear deletion marking | Instructions: Mark in-progress, analyze Git scripts, mark complete when all files are categorized_
+  - [X] 1.6.5. Analyze /scripts/maintenance/ subdirectory
 
-  - [x] 1.6.5. Analyze /scripts/maintenance/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Maintenance Specialist | Task: Analyze maintenance scripts to identify system maintenance utilities and unused scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with maintenance usage evidence | Success: Every maintenance script has clear deletion marking | Instructions: Mark in-progress, analyze maintenance scripts, mark complete when all files are categorized_
 
-  - [-] 1.6.6. Analyze /scripts/setup/ subdirectory
+  - [x] 1.6.6. Analyze /scripts/setup/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Setup Specialist | Task: Analyze setup scripts to identify installation and configuration utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with setup usage evidence | Success: Every setup script has clear deletion marking | Instructions: Mark in-progress, analyze setup scripts, mark complete when all files are categorized_
-  - [ ] 1.6.7. Analyze /scripts/validation/ subdirectory
+
+  - [-] 1.6.7. Analyze /scripts/validation/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
 
@@ -161,35 +162,13 @@
   - _Leverage: Markdown parsing, documentation analysis_
   - _Requirements: 1.2_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Technical Writer with documentation analysis skills | Task: Analyze docs directory to identify which documentation files reference code, images, or other files | Output: For each doc file/directory, provide KEEP/DELETE/REVIEW/UNKNOWN tag with reference evidence | Restrictions: Parse markdown files for internal links, code references, and image references, identify outdated version-specific docs | Success: Every doc file has clear deletion marking with reference mapping | Instructions: Mark in-progress, analyze docs directory, mark complete when all docs are categorized_
-
-- [-] 1.8. Analyze /data directory
-
-  - **Subdirectory Analysis Required**: Break down by data categories
-  - Purpose: Identify data files and their generation/usage patterns
-  - **Output Format**: List each data file/directory with KEEP/DELETE/REVIEW/UNKNOWN tag and usage type
-  - _Leverage: Data file pattern analysis_
-  - _Requirements: 1.2_
-
-  - [ ] 1.8.1. Analyze /data/analysis_results/ subdirectory
-
-    - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Analysis Specialist | Task: Analyze analysis results to identify generated outputs vs important results | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with generation/usage evidence | Success: Every analysis result has clear deletion marking | Instructions: Mark in-progress, analyze analysis results, mark complete when all files are categorized_
-  - [ ] 1.8.2. Analyze /data/cache/ subdirectory
-
-    - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Cache Management Specialist | Task: Analyze cache directory to identify cache files that can be safely deleted | Output: For each cache file, provide KEEP/DELETE/REVIEW/UNKNOWN tag (most cache files should be DELETE) | Success: Every cache file has clear deletion marking | Instructions: Mark in-progress, analyze cache files, mark complete when all files are categorized_
-  - [ ] 1.8.3. Analyze /data/reports/ subdirectory
-
-    - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Report Analysis Specialist | Task: Analyze report directory to identify important reports vs outdated/generated reports | Output: For each report file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with importance assessment | Success: Every report has clear deletion marking | Instructions: Mark in-progress, analyze reports, mark complete when all files are categorized_
-  - [ ] 1.8.4. Analyze /data/scripts/ subdirectory
-
-    - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Data Script Analyst | Task: Analyze data processing scripts to identify active vs unused data scripts | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with usage evidence | Success: Every data script has clear deletion marking | Instructions: Mark in-progress, analyze data scripts, mark complete when all files are categorized_
-- [x] 1.9. Analyze /examples directory
+- [X] 1.9. Analyze /examples directory
 
   - Purpose: Identify example files and their educational value
   - **Output Format**: List each example file/directory with KEEP/DELETE/REVIEW/UNKNOWN tag and documentation references
   - _Leverage: Example code analysis, documentation references_
   - _Requirements: 1.2_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Developer Relations Engineer | Task: Analyze examples directory to identify which examples are referenced in documentation or still relevant | Output: For each example, provide KEEP/DELETE/REVIEW/UNKNOWN tag with documentation reference evidence | Restrictions: Check references in README, docs, and code comments, identify outdated examples | Success: Every example has clear deletion marking with reference tracking | Instructions: Mark in-progress, analyze examples directory, mark complete when all examples are categorized_
-
 - [ ] 1.12. Analyze miscellaneous files
 
   - Files: .env.example, .gitignore, .python-version, VERSION, Dockerfile, docker-compose.yml, etc.
