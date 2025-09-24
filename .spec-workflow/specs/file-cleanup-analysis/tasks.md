@@ -150,7 +150,7 @@
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: System Setup Specialist | Task: Analyze setup scripts to identify installation and configuration utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with setup usage evidence | Success: Every setup script has clear deletion marking | Instructions: Mark in-progress, analyze setup scripts, mark complete when all files are categorized_
 
-  - [-] 1.6.7. Analyze /scripts/validation/ subdirectory
+  - [x] 1.6.7. Analyze /scripts/validation/ subdirectory
 
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
 
