@@ -21,7 +21,7 @@
   - _Leverage: Project configuration patterns_
   - _Requirements: 1.1_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: DevOps Engineer with expertise in Python project structure | Task: Analyze all files in the root directory to identify entry points, configuration files, and documentation that must never be deleted | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with detailed reasoning | Restrictions: Mark all configuration, entry point, and legal files as KEEP, handle missing files gracefully | Success: Every root file has clear deletion marking with justification | Instructions: Mark task in-progress, analyze root directory, mark complete when all files are categorized_
-- [-] 1.2. Analyze /config directory
+- [x] 1.2. Analyze /config directory
 
   - Files: logging.toml, logging_docker.toml, README.md
   - Purpose: Identify configuration files and their usage
