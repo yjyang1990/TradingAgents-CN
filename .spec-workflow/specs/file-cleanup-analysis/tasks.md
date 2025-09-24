@@ -36,7 +36,7 @@
   - _Leverage: Python AST parsing, import analysis_
   - _Requirements: 1.2_
 
-  - [ ] 1.3.1. Analyze /tradingagents/agents/ subdirectory
+  - [x] 1.3.1. Analyze /tradingagents/agents/ subdirectory
     - **Output Format**: List each .py file with KEEP/DELETE/REVIEW/UNKNOWN tag and import dependencies
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Python Package Analyst | Task: Analyze tradingagents/agents directory to map module dependencies and identify unused agent modules | Output: For each .py file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with import/usage evidence | Success: Every agent module has clear deletion marking | Instructions: Mark in-progress, analyze agents directory, mark complete when all files are categorized_
 
