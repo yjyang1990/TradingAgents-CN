@@ -169,7 +169,7 @@
   - _Leverage: Example code analysis, documentation references_
   - _Requirements: 1.2_
   - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Developer Relations Engineer | Task: Analyze examples directory to identify which examples are referenced in documentation or still relevant | Output: For each example, provide KEEP/DELETE/REVIEW/UNKNOWN tag with documentation reference evidence | Restrictions: Check references in README, docs, and code comments, identify outdated examples | Success: Every example has clear deletion marking with reference tracking | Instructions: Mark in-progress, analyze examples directory, mark complete when all examples are categorized_
-- [ ] 1.12. Analyze miscellaneous files
+- [x] 1.12. Analyze miscellaneous files
 
   - Files: .env.example, .gitignore, .python-version, VERSION, Dockerfile, docker-compose.yml, etc.
   - Purpose: Identify configuration and deployment files
