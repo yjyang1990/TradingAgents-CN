@@ -90,7 +90,7 @@
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and web config usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Configuration Specialist | Task: Analyze web/config directory to identify web configuration files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with config usage evidence | Success: Every web config has clear deletion marking | Instructions: Mark in-progress, analyze web config directory, mark complete when all files are categorized_
 
-  - [ ] 1.4.3. Analyze /web/data/ subdirectory
+  - [-] 1.4.3. Analyze /web/data/ subdirectory
     - **Output Format**: List each file with KEEP/DELETE/REVIEW/UNKNOWN tag and data file usage
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Web Data Analyst | Task: Analyze web/data directory to identify web data files and their usage | Output: For each file, provide KEEP/DELETE/REVIEW/UNKNOWN tag with data usage evidence | Success: Every web data file has clear deletion marking | Instructions: Mark in-progress, analyze web data directory, mark complete when all files are categorized_
 
@@ -145,7 +145,7 @@
 
   - [ ] 1.6.7. Analyze /scripts/validation/ subdirectory
     - _Prompt: Implement the task for spec file-cleanup-analysis, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Validation Specialist | Task: Analyze validation scripts to identify testing and validation utilities | Output: For each script, provide KEEP/DELETE/REVIEW/UNKNOWN tag with validation usage evidence | Success: Every validation script has clear deletion marking | Instructions: Mark in-progress, analyze validation scripts, mark complete when all files are categorized_
-- [-] 1.7. Analyze /docs directory
+- [x] 1.7. Analyze /docs directory
 
   - Purpose: Identify documentation structure and cross-references
   - **Output Format**: List each doc file/directory with KEEP/DELETE/REVIEW/UNKNOWN tag and reference analysis
