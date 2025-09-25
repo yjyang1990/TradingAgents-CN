@@ -53,6 +53,22 @@ _CONCEPT_CAPITAL_FLOW_COLUMNS = ['index_code', 'index_name', 'change_pct', 'main
                                  'mid_net_inflow', 'mid_net_inflow_rate', 'sm_net_inflow', 'sm_net_inflow_rate',
                                  'stock_code', 'stock_name']
 
+# API配置
+EASTMONEY_API_CONFIG = {
+    'base_urls': {
+        'clist': 'https://push2.eastmoney.com/api/qt/clist/get',
+        'stock_kline': 'https://push2his.eastmoney.com/api/qt/stock/kline/get',
+        'stock_trends': 'https://push2his.eastmoney.com/api/qt/stock/trends2/get',
+        'stock_realtime': 'https://push2.eastmoney.com/api/qt/stock/get'
+    },
+    'common_params': {
+        'cb': 'jQuery112406389542653718456_1640754174808',
+        'ut': 'bd1d9ddb04089700cf9c27f6f7426281',
+        'fltt': '2',
+        'invt': '2'
+    }
+}
+
 # 会话配置
 session = requests.Session()
 session.headers.update({
@@ -77,33 +93,27 @@ def _set_cached_data(cache_key: str, data, ttl: int, use_cache: bool = True):
         cache_manager.set('concept_data', cache_key, data, ttl=ttl)
 
 
-def get_concept_list(use_cache: bool = True) -> pd.DataFrame:
-    """获取概念板块列表"""
-    cache_key = "concept_data_concept_list"
+def _make_eastmoney_request(api_type: str, additional_params: dict) -> dict:
+    """
+    统一的东方财富API请求函数
 
-    # 检查缓存
-    cached_data = _get_cached_data(cache_key, use_cache)
-    if cached_data is not None:
-        if logger:
-            logger.info("从缓存获取概念板块列表")
-        return cached_data
+    Args:
+        api_type: API类型 ('clist', 'stock_kline', 'stock_trends', 'stock_realtime')
+        additional_params: 额外的请求参数
 
-    # 获取数据
-    url = "https://push2.eastmoney.com/api/qt/clist/get"
-    params = {
-        'cb': 'jQuery112406389542653718456_1640754174808',
-        'pn': '1',
-        'pz': '2000',
-        'po': '1',
-        'np': '1',
-        'ut': 'bd1d9ddb04089700cf9c27f6f7426281',
-        'fltt': '2',
-        'invt': '2',
-        'fid': 'f3',
-        'fs': 'm:90+t:3+f:!50',
-        'fields': 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f26,f22,f11,f62,f128,f136,f115,f152',
-        '_': str(int(time.time() * 1000))
-    }
+    Returns:
+        dict: 解析后的JSON数据
+    """
+    url = EASTMONEY_API_CONFIG['base_urls'].get(api_type)
+    if not url:
+        raise ValueError(f"不支持的API类型: {api_type}")
+
+    # 合并基础参数和额外参数
+    params = {**EASTMONEY_API_CONFIG['common_params'], **additional_params}
+
+    # 动态更新cb参数（时间戳）
+    params['cb'] = f"jQuery112309367957412610306_{int(time.time() * 1000)}"
+    params['_'] = str(int(time.time() * 1000))
 
     try:
         response = session.get(url, params=params, timeout=10)
@@ -115,7 +125,38 @@ def get_concept_list(use_cache: bool = True) -> pd.DataFrame:
         end = text.rfind(')')
         json_str = text[start:end]
 
-        data = json.loads(json_str)
+        return json.loads(json_str)
+    except Exception as e:
+        if logger:
+            logger.error(f"❌ 东方财富API请求失败 ({api_type}): {str(e)}")
+        raise
+
+
+def get_concept_list(use_cache: bool = True) -> pd.DataFrame:
+    """获取概念板块列表"""
+    cache_key = "concept_data_concept_list"
+
+    # 检查缓存
+    cached_data = _get_cached_data(cache_key, use_cache)
+    if cached_data is not None:
+        if logger:
+            logger.info("从缓存获取概念板块列表")
+        return cached_data
+
+    # 构造请求参数
+    params = {
+        'pn': '1',
+        'pz': '2000',
+        'po': '1',
+        'np': '1',
+        'fid': 'f3',
+        'fs': 'm:90+t:3+f:!50',
+        'fields': 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f26,f22,f11,f62,f128,f136,f115,f152'
+    }
+
+    try:
+        # 使用统一API请求函数
+        data = _make_eastmoney_request('clist', params)
 
         if not data.get('data') or not data['data'].get('diff'):
             return pd.DataFrame()
