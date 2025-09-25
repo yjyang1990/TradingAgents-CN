@@ -409,3 +409,71 @@ def calculate_dividend_yield(symbol: str, current_price: float = None, use_cache
     """计算股息率"""
     provider = get_dividend_provider()
     return provider.calculate_dividend_yield(symbol, current_price=current_price, use_cache=use_cache)
+
+
+if __name__ == '__main__':
+    # 测试代码
+    provider = get_dividend_provider()
+
+    # 测试股票代码
+    test_symbols = ['002115']
+
+    print("=== 股息数据测试 ===")
+
+    for symbol in test_symbols:
+        print(f"\n--- 测试股票: {symbol} ---")
+
+        # 测试分红历史数据
+        print("1. 获取分红历史数据")
+        df_history = provider.get_dividend_history(symbol)
+        print(f"分红历史记录数: {len(df_history)}")
+        if not df_history.empty:
+            print(df_history[['notice_date', 'ex_dividend_date', 'dividend_ratio', 'plan_explain']].head(3))
+        else:
+            print("无分红历史数据")
+
+        # 测试分红汇总信息
+        print("\n2. 获取分红汇总信息")
+        summary = provider.get_dividend_summary(symbol)
+        if summary:
+            print(f"总分红次数: {summary.get('total_dividend_count', 0)}")
+            print(f"累计分红金额: {summary.get('total_dividend_amount', 0):.2f}元/股")
+            print(f"平均分红比例: {summary.get('avg_dividend_ratio', 0):.2f}元/股")
+            print(f"分红稳定性: {summary.get('dividend_stability', 0):.2f}")
+
+            latest = summary.get('latest_dividend', {})
+            if latest:
+                print(f"最新分红: {latest.get('dividend_ratio', 0)}元/股 ({latest.get('notice_date', 'N/A')})")
+        else:
+            print("无分红汇总数据")
+
+        # 测试股息率计算（假设股价）
+        print("\n3. 计算股息率（假设股价100元）")
+        yield_data = provider.calculate_dividend_yield(symbol, current_price=100.0)
+        if yield_data:
+            print(f"年化股息率: {yield_data.get('dividend_yield', 0):.2f}%")
+            print(f"年度分红: {yield_data.get('annual_dividend', 0):.2f}元/股")
+            if 'error' in yield_data:
+                print(f"错误信息: {yield_data['error']}")
+
+        print("-" * 50)
+
+    # 测试便捷函数
+    print("\n=== 测试便捷函数 ===")
+
+    # 测试历史分红数据便捷函数
+    print("测试 get_dividend_history 便捷函数")
+    df_convenient = get_dividend_history('000001', start_year=2020, end_year=2024)
+    print(f"便捷函数获取数据条数: {len(df_convenient)}")
+
+    # 测试分红汇总便捷函数
+    print("\n测试 get_dividend_summary 便捷函数")
+    summary_convenient = get_dividend_summary('600519')
+    print(f"便捷函数获取汇总数据: {'成功' if summary_convenient else '失败'}")
+
+    # 测试股息率计算便捷函数
+    print("\n测试 calculate_dividend_yield 便捷函数")
+    yield_convenient = calculate_dividend_yield('000858', current_price=50.0)
+    print(f"便捷函数计算股息率: {yield_convenient.get('dividend_yield', 0):.2f}%")
+
+    print("\n=== 测试完成 ===")
