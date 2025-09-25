@@ -12,14 +12,13 @@
 
 import pandas as pd
 import requests
-import json
-from typing import Optional, Dict, Any, Union, List
+from typing import Optional
 import warnings
 from dataclasses import dataclass
 
 # 导入项目组件
 from tradingagents.utils.logging_manager import get_logger
-from tradingagents.utils.unified_cache_manager import UnifiedCacheManager, CacheBackend
+from tradingagents.utils.unified_cache_manager import UnifiedCacheManager
 
 logger = get_logger('market_data')
 warnings.filterwarnings('ignore')
@@ -82,7 +81,7 @@ class EastMoneyCapitalFlow(CapitalFlowDataSource):
             cid = 1 if stock_code.startswith('6') else 0
             url = f"https://push2.eastmoney.com/api/qt/stock/fflow/kline/get?lmt=0&klt=1&fields1=f1,f2,f3,f7&" \
                   f"fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61,f62,f63,f64,f65&" \
-                  f"secid={cid}.{stock_code}"
+                  f"secid={cid}.{stock_code}"  # cspell:disable-line
 
             response = self.session.get(url, timeout=30)
             response.raise_for_status()
@@ -91,7 +90,7 @@ class EastMoneyCapitalFlow(CapitalFlowDataSource):
             # 2. 解析数据
             if not data:
                 return pd.DataFrame([], columns=self.FLOW_MIN_COLUMNS)
-            lines = data['klines']
+            lines = data['klines']  # cspell:disable-line
 
             # 3. 数据 etl
             # 2024-06-19 09:31,-1943532.0,2710159.0,-766627.0,-5901648.0,3958116.0
@@ -118,7 +117,7 @@ class EastMoneyCapitalFlow(CapitalFlowDataSource):
             url = f"https://push2his.eastmoney.com/api/qt/stock/fflow/daykline/get?" \
                   f"lmt=0&klt=101&fields1=f1,f2,f3,f7&" \
                   f"fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&" \
-                  f"secid={cid}.{stock_code}"
+                  f"secid={cid}.{stock_code}"  # cspell:disable-line
 
             response = self.session.get(url, timeout=30)
             response.raise_for_status()
@@ -127,7 +126,7 @@ class EastMoneyCapitalFlow(CapitalFlowDataSource):
             # 2. 解析数据
             if not data:
                 return pd.DataFrame([], columns=self.FLOW_DAILY_COLUMNS)
-            lines = data['klines']
+            lines = data['klines']  # cspell:disable-line
 
             # 3. 数据 etl
             # '2023-12-18,-58234405.0,47874618.0,10359788.0,-13362003.0,-44872402.0,-9.72,7.99,1.73,-2.23,-7.49,8.41,-0.94,0.00,0.00'
