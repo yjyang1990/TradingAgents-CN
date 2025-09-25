@@ -754,7 +754,7 @@ class Toolkit:
             result_data = []
 
             if is_china:
-                # 中国A股：获取股票数据 + 基本面数据
+                # 中国A股：获取股票数据 + 增强的东方财富基本面数据
                 logger.info(f"🇨🇳 [统一基本面工具] 处理A股数据...")
                 logger.info(f"🔍 [股票代码追踪] 进入A股处理分支，ticker: '{ticker}'")
 
@@ -769,17 +769,32 @@ class Toolkit:
                     logger.error(f"🔍 [股票代码追踪] get_china_stock_data_unified 调用失败: {e}")
                     result_data.append(f"## A股价格数据\n获取失败: {e}")
 
+                # 优先使用东方财富增强数据
                 try:
-                    # 获取基本面数据
-                    from tradingagents.dataflows.optimized_china_data import OptimizedChinaDataProvider
-                    analyzer = OptimizedChinaDataProvider()
-                    logger.info(f"🔍 [股票代码追踪] 调用 OptimizedChinaDataProvider._generate_fundamentals_report，传入参数: ticker='{ticker}'")
-                    fundamentals_data = analyzer._generate_fundamentals_report(ticker, stock_data if 'stock_data' in locals() else "")
-                    logger.info(f"🔍 [股票代码追踪] _generate_fundamentals_report 返回结果前200字符: {fundamentals_data[:200] if fundamentals_data else 'None'}")
-                    result_data.append(f"## A股基本面数据\n{fundamentals_data}")
+                    from tradingagents.dataflows.eastmoney_core import generate_stock_analysis_report
+                    logger.info(f"🔍 [股票代码追踪] 调用东方财富核心数据，ticker: '{ticker}'")
+
+                    # 提取纯股票代码（去除交易所后缀）
+                    clean_ticker = ticker.replace('.SZ', '').replace('.SH', '').replace('.SS', '').replace('.XSHE', '').replace('.XSHG', '')
+
+                    eastmoney_data = generate_stock_analysis_report(clean_ticker)
+                    logger.info(f"🔍 [股票代码追踪] 东方财富数据获取成功，长度: {len(eastmoney_data)}")
+                    result_data.append(f"## A股东方财富核心指标\n{eastmoney_data}")
+
                 except Exception as e:
-                    logger.error(f"🔍 [股票代码追踪] _generate_fundamentals_report 调用失败: {e}")
-                    result_data.append(f"## A股基本面数据\n获取失败: {e}")
+                    logger.warning(f"🔍 [股票代码追踪] 东方财富数据获取失败，使用备用方案: {e}")
+
+                    # 备用方案：使用原有基本面数据
+                    try:
+                        from tradingagents.dataflows.optimized_china_data import OptimizedChinaDataProvider
+                        analyzer = OptimizedChinaDataProvider()
+                        logger.info(f"🔍 [股票代码追踪] 调用 OptimizedChinaDataProvider._generate_fundamentals_report，传入参数: ticker='{ticker}'")
+                        fundamentals_data = analyzer._generate_fundamentals_report(ticker, stock_data if 'stock_data' in locals() else "")
+                        logger.info(f"🔍 [股票代码追踪] _generate_fundamentals_report 返回结果前200字符: {fundamentals_data[:200] if fundamentals_data else 'None'}")
+                        result_data.append(f"## A股基本面数据（备用）\n{fundamentals_data}")
+                    except Exception as e2:
+                        logger.error(f"🔍 [股票代码追踪] 备用基本面数据获取也失败: {e2}")
+                        result_data.append(f"## A股基本面数据\n获取失败: {e2}")
 
             elif is_hk:
                 # 港股：使用AKShare数据源，支持多重备用方案
