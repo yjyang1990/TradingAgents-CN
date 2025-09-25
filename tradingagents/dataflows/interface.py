@@ -1421,6 +1421,170 @@ def get_current_china_data_source() -> str:
         return f"❌ 获取数据源信息失败: {e}"
 
 
+# ==================== 资金流向数据接口 ====================
+
+def get_capital_flow_data(
+    ticker: Annotated[str, "股票代码，如：000001、600036等"],
+    start_date: Annotated[str, "开始日期，格式：YYYY-MM-DD，可选"],
+    end_date: Annotated[str, "结束日期，格式：YYYY-MM-DD，可选"]
+) -> str:
+    """
+    获取个股日度资金流向数据
+
+    提供个股的主力资金流向分析，包括超大单、大单、中单、小单的资金流入流出情况。
+    支持多数据源（东方财富、百度等）和智能降级机制。
+
+    Args:
+        ticker: 股票代码，支持深市（如000001）和沪市（如600036）
+        start_date: 开始日期，可选，格式 'YYYY-MM-DD'
+        end_date: 结束日期，可选，格式 'YYYY-MM-DD'
+
+    Returns:
+        str: 格式化的资金流向分析报告
+    """
+    # 检查统一缓存
+    if UNIFIED_CACHE_AVAILABLE and cache_manager:
+        cache_key = f"daily_{ticker}_{start_date}_{end_date}"
+        cached_data = cache_manager.get("capital_flow_data", cache_key)
+        if cached_data:
+            logger.info(f"🚀 [缓存命中] 资金流向数据: {ticker}")
+            return cached_data
+
+    logger.info(f"💰 [资金流向] 开始获取{ticker}日度资金流向数据",
+               extra={
+                   'function': 'get_capital_flow_data',
+                   'ticker': ticker,
+                   'start_date': start_date,
+                   'end_date': end_date,
+                   'event_type': 'capital_flow_call_start'
+               })
+
+    start_time = time.time()
+
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        result = manager.get_capital_flow_daily(ticker, start_date=start_date, end_date=end_date)
+
+        # 缓存结果
+        if UNIFIED_CACHE_AVAILABLE and cache_manager and result and not result.startswith("❌"):
+            cache_key = f"daily_{ticker}_{start_date}_{end_date}"
+            cache_manager.set("capital_flow_data", cache_key, result, ttl=3600)  # 1小时缓存
+
+        duration = time.time() - start_time
+        logger.info(f"✅ [资金流向] 成功获取{ticker}日度数据，耗时: {duration:.2f}秒")
+
+        return result
+
+    except ImportError as e:
+        duration = time.time() - start_time
+        error_msg = f"❌ 资金流向模块未安装或导入失败: {e}"
+        logger.error(f"❌ [资金流向] 模块导入失败: {e}, 耗时={duration:.2f}s")
+        return error_msg
+    except Exception as e:
+        duration = time.time() - start_time
+        error_msg = f"❌ 获取{ticker}资金流向数据失败: {e}"
+        logger.error(f"❌ [资金流向] 获取失败: {e}, 耗时={duration:.2f}s", exc_info=True)
+        return error_msg
+
+
+def get_capital_flow_realtime(
+    ticker: Annotated[str, "股票代码，如：000001、600036等"]
+) -> str:
+    """
+    获取个股实时资金流向数据
+
+    提供个股的分时资金流向分析，包括当日各时间段的资金流入流出情况。
+    数据更新频率较高，适合短期交易决策参考。
+
+    Args:
+        ticker: 股票代码，支持深市（如000001）和沪市（如600036）
+
+    Returns:
+        str: 格式化的实时资金流向分析报告
+    """
+    # 检查统一缓存（实时数据缓存时间较短）
+    if UNIFIED_CACHE_AVAILABLE and cache_manager:
+        cache_key = f"realtime_{ticker}"
+        cached_data = cache_manager.get("capital_flow_realtime", cache_key)
+        if cached_data:
+            logger.info(f"🚀 [缓存命中] 实时资金流向数据: {ticker}")
+            return cached_data
+
+    logger.info(f"💰 [资金流向] 开始获取{ticker}实时资金流向数据",
+               extra={
+                   'function': 'get_capital_flow_realtime',
+                   'ticker': ticker,
+                   'event_type': 'capital_flow_realtime_call_start'
+               })
+
+    start_time = time.time()
+
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        result = manager.get_capital_flow_realtime(ticker)
+
+        # 缓存结果（实时数据5分钟缓存）
+        if UNIFIED_CACHE_AVAILABLE and cache_manager and result and not result.startswith("❌"):
+            cache_key = f"realtime_{ticker}"
+            cache_manager.set("capital_flow_realtime", cache_key, result, ttl=300)  # 5分钟缓存
+
+        duration = time.time() - start_time
+        logger.info(f"✅ [资金流向] 成功获取{ticker}实时数据，耗时: {duration:.2f}秒")
+
+        return result
+
+    except ImportError as e:
+        duration = time.time() - start_time
+        error_msg = f"❌ 资金流向模块未安装或导入失败: {e}"
+        logger.error(f"❌ [资金流向] 模块导入失败: {e}, 耗时={duration:.2f}s")
+        return error_msg
+    except Exception as e:
+        duration = time.time() - start_time
+        error_msg = f"❌ 获取{ticker}实时资金流向数据失败: {e}"
+        logger.error(f"❌ [资金流向] 获取失败: {e}, 耗时={duration:.2f}s", exc_info=True)
+        return error_msg
+
+
+def get_concept_capital_flow(
+    concept_code: Annotated[str, "概念板块代码"]
+) -> str:
+    """
+    获取概念板块资金流向数据（功能开发中）
+
+    提供概念板块的整体资金流向分析，包括板块内成分股的资金分布情况。
+
+    Args:
+        concept_code: 概念板块代码
+
+    Returns:
+        str: 格式化的概念板块资金流向分析报告
+    """
+    logger.info(f"💰 [资金流向] 开始获取概念{concept_code}资金流向数据")
+
+    start_time = time.time()
+
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        result = manager.get_concept_capital_flow(concept_code)
+
+        duration = time.time() - start_time
+        logger.info(f"✅ [资金流向] 概念数据获取完成，耗时: {duration:.2f}秒")
+
+        return result
+
+    except Exception as e:
+        duration = time.time() - start_time
+        error_msg = f"❌ 获取概念{concept_code}资金流向数据失败: {e}"
+        logger.error(f"❌ [资金流向] 概念数据获取失败: {e}, 耗时={duration:.2f}s", exc_info=True)
+        return error_msg
+
+
 # ==================== 港股数据接口 ====================
 
 def get_hk_stock_data_unified(symbol: str, start_date: str = None, end_date: str = None) -> str:
@@ -1575,3 +1739,150 @@ def get_stock_data_by_market(symbol: str, start_date: str = None, end_date: str 
     except Exception as e:
         logger.error(f"❌ 获取股票数据失败: {e}")
         return f"❌ 获取股票{symbol}数据失败: {e}"
+
+
+# ============ 概念板块数据接口 ============
+
+def get_concept_list(use_cache: Annotated[bool, "是否使用缓存"] = True) -> str:
+    """
+    获取概念板块列表数据
+
+    Args:
+        use_cache: 是否使用缓存
+
+    Returns:
+        str: 格式化的概念板块列表报告
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.get_concept_list(use_cache=use_cache)
+
+    except Exception as e:
+        logger.error(f"❌ 获取概念板块列表失败: {e}")
+        return f"❌ 获取概念板块列表失败: {e}"
+
+
+def get_concept_stocks(concept_code: Annotated[str, "概念代码"], use_cache: Annotated[bool, "是否使用缓存"] = True) -> str:
+    """
+    获取概念板块成分股数据
+
+    Args:
+        concept_code: 概念代码
+        use_cache: 是否使用缓存
+
+    Returns:
+        str: 格式化的概念成分股报告
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.get_concept_stocks(concept_code, use_cache=use_cache)
+
+    except Exception as e:
+        logger.error(f"❌ 获取概念{concept_code}成分股失败: {e}")
+        return f"❌ 获取概念{concept_code}成分股失败: {e}"
+
+
+def get_concept_ranking(sort_by: Annotated[str, "排序字段"] = "change_pct",
+                       ascending: Annotated[bool, "是否升序排列"] = False,
+                       limit: Annotated[int, "返回数量限制"] = 20) -> str:
+    """
+    获取概念板块排行榜
+
+    Args:
+        sort_by: 排序字段 (change_pct-涨跌幅, volume-成交量, turnover-成交额, market_cap-市值等)
+        ascending: 是否升序排列
+        limit: 返回数量限制
+
+    Returns:
+        str: 格式化的概念板块排行榜
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.get_top_concepts(sort_by=sort_by, ascending=ascending, limit=limit)
+
+    except Exception as e:
+        logger.error(f"❌ 获取概念板块排行榜失败: {e}")
+        return f"❌ 获取概念板块排行榜失败: {e}"
+
+
+# ============ 股息分红数据接口 ============
+
+def get_dividend_history(ticker: Annotated[str, "股票代码"],
+                        start_year: Annotated[int, "开始年份"] = None,
+                        end_year: Annotated[int, "结束年份"] = None,
+                        use_cache: Annotated[bool, "是否使用缓存"] = True) -> str:
+    """
+    获取股票历史分红数据
+
+    Args:
+        ticker: 股票代码
+        start_year: 开始年份
+        end_year: 结束年份
+        use_cache: 是否使用缓存
+
+    Returns:
+        str: 格式化的分红历史报告
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.get_dividend_history(ticker, start_year=start_year, end_year=end_year, use_cache=use_cache)
+
+    except Exception as e:
+        logger.error(f"❌ 获取股票{ticker}分红历史失败: {e}")
+        return f"❌ 获取股票{ticker}分红历史失败: {e}"
+
+
+def get_dividend_summary(ticker: Annotated[str, "股票代码"],
+                        use_cache: Annotated[bool, "是否使用缓存"] = True) -> str:
+    """
+    获取股票分红汇总信息
+
+    Args:
+        ticker: 股票代码
+        use_cache: 是否使用缓存
+
+    Returns:
+        str: 格式化的分红汇总报告
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.get_dividend_summary(ticker, use_cache=use_cache)
+
+    except Exception as e:
+        logger.error(f"❌ 获取股票{ticker}分红汇总失败: {e}")
+        return f"❌ 获取股票{ticker}分红汇总失败: {e}"
+
+
+def calculate_dividend_yield(ticker: Annotated[str, "股票代码"],
+                           current_price: Annotated[float, "当前股价"] = None,
+                           use_cache: Annotated[bool, "是否使用缓存"] = True) -> str:
+    """
+    计算股票股息率
+
+    Args:
+        ticker: 股票代码
+        current_price: 当前股价（如果不提供，将无法计算准确股息率）
+        use_cache: 是否使用缓存
+
+    Returns:
+        str: 格式化的股息率分析报告
+    """
+    try:
+        from .data_source_manager import get_data_source_manager
+
+        manager = get_data_source_manager()
+        return manager.calculate_dividend_yield(ticker, current_price=current_price, use_cache=use_cache)
+
+    except Exception as e:
+        logger.error(f"❌ 计算股票{ticker}股息率失败: {e}")
+        return f"❌ 计算股票{ticker}股息率失败: {e}"

@@ -91,6 +91,18 @@ def __getattr__(name):
         'get_hk_stock_data_unified': 'get_hk_stock_data_unified',
         'get_hk_stock_info_unified': 'get_hk_stock_info_unified',
         'get_stock_data_by_market': 'get_stock_data_by_market',
+        # Capital flow functions
+        'get_capital_flow_data': 'get_capital_flow_data',
+        'get_capital_flow_realtime': 'get_capital_flow_realtime',
+        'get_concept_capital_flow': 'get_concept_capital_flow',
+        # Concept sector functions
+        'get_concept_list': 'get_concept_list',
+        'get_concept_stocks': 'get_concept_stocks',
+        'get_concept_ranking': 'get_concept_ranking',
+        # Dividend functions
+        'get_dividend_history': 'get_dividend_history',
+        'get_dividend_summary': 'get_dividend_summary',
+        'calculate_dividend_yield': 'calculate_dividend_yield',
     }
 
     # 使用缓存避免重复导入
@@ -169,4 +181,16 @@ __all__ = [
     "get_hk_stock_data_unified",
     "get_hk_stock_info_unified",
     "get_stock_data_by_market",
+    # Capital flow functions
+    "get_capital_flow_data",
+    "get_capital_flow_realtime",
+    "get_concept_capital_flow",
+    # Concept sector functions
+    "get_concept_list",
+    "get_concept_stocks",
+    "get_concept_ranking",
+    # Dividend functions
+    "get_dividend_history",
+    "get_dividend_summary",
+    "calculate_dividend_yield",
 ]

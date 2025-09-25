@@ -855,6 +855,505 @@ class DataSourceManager:
             logger.error(f"⚠️ 解析股票信息失败: {e}")
             return {'symbol': symbol, 'name': f'股票{symbol}', 'source': self.current_source.value}
 
+    # ==================== 资金流向数据接口 ====================
+
+    def get_capital_flow_realtime(self, symbol: str, use_cache: bool = True) -> str:
+        """
+        获取个股实时资金流向数据，支持多数据源降级
+
+        Args:
+            symbol: 股票代码，如 '000001'
+            use_cache: 是否使用缓存
+
+        Returns:
+            str: 格式化的资金流向数据报告
+        """
+        logger.info(f"💰 [资金流向] 获取{symbol}实时资金流向数据...")
+
+        try:
+            # 导入资金流向提供器
+            from .market_data_capital_flow_utils import get_capital_flow_provider
+
+            provider = get_capital_flow_provider()
+            df = provider.get_capital_flow_realtime(symbol, use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化输出
+                result = f"💰 {symbol} - 实时资金流向数据\n"
+                result += f"数据时间: {df.iloc[-1]['trade_time'] if 'trade_time' in df.columns else '最新'}\n"
+                result += f"数据条数: {len(df)}条\n\n"
+
+                # 显示最新资金流向
+                if not df.empty:
+                    latest = df.iloc[-1]
+                    result += "📊 最新资金流向:\n"
+                    if 'main_net_inflow' in latest:
+                        result += f"   主力净流入: {latest['main_net_inflow']:+,.2f}万元\n"
+                    if 'large_net_inflow' in latest:
+                        result += f"   大单净流入: {latest['large_net_inflow']:+,.2f}万元\n"
+                    if 'medium_net_inflow' in latest:
+                        result += f"   中单净流入: {latest['medium_net_inflow']:+,.2f}万元\n"
+                    if 'small_net_inflow' in latest:
+                        result += f"   小单净流入: {latest['small_net_inflow']:+,.2f}万元\n"
+                    if 'super_large_net_inflow' in latest:
+                        result += f"   超大单净流入: {latest['super_large_net_inflow']:+,.2f}万元\n"
+
+                # 计算总净流入
+                if len(df) > 0:
+                    total_main = df['main_net_inflow'].sum() if 'main_net_inflow' in df.columns else 0
+                    result += f"\n💡 今日主力净流入总计: {total_main:+,.2f}万元\n"
+
+                logger.info(f"✅ [资金流向] 成功获取{symbol}实时资金流向，共{len(df)}条记录")
+                return result
+            else:
+                result = f"❌ 未获取到{symbol}的实时资金流向数据"
+                logger.warning(f"⚠️ [资金流向] {result}")
+                return result
+
+        except ImportError as e:
+            error_msg = f"❌ 资金流向模块未安装或导入失败: {e}"
+            logger.error(f"❌ [资金流向] 模块导入失败: {e}")
+            return error_msg
+        except Exception as e:
+            error_msg = f"❌ 获取{symbol}实时资金流向数据失败: {e}"
+            logger.error(f"❌ [资金流向] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_capital_flow_daily(self, symbol: str, start_date: str = None, end_date: str = None,
+                             use_cache: bool = True) -> str:
+        """
+        获取个股日度资金流向数据，支持多数据源降级
+
+        Args:
+            symbol: 股票代码，如 '000001'
+            start_date: 开始日期，格式 'YYYY-MM-DD'
+            end_date: 结束日期，格式 'YYYY-MM-DD'
+            use_cache: 是否使用缓存
+
+        Returns:
+            str: 格式化的资金流向数据报告
+        """
+        logger.info(f"💰 [资金流向] 获取{symbol}日度资金流向数据...")
+
+        try:
+            # 导入资金流向提供器
+            from .market_data_capital_flow_utils import get_capital_flow_provider
+
+            provider = get_capital_flow_provider()
+            df = provider.get_capital_flow_daily(symbol, start_date=start_date,
+                                               end_date=end_date, use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化输出
+                result = f"💰 {symbol} - 日度资金流向数据\n"
+                result += f"数据期间: {start_date or '最早'} 至 {end_date or '最新'}\n"
+                result += f"数据条数: {len(df)}条\n\n"
+
+                # 显示最近几日资金流向
+                recent_days = min(5, len(df))
+                result += f"📊 最近{recent_days}日资金流向:\n"
+                for i in range(recent_days):
+                    row = df.iloc[-(i+1)]  # 倒序显示最新的
+                    result += f"   {row['trade_date']}: 主力净流入 {row.get('main_net_inflow', 0):+,.2f}万元\n"
+
+                # 计算统计数据
+                if len(df) > 0:
+                    total_main = df['main_net_inflow'].sum() if 'main_net_inflow' in df.columns else 0
+                    avg_main = df['main_net_inflow'].mean() if 'main_net_inflow' in df.columns else 0
+                    max_inflow = df['main_net_inflow'].max() if 'main_net_inflow' in df.columns else 0
+                    min_inflow = df['main_net_inflow'].min() if 'main_net_inflow' in df.columns else 0
+
+                    result += f"\n📈 统计数据:\n"
+                    result += f"   累计主力净流入: {total_main:+,.2f}万元\n"
+                    result += f"   平均每日净流入: {avg_main:+,.2f}万元\n"
+                    result += f"   最大单日流入: {max_inflow:+,.2f}万元\n"
+                    result += f"   最大单日流出: {min_inflow:+,.2f}万元\n"
+
+                logger.info(f"✅ [资金流向] 成功获取{symbol}日度资金流向，共{len(df)}条记录")
+                return result
+            else:
+                result = f"❌ 未获取到{symbol}的日度资金流向数据"
+                logger.warning(f"⚠️ [资金流向] {result}")
+                return result
+
+        except ImportError as e:
+            error_msg = f"❌ 资金流向模块未安装或导入失败: {e}"
+            logger.error(f"❌ [资金流向] 模块导入失败: {e}")
+            return error_msg
+        except Exception as e:
+            error_msg = f"❌ 获取{symbol}日度资金流向数据失败: {e}"
+            logger.error(f"❌ [资金流向] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_concept_capital_flow(self, concept_code: str, use_cache: bool = True) -> str:
+        """
+        获取概念板块资金流向数据（待实现）
+
+        Args:
+            concept_code: 概念代码
+            use_cache: 是否使用缓存
+
+        Returns:
+            str: 格式化的概念资金流向数据报告
+        """
+        logger.info(f"💰 [资金流向] 获取概念{concept_code}资金流向数据...")
+
+        try:
+            # 导入资金流向提供器
+            from .market_data_capital_flow_utils import get_capital_flow_provider
+
+            provider = get_capital_flow_provider()
+            df = provider.get_concept_capital_flow(concept_code, use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化输出（待实现）
+                result = f"💰 概念{concept_code} - 资金流向数据\n"
+                result += f"数据条数: {len(df)}条\n"
+                result += "⚠️ 概念资金流向功能正在开发中...\n"
+                return result
+            else:
+                result = f"⚠️ 概念{concept_code}资金流向功能待实现"
+                logger.warning(f"⚠️ [资金流向] {result}")
+                return result
+
+        except Exception as e:
+            error_msg = f"❌ 获取概念{concept_code}资金流向数据失败: {e}"
+            logger.error(f"❌ [资金流向] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_concept_list(self, use_cache: bool = True) -> str:
+        """
+        获取概念板块列表
+        Args:
+            use_cache: 是否使用缓存
+        Returns:
+            str: 格式化的概念板块列表报告
+        """
+        logger.info("📊 [概念板块] 获取概念板块列表...")
+        try:
+            from .market_data_concept_utils import get_concept_provider
+            provider = get_concept_provider()
+            df = provider.get_concept_list(use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化返回结果
+                result = f"📊 概念板块数据汇总 (共{len(df)}个概念)\n"
+                result += "=" * 60 + "\n"
+
+                # 显示前10个概念板块的基本信息
+                top_concepts = df.head(10)
+                for _, row in top_concepts.iterrows():
+                    concept_name = row.get('concept_name', '未知')
+                    change_pct = row.get('change_pct', 0)
+                    price = row.get('price', 0)
+                    volume = row.get('volume', 0)
+                    turnover = row.get('turnover', 0)
+
+                    result += f"📈 {concept_name}\n"
+                    result += f"   价格: {price:.2f}  涨跌幅: {change_pct:.2f}%\n"
+                    result += f"   成交量: {volume}  成交额: {turnover:.2f}万\n"
+                    result += "-" * 40 + "\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [概念板块] 成功获取{len(df)}个概念板块数据")
+                return result
+            else:
+                error_msg = "❌ 未获取到概念板块数据"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 获取概念板块列表失败: {e}"
+            logger.error(f"❌ [概念板块] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_concept_stocks(self, concept_code: str, use_cache: bool = True) -> str:
+        """
+        获取概念板块成分股
+        Args:
+            concept_code: 概念代码
+            use_cache: 是否使用缓存
+        Returns:
+            str: 格式化的概念成分股报告
+        """
+        logger.info(f"📊 [概念成分股] 获取概念{concept_code}成分股...")
+        try:
+            from .market_data_concept_utils import get_concept_provider
+            provider = get_concept_provider()
+            df = provider.get_concept_stocks(concept_code, use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化返回结果
+                result = f"📊 概念{concept_code}成分股数据 (共{len(df)}只股票)\n"
+                result += "=" * 60 + "\n"
+
+                # 按涨跌幅排序，显示前15只成分股
+                sorted_stocks = df.sort_values('change_pct', ascending=False).head(15)
+                for _, row in sorted_stocks.iterrows():
+                    stock_code = row.get('stock_code', '')
+                    stock_name = row.get('stock_name', '未知')
+                    price = row.get('price', 0)
+                    change_pct = row.get('change_pct', 0)
+                    change_amount = row.get('change_amount', 0)
+                    volume = row.get('volume', 0)
+                    turnover = row.get('turnover', 0)
+
+                    result += f"📈 {stock_name} ({stock_code})\n"
+                    result += f"   价格: {price:.2f}  涨跌: {change_amount:+.2f} ({change_pct:+.2f}%)\n"
+                    result += f"   成交量: {volume}  成交额: {turnover:.2f}万\n"
+                    result += "-" * 40 + "\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [概念成分股] 成功获取概念{concept_code}的{len(df)}只成分股")
+                return result
+            else:
+                error_msg = f"❌ 未获取到概念{concept_code}的成分股数据"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 获取概念{concept_code}成分股失败: {e}"
+            logger.error(f"❌ [概念成分股] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_top_concepts(self, sort_by: str = "change_pct", ascending: bool = False, limit: int = 20) -> str:
+        """
+        获取概念板块排行榜
+        Args:
+            sort_by: 排序字段 (change_pct, volume, turnover, market_cap等)
+            ascending: 是否升序排列
+            limit: 返回数量限制
+        Returns:
+            str: 格式化的概念板块排行榜
+        """
+        logger.info(f"📊 [概念排行] 获取概念板块排行榜 (按{sort_by}排序)...")
+        try:
+            from .market_data_concept_utils import get_concept_provider
+            provider = get_concept_provider()
+            df = provider.get_top_concepts(sort_by=sort_by, ascending=ascending, limit=limit)
+
+            if df is not None and not df.empty:
+                # 格式化返回结果
+                sort_name_map = {
+                    'change_pct': '涨跌幅',
+                    'volume': '成交量',
+                    'turnover': '成交额',
+                    'market_cap': '市值',
+                    'amplitude': '振幅'
+                }
+                sort_display = sort_name_map.get(sort_by, sort_by)
+
+                result = f"📊 概念板块排行榜 (按{sort_display}排序，前{len(df)}名)\n"
+                result += "=" * 60 + "\n"
+
+                for i, (_, row) in enumerate(df.iterrows(), 1):
+                    concept_name = row.get('concept_name', '未知')
+                    change_pct = row.get('change_pct', 0)
+                    price = row.get('price', 0)
+                    volume = row.get('volume', 0)
+                    turnover = row.get('turnover', 0)
+                    sort_value = row.get(sort_by, 0)
+
+                    result += f"🏆 第{i}名: {concept_name}\n"
+                    result += f"   {sort_display}: {sort_value:.2f}  价格: {price:.2f}  涨跌幅: {change_pct:+.2f}%\n"
+                    result += f"   成交量: {volume}  成交额: {turnover:.2f}万\n"
+                    result += "-" * 40 + "\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [概念排行] 成功获取{len(df)}个概念排行数据")
+                return result
+            else:
+                error_msg = "❌ 未获取到概念板块排行数据"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 获取概念板块排行失败: {e}"
+            logger.error(f"❌ [概念排行] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_dividend_history(self, symbol: str, start_year: int = None, end_year: int = None, use_cache: bool = True) -> str:
+        """
+        获取股票历史分红数据
+        Args:
+            symbol: 股票代码
+            start_year: 开始年份
+            end_year: 结束年份
+            use_cache: 是否使用缓存
+        Returns:
+            str: 格式化的分红历史报告
+        """
+        logger.info(f"💰 [分红历史] 获取股票{symbol}分红历史数据...")
+        try:
+            from .market_data_dividend_utils import get_dividend_provider
+            provider = get_dividend_provider()
+            df = provider.get_dividend_history(symbol, start_year=start_year, end_year=end_year, use_cache=use_cache)
+
+            if df is not None and not df.empty:
+                # 格式化返回结果
+                result = f"💰 股票{symbol}分红历史数据 (共{len(df)}条记录)\n"
+                result += "=" * 60 + "\n"
+
+                # 按公告日期排序，显示最近的分红记录
+                sorted_dividends = df.sort_values('notice_date', ascending=False).head(10)
+                for _, row in sorted_dividends.iterrows():
+                    notice_date = row.get('notice_date', '未知')[:10] if row.get('notice_date') else '未知'
+                    ex_dividend_date = row.get('ex_dividend_date', '未知')[:10] if row.get('ex_dividend_date') else '未知'
+                    dividend_ratio = row.get('dividend_ratio', 0)
+                    plan_explain = row.get('plan_explain', '未知')
+                    year = row.get('year', '未知')
+                    progress = row.get('progress', '未知')
+
+                    result += f"📅 分红年度: {year}\n"
+                    result += f"   派息方案: {plan_explain}\n"
+                    result += f"   每股派息: {dividend_ratio:.4f}元\n"
+                    result += f"   公告日期: {notice_date}\n"
+                    result += f"   除息日期: {ex_dividend_date}\n"
+                    result += f"   实施进度: {progress}\n"
+                    result += "-" * 40 + "\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [分红历史] 成功获取{symbol}的{len(df)}条分红记录")
+                return result
+            else:
+                error_msg = f"❌ 未获取到股票{symbol}的分红历史数据"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 获取股票{symbol}分红历史失败: {e}"
+            logger.error(f"❌ [分红历史] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def get_dividend_summary(self, symbol: str, use_cache: bool = True) -> str:
+        """
+        获取股票分红汇总信息
+        Args:
+            symbol: 股票代码
+            use_cache: 是否使用缓存
+        Returns:
+            str: 格式化的分红汇总报告
+        """
+        logger.info(f"💰 [分红汇总] 获取股票{symbol}分红汇总信息...")
+        try:
+            from .market_data_dividend_utils import get_dividend_provider
+            provider = get_dividend_provider()
+            summary = provider.get_dividend_summary(symbol, use_cache=use_cache)
+
+            if summary:
+                # 格式化返回结果
+                result = f"💰 股票{symbol}分红汇总分析\n"
+                result += "=" * 60 + "\n"
+
+                # 基本统计信息
+                result += "📊 分红统计概况\n"
+                result += f"   总分红次数: {summary.get('total_dividend_count', 0)}次\n"
+                result += f"   累计分红总额: {summary.get('total_dividend_amount', 0):.4f}元/股\n"
+                result += f"   平均每次分红: {summary.get('avg_dividend_ratio', 0):.4f}元/股\n"
+                result += f"   分红稳定性: {summary.get('dividend_stability', 0):.2f} (0-1分)\n"
+                result += "-" * 40 + "\n"
+
+                # 最近一次分红信息
+                latest = summary.get('latest_dividend', {})
+                if latest:
+                    result += "📅 最近分红信息\n"
+                    result += f"   公告日期: {latest.get('notice_date', '未知')[:10] if latest.get('notice_date') else '未知'}\n"
+                    result += f"   除息日期: {latest.get('ex_dividend_date', '未知')[:10] if latest.get('ex_dividend_date') else '未知'}\n"
+                    result += f"   派息金额: {latest.get('dividend_ratio', 0):.4f}元/股\n"
+                    result += f"   分红方案: {latest.get('plan_explain', '未知')}\n"
+                    result += f"   实施进度: {latest.get('progress', '未知')}\n"
+                    result += "-" * 40 + "\n"
+
+                # 年度分红分布
+                yearly_dividends = summary.get('yearly_dividends', {})
+                if yearly_dividends:
+                    result += "📈 年度分红分布\n"
+                    for year, amount in sorted(yearly_dividends.items(), reverse=True):
+                        result += f"   {year}年: {amount:.4f}元/股\n"
+                    result += "-" * 40 + "\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [分红汇总] 成功获取{symbol}分红汇总数据")
+                return result
+            else:
+                error_msg = f"❌ 未获取到股票{symbol}的分红汇总数据"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 获取股票{symbol}分红汇总失败: {e}"
+            logger.error(f"❌ [分红汇总] 获取失败: {e}", exc_info=True)
+            return error_msg
+
+    def calculate_dividend_yield(self, symbol: str, current_price: float = None, use_cache: bool = True) -> str:
+        """
+        计算股票股息率
+        Args:
+            symbol: 股票代码
+            current_price: 当前股价
+            use_cache: 是否使用缓存
+        Returns:
+            str: 格式化的股息率报告
+        """
+        logger.info(f"💰 [股息率] 计算股票{symbol}股息率...")
+        try:
+            from .market_data_dividend_utils import get_dividend_provider
+            provider = get_dividend_provider()
+            result_data = provider.calculate_dividend_yield(symbol, current_price=current_price, use_cache=use_cache)
+
+            if result_data and 'dividend_yield' in result_data:
+                # 格式化返回结果
+                result = f"💰 股票{symbol}股息率分析\n"
+                result += "=" * 60 + "\n"
+
+                dividend_yield = result_data.get('dividend_yield', 0)
+                annual_dividend = result_data.get('annual_dividend', 0)
+                price = result_data.get('current_price', current_price)
+                calc_date = result_data.get('calculation_date', time.strftime('%Y-%m-%d'))
+
+                # 股息率信息
+                result += "📊 股息率计算结果\n"
+                result += f"   股息率: {dividend_yield:.2f}%\n"
+                result += f"   年度分红: {annual_dividend:.4f}元/股\n"
+                if price:
+                    result += f"   参考股价: {price:.2f}元\n"
+                result += f"   计算日期: {calc_date}\n"
+                result += "-" * 40 + "\n"
+
+                # 股息率评估
+                result += "📈 股息率评估\n"
+                if dividend_yield >= 5.0:
+                    result += "   评级: ⭐⭐⭐⭐⭐ 优秀 (股息率≥5%)\n"
+                    result += "   说明: 股息率较高，适合追求稳定收益的投资者\n"
+                elif dividend_yield >= 3.0:
+                    result += "   评级: ⭐⭐⭐⭐ 良好 (股息率3-5%)\n"
+                    result += "   说明: 股息率适中，有一定分红收益\n"
+                elif dividend_yield >= 1.0:
+                    result += "   评级: ⭐⭐⭐ 一般 (股息率1-3%)\n"
+                    result += "   说明: 股息率偏低，分红收益有限\n"
+                else:
+                    result += "   评级: ⭐⭐ 较低 (股息率<1%)\n"
+                    result += "   说明: 股息率很低或无分红，不适合追求分红收益的投资者\n"
+
+                # 错误信息处理
+                if 'error' in result_data:
+                    result += f"\n⚠️ 注意事项: {result_data['error']}\n"
+
+                result += f"\n💡 数据来源: 东方财富  更新时间: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                logger.info(f"✅ [股息率] 成功计算{symbol}股息率: {dividend_yield:.2f}%")
+                return result
+            else:
+                error_msg = f"❌ 无法计算股票{symbol}的股息率"
+                if result_data and 'error' in result_data:
+                    error_msg += f": {result_data['error']}"
+                logger.warning(error_msg)
+                return error_msg
+
+        except Exception as e:
+            error_msg = f"❌ 计算股票{symbol}股息率失败: {e}"
+            logger.error(f"❌ [股息率] 计算失败: {e}", exc_info=True)
+            return error_msg
+
 
 # 全局数据源管理器实例
 _data_source_manager = None
