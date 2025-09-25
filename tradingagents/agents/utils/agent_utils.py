@@ -1210,420 +1210,426 @@ class Toolkit:
             return error_msg
 
 
-# ============ 资金流向分析工具 ============
+    # ============ 资金流向分析工具 ============
 
-@tool
-@log_tool_call
-def get_capital_flow_analysis(
-    symbol: Annotated[str, "股票代码"],
-    analysis_days: Annotated[int, "分析天数"] = 5
-) -> str:
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_capital_flow_analysis(
+        symbol: Annotated[str, "股票代码"],
+        analysis_days: Annotated[int, "分析天数"] = 5
+    ) -> str:
+        """
+        获取股票资金流向分析，为技术分析师提供资金面的洞察
+
+        Args:
+            symbol: 股票代码
+            analysis_days: 分析天数，默认5天
+
+        Returns:
+            str: 资金流向分析报告
+        """
+        try:
+            logger.info(f"💰 [资金流向工具] 开始分析股票 {symbol} 的资金流向")
+
+            # 获取实时资金流向数据
+            realtime_flow = interface.get_capital_flow_realtime(symbol)
+            logger.debug(f"💰 [资金流向工具] 获取实时数据: {len(realtime_flow)} 字符")
+
+            # 获取历史资金流向数据
+            from datetime import datetime, timedelta
+            end_date = datetime.now().strftime('%Y-%m-%d')
+            start_date = (datetime.now() - timedelta(days=analysis_days)).strftime('%Y-%m-%d')
+
+            historical_flow = interface.get_capital_flow_data(symbol, start_date, end_date)
+            logger.debug(f"💰 [资金流向工具] 获取历史数据: {len(historical_flow)} 字符")
+
+            # 组合分析报告
+            analysis_report = f"""# {symbol} 资金流向技术分析
+
+    ## 实时资金流向情况
+    {realtime_flow}
+
+    ## 近{analysis_days}日资金流向趋势
+    {historical_flow}
+
+    ## 技术分析要点
+
+    ### 资金流向指标说明：
+    - **主力净流入**: 大资金(>50万)的净流入情况，正值表示资金流入，负值表示流出
+    - **超大单净流入**: 特大资金(>100万)流向，通常代表机构资金动向
+    - **大单净流入**: 大额交易(20-50万)资金流向
+    - **中单净流入**: 中等资金(5-20万)流向，往往反映游资活动
+    - **小单净流入**: 散户资金(<5万)流向
+
+    ### 分析维度：
+    1. **资金性质分析**: 从资金规模判断是机构资金还是散户资金
+    2. **资金流向趋势**: 连续几日的资金净流入/流出趋势
+    3. **资金流向强度**: 资金流入/流出的绝对数量和相对比例
+    4. **主力控盘度**: 主力资金与散户资金的对比
+
+    ### 技术分析建议：
+    - 主力资金持续流入通常是股价上涨的先行指标
+    - 超大单资金流入常预示着重要的价格变化
+    - 资金流向与股价走势的背离需要特别关注
+    - 连续多日的资金净流出可能预示调整压力
+
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *数据来源: 东方财富等多数据源智能融合*
     """
-    获取股票资金流向分析，为技术分析师提供资金面的洞察
 
-    Args:
-        symbol: 股票代码
-        analysis_days: 分析天数，默认5天
+            logger.info(f"💰 [资金流向工具] 分析完成，报告长度: {len(analysis_report)}")
+            return analysis_report
 
-    Returns:
-        str: 资金流向分析报告
+        except Exception as e:
+            error_msg = f"资金流向分析失败: {str(e)}"
+            logger.error(f"❌ [资金流向工具] {error_msg}")
+            return f"❌ 获取{symbol}资金流向分析失败: {error_msg}"
+
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_concept_capital_flow_analysis(
+        concept_code: Annotated[str, "概念板块代码"],
+    ) -> str:
+        """
+        获取概念板块资金流向分析，帮助技术分析师识别板块轮动和热点
+
+        Args:
+            concept_code: 概念板块代码
+
+        Returns:
+            str: 概念板块资金流向分析报告
+        """
+        try:
+            logger.info(f"📊 [概念资金流向] 开始分析概念板块 {concept_code}")
+
+            # 获取概念资金流向数据
+            concept_flow = interface.get_concept_capital_flow(concept_code)
+
+            # 获取概念成分股信息
+            concept_stocks = interface.get_concept_stocks(concept_code)
+
+            # 组合分析报告
+            analysis_report = f"""# 概念板块 {concept_code} 资金流向分析
+
+    ## 概念板块资金流向
+    {concept_flow}
+
+    ## 概念成分股表现
+    {concept_stocks}
+
+    ## 板块技术分析要点
+
+    ### 板块资金流向意义：
+    - **板块资金净流入**: 反映市场对该概念主题的关注度和资金偏好
+    - **成分股资金分化**: 分析板块内部资金流向的差异化表现
+    - **龙头股资金集中度**: 识别板块内的资金集中股票
+
+    ### 技术分析应用：
+    1. **板块轮动识别**: 通过资金流向变化识别热点板块切换
+    2. **概念炒作周期**: 判断概念主题的资金流入阶段
+    3. **个股选择参考**: 在强势板块中选择资金流入最多的个股
+    4. **风险控制**: 板块资金流出时及时规避相关个股风险
+
+    ### 操作建议：
+    - 板块资金持续流入时，重点关注龙头股机会
+    - 板块资金分化严重时，谨慎参与概念炒作
+    - 结合板块资金流向和个股技术形态，提高胜率
+
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *数据来源: 概念板块多维度资金流向监控*
     """
-    try:
-        logger.info(f"💰 [资金流向工具] 开始分析股票 {symbol} 的资金流向")
 
-        # 获取实时资金流向数据
-        realtime_flow = interface.get_capital_flow_realtime(symbol)
-        logger.debug(f"💰 [资金流向工具] 获取实时数据: {len(realtime_flow)} 字符")
+            logger.info(f"📊 [概念资金流向] 分析完成")
+            return analysis_report
 
-        # 获取历史资金流向数据
-        from datetime import datetime, timedelta
-        end_date = datetime.now().strftime('%Y-%m-%d')
-        start_date = (datetime.now() - timedelta(days=analysis_days)).strftime('%Y-%m-%d')
+        except Exception as e:
+            error_msg = f"概念板块资金流向分析失败: {str(e)}"
+            logger.error(f"❌ [概念资金流向] {error_msg}")
+            return f"❌ 获取概念板块{concept_code}资金流向分析失败: {error_msg}"
 
-        historical_flow = interface.get_capital_flow_data(symbol, start_date, end_date)
-        logger.debug(f"💰 [资金流向工具] 获取历史数据: {len(historical_flow)} 字符")
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_market_capital_flow_overview() -> str:
+        """
+        获取市场整体资金流向概览，为技术分析师提供市场资金面的宏观视角
 
-        # 组合分析报告
-        analysis_report = f"""# {symbol} 资金流向技术分析
+        Returns:
+            str: 市场资金流向概览报告
+        """
+        try:
+            logger.info(f"🌐 [市场资金流向] 开始获取市场整体资金流向概览")
 
-## 实时资金流向情况
-{realtime_flow}
+            # 获取热门概念的资金流向
+            concept_ranking = interface.get_concept_ranking(sort_by="change_pct", limit=10)
 
-## 近{analysis_days}日资金流向趋势
-{historical_flow}
+            # 组合市场资金流向概览
+            overview_report = f"""# 市场资金流向概览
 
-## 技术分析要点
+    ## 热门概念板块排行 (按涨跌幅)
+    {concept_ranking}
 
-### 资金流向指标说明：
-- **主力净流入**: 大资金(>50万)的净流入情况，正值表示资金流入，负值表示流出
-- **超大单净流入**: 特大资金(>100万)流向，通常代表机构资金动向
-- **大单净流入**: 大额交易(20-50万)资金流向
-- **中单净流入**: 中等资金(5-20万)流向，往往反映游资活动
-- **小单净流入**: 散户资金(<5万)流向
+    ## 市场资金流向技术分析
 
-### 分析维度：
-1. **资金性质分析**: 从资金规模判断是机构资金还是散户资金
-2. **资金流向趋势**: 连续几日的资金净流入/流出趋势
-3. **资金流向强度**: 资金流入/流出的绝对数量和相对比例
-4. **主力控盘度**: 主力资金与散户资金的对比
+    ### 市场资金面分析要点：
+    1. **热点板块识别**: 资金集中流入的概念板块往往是短期热点
+    2. **市场情绪判断**: 通过板块资金流向强度判断市场风险偏好
+    3. **轮动周期把握**: 识别不同概念板块之间的资金轮动规律
+    4. **系统性风险**: 当所有板块资金同时流出时，需警惕市场系统性风险
 
-### 技术分析建议：
-- 主力资金持续流入通常是股价上涨的先行指标
-- 超大单资金流入常预示着重要的价格变化
-- 资金流向与股价走势的背离需要特别关注
-- 连续多日的资金净流出可能预示调整压力
+    ### 技术分析策略：
+    - **追涨策略**: 重点关注资金流入强劲的概念板块龙头
+    - **轮动策略**: 在资金从一个板块流向另一个板块时把握机会
+    - **防守策略**: 当市场整体资金流出时，降低仓位或选择防守性板块
 
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*数据来源: 东方财富等多数据源智能融合*
-"""
+    ### 风险提示：
+    - 概念板块炒作具有阶段性，注意及时止盈
+    - 资金流向数据需要结合基本面和技术面综合判断
+    - 短期资金流向可能存在噪音，建议关注趋势性变化
 
-        logger.info(f"💰 [资金流向工具] 分析完成，报告长度: {len(analysis_report)}")
-        return analysis_report
-
-    except Exception as e:
-        error_msg = f"资金流向分析失败: {str(e)}"
-        logger.error(f"❌ [资金流向工具] {error_msg}")
-        return f"❌ 获取{symbol}资金流向分析失败: {error_msg}"
-
-@tool
-@log_tool_call
-def get_concept_capital_flow_analysis(
-    concept_code: Annotated[str, "概念板块代码"],
-) -> str:
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *覆盖范围: 主要概念板块和市场热点追踪*
     """
-    获取概念板块资金流向分析，帮助技术分析师识别板块轮动和热点
 
-    Args:
-        concept_code: 概念板块代码
+            logger.info(f"🌐 [市场资金流向] 概览分析完成")
+            return overview_report
 
-    Returns:
-        str: 概念板块资金流向分析报告
+        except Exception as e:
+            error_msg = f"市场资金流向概览获取失败: {str(e)}"
+            logger.error(f"❌ [市场资金流向] {error_msg}")
+            return f"❌ 获取市场资金流向概览失败: {error_msg}"
+
+        # ============ 基本面分析工具 (概念板块 + 股息分析) ============
+
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_concept_fundamentals_analysis(
+        concept_code: Annotated[str, "概念板块代码"]
+    ) -> str:
+        """
+        获取概念板块基本面分析，帮助基本面分析师识别有价值的投资主题
+
+        Args:
+            concept_code: 概念板块代码
+
+        Returns:
+            str: 概念板块基本面分析报告
+        """
+        try:
+            logger.info(f"📈 [概念基本面] 开始分析概念板块 {concept_code} 的基本面")
+
+            # 获取概念板块列表和成分股
+            concept_stocks = interface.get_concept_stocks(concept_code)
+            concept_ranking = interface.get_concept_ranking(sort_by="market_cap", limit=5)
+
+            # 组合基本面分析报告
+            analysis_report = f"""# 概念板块 {concept_code} 基本面投资分析
+
+    ## 概念板块成分股分析
+    {concept_stocks}
+
+    ## 相关概念板块市值排名 (前5名)
+    {concept_ranking}
+
+    ## 基本面投资分析框架
+
+    ### 概念投资价值评估：
+    1. **行业前景分析**: 评估概念所代表的行业或主题的长期发展潜力
+    2. **政策支持度**: 分析相关政策对概念板块的支持力度和持续性
+    3. **技术成熟度**: 判断概念涉及的技术或商业模式的成熟程度
+    4. **市场空间**: 评估概念板块的总体市场规模和增长潜力
+
+    ### 成分股基本面筛选：
+    - **财务健康度**: 关注成分股的盈利能力、现金流和负债情况
+    - **竞争优势**: 识别在概念主题中具有核心竞争力的公司
+    - **估值合理性**: 评估股票当前估值是否合理，避免概念溢价过高
+    - **管理层质量**: 考察公司管理层的执行力和战略规划能力
+
+    ### 投资建议框架：
+    1. **长期投资视角**: 关注具有长期成长性的概念主题
+    2. **分散投资**: 在概念板块内选择多只优质股票分散风险
+    3. **估值纪律**: 严格控制买入价格，避免追高
+    4. **定期评估**: 定期评估概念的发展情况和投资逻辑变化
+
+    ### 风险控制：
+    - 概念炒作风险：避免在概念高峰期盲目追高
+    - 政策变化风险：关注相关政策的变化对概念的影响
+    - 基本面变化：及时跟踪成分股基本面变化
+
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *分析维度: 概念价值评估 + 成分股基本面筛选*
     """
-    try:
-        logger.info(f"📊 [概念资金流向] 开始分析概念板块 {concept_code}")
 
-        # 获取概念资金流向数据
-        concept_flow = interface.get_concept_capital_flow(concept_code)
+            logger.info(f"📈 [概念基本面] 分析完成")
+            return analysis_report
 
-        # 获取概念成分股信息
-        concept_stocks = interface.get_concept_stocks(concept_code)
+        except Exception as e:
+            error_msg = f"概念板块基本面分析失败: {str(e)}"
+            logger.error(f"❌ [概念基本面] {error_msg}")
+            return f"❌ 概念板块{concept_code}基本面分析失败: {error_msg}"
 
-        # 组合分析报告
-        analysis_report = f"""# 概念板块 {concept_code} 资金流向分析
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_dividend_investment_analysis(
+        symbol: Annotated[str, "股票代码"],
+        current_price: Annotated[float, "当前股价"] = None
+    ) -> str:
+        """
+        获取股票股息投资分析，为基本面分析师提供价值投资和收益评估
 
-## 概念板块资金流向
-{concept_flow}
+        Args:
+            symbol: 股票代码
+            current_price: 当前股价(可选)
 
-## 概念成分股表现
-{concept_stocks}
+        Returns:
+            str: 股息投资分析报告
+        """
+        try:
+            logger.info(f"💎 [股息投资分析] 开始分析股票 {symbol} 的股息投资价值")
 
-## 板块技术分析要点
+            # 获取股息历史数据
+            dividend_history = interface.get_dividend_history(symbol, use_cache=True)
 
-### 板块资金流向意义：
-- **板块资金净流入**: 反映市场对该概念主题的关注度和资金偏好
-- **成分股资金分化**: 分析板块内部资金流向的差异化表现
-- **龙头股资金集中度**: 识别板块内的资金集中股票
+            # 获取股息汇总信息
+            dividend_summary = interface.get_dividend_summary(symbol, use_cache=True)
 
-### 技术分析应用：
-1. **板块轮动识别**: 通过资金流向变化识别热点板块切换
-2. **概念炒作周期**: 判断概念主题的资金流入阶段
-3. **个股选择参考**: 在强势板块中选择资金流入最多的个股
-4. **风险控制**: 板块资金流出时及时规避相关个股风险
+            # 计算股息率
+            dividend_yield = interface.calculate_dividend_yield(symbol, current_price, use_cache=True)
 
-### 操作建议：
-- 板块资金持续流入时，重点关注龙头股机会
-- 板块资金分化严重时，谨慎参与概念炒作
-- 结合板块资金流向和个股技术形态，提高胜率
+            # 组合股息投资分析报告
+            analysis_report = f"""# {symbol} 股息投资价值分析
 
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*数据来源: 概念板块多维度资金流向监控*
-"""
+    ## 股息历史表现
+    {dividend_history}
 
-        logger.info(f"📊 [概念资金流向] 分析完成")
-        return analysis_report
+    ## 股息汇总统计
+    {dividend_summary}
 
-    except Exception as e:
-        error_msg = f"概念板块资金流向分析失败: {str(e)}"
-        logger.error(f"❌ [概念资金流向] {error_msg}")
-        return f"❌ 获取概念板块{concept_code}资金流向分析失败: {error_msg}"
+    ## 股息率评估
+    {dividend_yield}
 
-@tool
-@log_tool_call
-def get_market_capital_flow_overview() -> str:
+    ## 股息投资价值评估框架
+
+    ### 股息投资优势分析：
+    1. **稳定现金收益**: 定期股息提供稳定的现金流收入
+    2. **抗通胀能力**: 优质分红股的股息增长通常能跑赢通胀
+    3. **风险控制**: 分红能力强的公司通常财务稳健，风险相对较低
+    4. **复利效应**: 长期持有并再投资股息，实现复利增长
+
+    ### 股息质量评估维度：
+    - **分红稳定性**: 历史分红的连续性和稳定性
+    - **分红增长性**: 股息的增长趋势和可持续性
+    - **派息率适中**: 避免派息率过高影响公司发展
+    - **现金流支撑**: 分红是否有足够的自由现金流支撑
+
+    ### 股息投资策略：
+    1. **股息增长投资**: 选择股息持续增长的优质公司
+    2. **高股息价值投资**: 关注股息率较高且基本面良好的股票
+    3. **股息再投资**: 将获得的股息继续投资，实现复利效应
+    4. **组合配置**: 构建多元化的股息股票组合
+
+    ### 投资建议：
+    - **买入时机**: 在股息率相对较高时买入，获得更好的收益率
+    - **长期持有**: 股息投资适合长期投资者，短期波动不必过度关注
+    - **定期评估**: 关注公司基本面变化，确保分红的可持续性
+    - **税收考虑**: 了解股息税收政策，优化投资收益
+
+    ### 风险提示：
+    - 股息削减风险：经济下行时公司可能削减或暂停分红
+    - 利率敏感性：利率上升时高股息股票可能面临估值压力
+    - 增长性权衡：高股息股票的资本增值潜力可能相对有限
+
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *投资理念: 价值投资 + 现金流收益 + 长期持有*
     """
-    获取市场整体资金流向概览，为技术分析师提供市场资金面的宏观视角
 
-    Returns:
-        str: 市场资金流向概览报告
+            logger.info(f"💎 [股息投资分析] 分析完成")
+            return analysis_report
+
+        except Exception as e:
+            error_msg = f"股息投资分析失败: {str(e)}"
+            logger.error(f"❌ [股息投资分析] {error_msg}")
+            return f"❌ 股票{symbol}股息投资分析失败: {error_msg}"
+
+    @staticmethod
+    @tool
+    @log_tool_call
+    def get_sector_rotation_analysis() -> str:
+        """
+        获取行业板块轮动分析，帮助基本面分析师把握市场轮动机会
+
+        Returns:
+            str: 行业板块轮动分析报告
+        """
+        try:
+            logger.info(f"🔄 [板块轮动] 开始分析行业板块轮动情况")
+
+            # 获取概念板块排名数据
+            top_concepts_by_change = interface.get_concept_ranking(sort_by="change_pct", limit=10)
+            top_concepts_by_volume = interface.get_concept_ranking(sort_by="volume", limit=8)
+            top_concepts_by_market_cap = interface.get_concept_ranking(sort_by="market_cap", limit=8)
+
+            # 组合板块轮动分析报告
+            rotation_report = f"""# 行业板块轮动基本面分析
+
+    ## 当前热门板块 (按涨跌幅排序)
+    {top_concepts_by_change}
+
+    ## 活跃交易板块 (按成交量排序)
+    {top_concepts_by_volume}
+
+    ## 大市值板块 (按市值排序)
+    {top_concepts_by_market_cap}
+
+    ## 板块轮动投资策略框架
+
+    ### 板块轮动分析逻辑：
+    1. **经济周期分析**: 不同经济周期阶段，不同板块的表现差异显著
+    2. **政策导向跟踪**: 政策扶持的行业往往成为阶段性热点
+    3. **基本面拐点**: 关注行业基本面出现向上拐点的板块
+    4. **估值比较**: 寻找基本面良好但估值相对较低的板块
+
+    ### 板块投资机会识别：
+    - **成长性板块**: 关注新兴产业和高成长行业的投资机会
+    - **价值修复板块**: 寻找被错杀但基本面稳定的传统行业
+    - **周期性板块**: 把握经济周期带来的周期性行业机会
+    - **防御性板块**: 经济不确定时期的避险选择
+
+    ### 基本面分析要点：
+    1. **行业景气度**: 评估行业整体的景气程度和发展趋势
+    2. **供需关系**: 分析行业供需平衡状况及未来变化
+    3. **技术进步**: 关注技术创新对行业格局的影响
+    4. **监管环境**: 评估监管政策对行业发展的影响
+
+    ### 投资策略建议：
+    - **分阶段配置**: 根据经济周期和市场阶段调整板块配置
+    - **龙头优选**: 在优势板块中选择龙头企业进行配置
+    - **估值纪律**: 严格控制买入估值，避免高位追涨
+    - **动态调整**: 根据基本面变化及时调整板块配置
+
+    ### 风险管控：
+    - 板块集中风险：避免过度集中在单一板块
+    - 择时风险：板块轮动存在一定的择时难度
+    - 基本面变化：密切跟踪板块基本面的变化
+
+    ---
+    *分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+    *分析范围: 全市场主要概念板块轮动监控*
     """
-    try:
-        logger.info(f"🌐 [市场资金流向] 开始获取市场整体资金流向概览")
 
-        # 获取热门概念的资金流向
-        concept_ranking = interface.get_concept_ranking(sort_by="change_pct", limit=10)
+            logger.info(f"🔄 [板块轮动] 分析完成")
+            return rotation_report
 
-        # 组合市场资金流向概览
-        overview_report = f"""# 市场资金流向概览
-
-## 热门概念板块排行 (按涨跌幅)
-{concept_ranking}
-
-## 市场资金流向技术分析
-
-### 市场资金面分析要点：
-1. **热点板块识别**: 资金集中流入的概念板块往往是短期热点
-2. **市场情绪判断**: 通过板块资金流向强度判断市场风险偏好
-3. **轮动周期把握**: 识别不同概念板块之间的资金轮动规律
-4. **系统性风险**: 当所有板块资金同时流出时，需警惕市场系统性风险
-
-### 技术分析策略：
-- **追涨策略**: 重点关注资金流入强劲的概念板块龙头
-- **轮动策略**: 在资金从一个板块流向另一个板块时把握机会
-- **防守策略**: 当市场整体资金流出时，降低仓位或选择防守性板块
-
-### 风险提示：
-- 概念板块炒作具有阶段性，注意及时止盈
-- 资金流向数据需要结合基本面和技术面综合判断
-- 短期资金流向可能存在噪音，建议关注趋势性变化
-
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*覆盖范围: 主要概念板块和市场热点追踪*
-"""
-
-        logger.info(f"🌐 [市场资金流向] 概览分析完成")
-        return overview_report
-
-    except Exception as e:
-        error_msg = f"市场资金流向概览获取失败: {str(e)}"
-        logger.error(f"❌ [市场资金流向] {error_msg}")
-        return f"❌ 获取市场资金流向概览失败: {error_msg}"
-
-    # ============ 基本面分析工具 (概念板块 + 股息分析) ============
-
-@tool
-@log_tool_call
-def get_concept_fundamentals_analysis(
-    concept_code: Annotated[str, "概念板块代码"]
-) -> str:
-    """
-    获取概念板块基本面分析，帮助基本面分析师识别有价值的投资主题
-
-    Args:
-        concept_code: 概念板块代码
-
-    Returns:
-        str: 概念板块基本面分析报告
-    """
-    try:
-        logger.info(f"📈 [概念基本面] 开始分析概念板块 {concept_code} 的基本面")
-
-        # 获取概念板块列表和成分股
-        concept_stocks = interface.get_concept_stocks(concept_code)
-        concept_ranking = interface.get_concept_ranking(sort_by="market_cap", limit=5)
-
-        # 组合基本面分析报告
-        analysis_report = f"""# 概念板块 {concept_code} 基本面投资分析
-
-## 概念板块成分股分析
-{concept_stocks}
-
-## 相关概念板块市值排名 (前5名)
-{concept_ranking}
-
-## 基本面投资分析框架
-
-### 概念投资价值评估：
-1. **行业前景分析**: 评估概念所代表的行业或主题的长期发展潜力
-2. **政策支持度**: 分析相关政策对概念板块的支持力度和持续性
-3. **技术成熟度**: 判断概念涉及的技术或商业模式的成熟程度
-4. **市场空间**: 评估概念板块的总体市场规模和增长潜力
-
-### 成分股基本面筛选：
-- **财务健康度**: 关注成分股的盈利能力、现金流和负债情况
-- **竞争优势**: 识别在概念主题中具有核心竞争力的公司
-- **估值合理性**: 评估股票当前估值是否合理，避免概念溢价过高
-- **管理层质量**: 考察公司管理层的执行力和战略规划能力
-
-### 投资建议框架：
-1. **长期投资视角**: 关注具有长期成长性的概念主题
-2. **分散投资**: 在概念板块内选择多只优质股票分散风险
-3. **估值纪律**: 严格控制买入价格，避免追高
-4. **定期评估**: 定期评估概念的发展情况和投资逻辑变化
-
-### 风险控制：
-- 概念炒作风险：避免在概念高峰期盲目追高
-- 政策变化风险：关注相关政策的变化对概念的影响
-- 基本面变化：及时跟踪成分股基本面变化
-
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*分析维度: 概念价值评估 + 成分股基本面筛选*
-"""
-
-        logger.info(f"📈 [概念基本面] 分析完成")
-        return analysis_report
-
-    except Exception as e:
-        error_msg = f"概念板块基本面分析失败: {str(e)}"
-        logger.error(f"❌ [概念基本面] {error_msg}")
-        return f"❌ 概念板块{concept_code}基本面分析失败: {error_msg}"
-
-@tool
-@log_tool_call
-def get_dividend_investment_analysis(
-    symbol: Annotated[str, "股票代码"],
-    current_price: Annotated[float, "当前股价"] = None
-) -> str:
-    """
-    获取股票股息投资分析，为基本面分析师提供价值投资和收益评估
-
-    Args:
-        symbol: 股票代码
-        current_price: 当前股价(可选)
-
-    Returns:
-        str: 股息投资分析报告
-    """
-    try:
-        logger.info(f"💎 [股息投资分析] 开始分析股票 {symbol} 的股息投资价值")
-
-        # 获取股息历史数据
-        dividend_history = interface.get_dividend_history(symbol, use_cache=True)
-
-        # 获取股息汇总信息
-        dividend_summary = interface.get_dividend_summary(symbol, use_cache=True)
-
-        # 计算股息率
-        dividend_yield = interface.calculate_dividend_yield(symbol, current_price, use_cache=True)
-
-        # 组合股息投资分析报告
-        analysis_report = f"""# {symbol} 股息投资价值分析
-
-## 股息历史表现
-{dividend_history}
-
-## 股息汇总统计
-{dividend_summary}
-
-## 股息率评估
-{dividend_yield}
-
-## 股息投资价值评估框架
-
-### 股息投资优势分析：
-1. **稳定现金收益**: 定期股息提供稳定的现金流收入
-2. **抗通胀能力**: 优质分红股的股息增长通常能跑赢通胀
-3. **风险控制**: 分红能力强的公司通常财务稳健，风险相对较低
-4. **复利效应**: 长期持有并再投资股息，实现复利增长
-
-### 股息质量评估维度：
-- **分红稳定性**: 历史分红的连续性和稳定性
-- **分红增长性**: 股息的增长趋势和可持续性
-- **派息率适中**: 避免派息率过高影响公司发展
-- **现金流支撑**: 分红是否有足够的自由现金流支撑
-
-### 股息投资策略：
-1. **股息增长投资**: 选择股息持续增长的优质公司
-2. **高股息价值投资**: 关注股息率较高且基本面良好的股票
-3. **股息再投资**: 将获得的股息继续投资，实现复利效应
-4. **组合配置**: 构建多元化的股息股票组合
-
-### 投资建议：
-- **买入时机**: 在股息率相对较高时买入，获得更好的收益率
-- **长期持有**: 股息投资适合长期投资者，短期波动不必过度关注
-- **定期评估**: 关注公司基本面变化，确保分红的可持续性
-- **税收考虑**: 了解股息税收政策，优化投资收益
-
-### 风险提示：
-- 股息削减风险：经济下行时公司可能削减或暂停分红
-- 利率敏感性：利率上升时高股息股票可能面临估值压力
-- 增长性权衡：高股息股票的资本增值潜力可能相对有限
-
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*投资理念: 价值投资 + 现金流收益 + 长期持有*
-"""
-
-        logger.info(f"💎 [股息投资分析] 分析完成")
-        return analysis_report
-
-    except Exception as e:
-        error_msg = f"股息投资分析失败: {str(e)}"
-        logger.error(f"❌ [股息投资分析] {error_msg}")
-        return f"❌ 股票{symbol}股息投资分析失败: {error_msg}"
-
-@tool
-@log_tool_call
-def get_sector_rotation_analysis() -> str:
-    """
-    获取行业板块轮动分析，帮助基本面分析师把握市场轮动机会
-
-    Returns:
-        str: 行业板块轮动分析报告
-    """
-    try:
-        logger.info(f"🔄 [板块轮动] 开始分析行业板块轮动情况")
-
-        # 获取概念板块排名数据
-        top_concepts_by_change = interface.get_concept_ranking(sort_by="change_pct", limit=10)
-        top_concepts_by_volume = interface.get_concept_ranking(sort_by="volume", limit=8)
-        top_concepts_by_market_cap = interface.get_concept_ranking(sort_by="market_cap", limit=8)
-
-        # 组合板块轮动分析报告
-        rotation_report = f"""# 行业板块轮动基本面分析
-
-## 当前热门板块 (按涨跌幅排序)
-{top_concepts_by_change}
-
-## 活跃交易板块 (按成交量排序)
-{top_concepts_by_volume}
-
-## 大市值板块 (按市值排序)
-{top_concepts_by_market_cap}
-
-## 板块轮动投资策略框架
-
-### 板块轮动分析逻辑：
-1. **经济周期分析**: 不同经济周期阶段，不同板块的表现差异显著
-2. **政策导向跟踪**: 政策扶持的行业往往成为阶段性热点
-3. **基本面拐点**: 关注行业基本面出现向上拐点的板块
-4. **估值比较**: 寻找基本面良好但估值相对较低的板块
-
-### 板块投资机会识别：
-- **成长性板块**: 关注新兴产业和高成长行业的投资机会
-- **价值修复板块**: 寻找被错杀但基本面稳定的传统行业
-- **周期性板块**: 把握经济周期带来的周期性行业机会
-- **防御性板块**: 经济不确定时期的避险选择
-
-### 基本面分析要点：
-1. **行业景气度**: 评估行业整体的景气程度和发展趋势
-2. **供需关系**: 分析行业供需平衡状况及未来变化
-3. **技术进步**: 关注技术创新对行业格局的影响
-4. **监管环境**: 评估监管政策对行业发展的影响
-
-### 投资策略建议：
-- **分阶段配置**: 根据经济周期和市场阶段调整板块配置
-- **龙头优选**: 在优势板块中选择龙头企业进行配置
-- **估值纪律**: 严格控制买入估值，避免高位追涨
-- **动态调整**: 根据基本面变化及时调整板块配置
-
-### 风险管控：
-- 板块集中风险：避免过度集中在单一板块
-- 择时风险：板块轮动存在一定的择时难度
-- 基本面变化：密切跟踪板块基本面的变化
-
----
-*分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-*分析范围: 全市场主要概念板块轮动监控*
-"""
-
-        logger.info(f"🔄 [板块轮动] 分析完成")
-        return rotation_report
-
-    except Exception as e:
-        error_msg = f"板块轮动分析失败: {str(e)}"
-        logger.error(f"❌ [板块轮动] {error_msg}")
-        return f"❌ 板块轮动分析失败: {error_msg}"
+        except Exception as e:
+            error_msg = f"板块轮动分析失败: {str(e)}"
+            logger.error(f"❌ [板块轮动] {error_msg}")
+            return f"❌ 板块轮动分析失败: {error_msg}"
