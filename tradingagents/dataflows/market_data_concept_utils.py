@@ -36,6 +36,7 @@ CACHE_CONFIG = {
     'concept_stocks_ttl': 1800,  # 成分股30分钟缓存
     'market_ttl': 300,           # 行情数据5分钟缓存
     'realtime_ttl': 300,         # 实时数据5分钟缓存
+    'capital_flow_ttl': 300,     # 概念资金流向5分钟缓存
 }
 
 # AData标准列定义
@@ -45,6 +46,12 @@ _MARKET_CONCEPT_MIN_COLUMNS = ['index_code', 'trade_time', 'trade_date', 'price'
                                'amount', 'change', 'change_pct']
 _MARKET_CONCEPT_CURRENT_COLUMNS = ['index_code', 'trade_time', 'trade_date', 'open', 'high', 'low', 'price',
                                    'volume', 'amount', 'change', 'change_pct']
+
+# 概念资金流向列定义（参考东方财富API字段）
+_CONCEPT_CAPITAL_FLOW_COLUMNS = ['index_code', 'index_name', 'change_pct', 'main_net_inflow', 'main_net_inflow_rate',
+                                 'max_net_inflow', 'max_net_inflow_rate', 'lg_net_inflow', 'lg_net_inflow_rate',
+                                 'mid_net_inflow', 'mid_net_inflow_rate', 'sm_net_inflow', 'sm_net_inflow_rate',
+                                 'stock_code', 'stock_name']
 
 # 会话配置
 session = requests.Session()
@@ -460,6 +467,201 @@ def get_concept_market_current(index_code: str = 'BK0612', use_cache: bool = Tru
     return df
 
 
+def get_all_concept_capital_flow_east(days_type: int = 1) -> pd.DataFrame:
+    """
+    获取全部概念板块资金流向数据（基于东方财富）
+
+    Args:
+        days_type: 天数类型：1.当天，5.最近5日；10.最近十日
+
+    Returns:
+        DataFrame: 概念板块资金流向数据
+    """
+    # 字段映射配置（参考 /Users/yyj/GitProject/adata/adata/stock/market/concept_capital_flow/capital_flow_east.py）
+    fid = {
+        1: 'f62',
+        5: 'f164',
+        10: 'f174'
+    }.get(days_type, 'f62')
+
+    fields = {
+        1: 'f12,f14,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205',
+        5: 'f12,f14,f109,f164,f165,f166,f167,f168,f169,f170,f171,f172,f173,f257,f258',
+        10: 'f12,f14,f160,f174,f175,f176,f177,f178,f179,f180,f181,f182,f183,f260,f261'
+    }.get(days_type, 'f12,f14,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205')
+
+    # 分页循环获取数据
+    curr_page = 1
+    all_data = []
+
+    try:
+        while curr_page < 50:  # 防止无限循环
+            url = f"https://push2.eastmoney.com/api/qt/clist/get"
+            params = {
+                'cb': f'jQuery112309367957412610306_{int(time.time() * 1000)}',
+                'fid': fid,
+                'po': '1',
+                'pz': '50',
+                'pn': str(curr_page),
+                'np': '1',
+                'fltt': '2',
+                'invt': '2',
+                'fs': 'm:90 t:3',  # 概念板块筛选条件
+                'fields': fields
+            }
+
+            response = session.get(url, params=params, timeout=10)
+            response.raise_for_status()
+
+            # 解析JSONP响应
+            text = response.text
+            start = text.find('(') + 1
+            end = text.rfind(')')
+            json_str = text[start:end]
+
+            data = json.loads(json_str).get('data')
+            if not data or not data.get('diff'):
+                break
+
+            # 解析数据字段
+            field_list = fields.split(',')
+            for item in data['diff']:
+                row_data = {}
+                for i, col_name in enumerate(_CONCEPT_CAPITAL_FLOW_COLUMNS):
+                    field_val = item.get(field_list[i], None)
+                    if field_val == '-' or field_val is None:
+                        continue
+                    row_data[col_name] = field_val
+
+                # 只添加完整的数据记录
+                if len(row_data) == len(_CONCEPT_CAPITAL_FLOW_COLUMNS):
+                    all_data.append(row_data)
+
+            curr_page += 1
+
+        # 构建DataFrame
+        if not all_data:
+            return pd.DataFrame(columns=_CONCEPT_CAPITAL_FLOW_COLUMNS)
+
+        result_df = pd.DataFrame(all_data)
+
+        # 数据类型转换
+        numeric_columns = ['change_pct', 'main_net_inflow', 'sm_net_inflow', 'mid_net_inflow',
+                          'lg_net_inflow', 'max_net_inflow', 'main_net_inflow_rate',
+                          'sm_net_inflow_rate', 'mid_net_inflow_rate', 'lg_net_inflow_rate',
+                          'max_net_inflow_rate']
+
+        for col in numeric_columns:
+            if col in result_df.columns:
+                result_df[col] = pd.to_numeric(result_df[col], errors='coerce')
+
+        if logger:
+            logger.info(f"✅ 成功获取概念板块资金流向数据，共{len(result_df)}条记录（{days_type}日类型）")
+
+        return result_df
+
+    except Exception as e:
+        if logger:
+            logger.error(f"❌ 获取概念板块资金流向数据失败: {str(e)}")
+        return pd.DataFrame(columns=_CONCEPT_CAPITAL_FLOW_COLUMNS)
+
+
+def get_concept_capital_flow(days_type: int = 1, use_cache: bool = True) -> pd.DataFrame:
+    """
+    获取概念板块资金流向数据（带缓存）
+
+    Args:
+        days_type: 天数类型：1.当天，5.最近5日；10.最近十日
+        use_cache: 是否使用缓存
+
+    Returns:
+        DataFrame: 概念板块资金流向数据
+    """
+    cache_key = f"concept_capital_flow_{days_type}"
+
+    # 检查缓存
+    cached_data = _get_cached_data(cache_key, use_cache)
+    if cached_data is not None:
+        if logger:
+            logger.info(f"✅ 从缓存获取概念板块资金流向数据（{days_type}日类型）")
+        return cached_data
+
+    # 获取数据
+    df = get_all_concept_capital_flow_east(days_type)
+
+    # 设置缓存
+    _set_cached_data(cache_key, df, CACHE_CONFIG['capital_flow_ttl'], use_cache)
+
+    return df
+
+
+def get_top_concept_capital_flow(days_type: int = 1, sort_by: str = "main_net_inflow",
+                                ascending: bool = False, limit: int = 20) -> pd.DataFrame:
+    """
+    获取概念板块资金流向排行榜
+
+    Args:
+        days_type: 天数类型：1.当天，5.最近5日；10.最近十日
+        sort_by: 排序字段（main_net_inflow, main_net_inflow_rate, change_pct等）
+        ascending: 是否升序排列
+        limit: 返回记录数量
+
+    Returns:
+        DataFrame: 排序后的概念板块资金流向数据
+    """
+    df = get_concept_capital_flow(days_type)
+
+    if df.empty:
+        return pd.DataFrame()
+
+    # 按指定字段排序
+    if sort_by in df.columns:
+        sorted_df = df.sort_values(by=sort_by, ascending=ascending).head(limit)
+        if logger:
+            logger.info(f"✅ 获取概念板块资金流向排行榜: {sort_by} 前{limit}名（{days_type}日类型）")
+        return sorted_df
+    else:
+        if logger:
+            logger.warning(f"⚠️ 排序字段 {sort_by} 不存在，返回前{limit}条数据")
+        return df.head(limit)
+
+
+def get_concept_capital_flow_summary(days_type: int = 1) -> dict:
+    """
+    获取概念板块资金流向汇总统计
+
+    Args:
+        days_type: 天数类型：1.当天，5.最近5日；10.最近十日
+
+    Returns:
+        dict: 汇总统计信息
+    """
+    df = get_concept_capital_flow(days_type)
+
+    if df.empty:
+        return {}
+
+    # 统计汇总信息
+    summary = {
+        'total_concepts': len(df),
+        'net_inflow_positive': len(df[df['main_net_inflow'] > 0]),
+        'net_inflow_negative': len(df[df['main_net_inflow'] < 0]),
+        'total_main_net_inflow': df['main_net_inflow'].sum(),
+        'avg_main_net_inflow': df['main_net_inflow'].mean(),
+        'max_main_net_inflow': df['main_net_inflow'].max(),
+        'min_main_net_inflow': df['main_net_inflow'].min(),
+        'avg_change_pct': df['change_pct'].mean(),
+        'max_change_pct': df['change_pct'].max(),
+        'min_change_pct': df['change_pct'].min(),
+        'days_type': days_type
+    }
+
+    if logger:
+        logger.info(f"✅ 生成概念板块资金流向汇总统计（{days_type}日类型）")
+
+    return summary
+
+
 if __name__ == '__main__':
     # 测试概念市场行情功能（基于AData实现）
     print("=== 测试概念市场行情功能（基于AData架构）===")
@@ -547,3 +749,52 @@ if __name__ == '__main__':
         print(f"数据列: {df_concept_current.columns.tolist()}")
         print("数据内容:")
         print(df_concept_current)
+
+    print("\n" + "="*60)
+    print("=== 测试概念板块资金流向功能 ===")
+
+    # 测试当日概念板块资金流向
+    print("\n=== 测试当日概念板块资金流向 ===")
+    df_concept_flow = get_concept_capital_flow(days_type=1)
+    print(f"当日概念板块资金流向数据条数: {len(df_concept_flow)}")
+    if not df_concept_flow.empty:
+        print(f"数据列: {df_concept_flow.columns.tolist()}")
+        print("前5条数据:")
+        print(df_concept_flow.head())
+
+    # 测试5日概念板块资金流向
+    print("\n=== 测试5日概念板块资金流向 ===")
+    df_concept_flow_5d = get_concept_capital_flow(days_type=5)
+    print(f"5日概念板块资金流向数据条数: {len(df_concept_flow_5d)}")
+    if not df_concept_flow_5d.empty:
+        print("前3条数据:")
+        print(df_concept_flow_5d.head(3))
+
+    # 测试10日概念板块资金流向
+    print("\n=== 测试10日概念板块资金流向 ===")
+    df_concept_flow_10d = get_concept_capital_flow(days_type=10)
+    print(f"10日概念板块资金流向数据条数: {len(df_concept_flow_10d)}")
+
+    # 测试概念板块资金流向排行榜
+    print("\n=== 测试概念板块资金流向排行榜 ===")
+    top_inflow = get_top_concept_capital_flow(days_type=1, sort_by="main_net_inflow", limit=10)
+    print(f"主力净流入前10的概念板块:")
+    if not top_inflow.empty:
+        print(top_inflow[['index_code', 'index_name', 'main_net_inflow', 'main_net_inflow_rate', 'change_pct']].head())
+
+    top_rate = get_top_concept_capital_flow(days_type=1, sort_by="main_net_inflow_rate", limit=5)
+    print(f"\n主力净流入率前5的概念板块:")
+    if not top_rate.empty:
+        print(top_rate[['index_code', 'index_name', 'main_net_inflow', 'main_net_inflow_rate', 'change_pct']].head())
+
+    # 测试概念板块资金流向汇总统计
+    print("\n=== 测试概念板块资金流向汇总统计 ===")
+    summary_1d = get_concept_capital_flow_summary(days_type=1)
+    print(f"当日概念板块资金流向汇总:")
+    for key, value in summary_1d.items():
+        print(f"  {key}: {value}")
+
+    summary_5d = get_concept_capital_flow_summary(days_type=5)
+    print(f"\n5日概念板块资金流向汇总:")
+    for key, value in summary_5d.items():
+        print(f"  {key}: {value}")
