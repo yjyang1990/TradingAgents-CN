@@ -86,7 +86,7 @@ def demo_usage_tracking():
             "input_tokens": 2500,
             "output_tokens": 1200,
             "analysis_type": "A股_analysis",
-            "stock": "000001"
+            "stock": "002115"
         },
         {
             "provider": "google",

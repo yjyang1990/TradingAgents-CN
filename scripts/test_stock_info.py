@@ -16,7 +16,7 @@ def test_stock_info_retrieval():
     print("=" * 50)
     
     # 测试股票代码
-    test_codes = ["603985", "000001", "300033"]
+    test_codes = ["603985", "002115", "300033"]
     
     for code in test_codes:
         print(f"\n📊 测试股票代码: {code}")
@@ -75,7 +75,7 @@ def test_tushare_stock_basic_api():
             return
         
         # 测试stock_basic API
-        test_codes = ["603985", "000001", "300033"]
+        test_codes = ["603985", "002115", "300033"]
         
         for code in test_codes:
             print(f"\n📊 测试股票代码: {code}")
@@ -132,7 +132,7 @@ def test_stock_basic_all():
         print(f"✅ 获取到{len(all_stocks)}只股票")
         
         # 查找测试股票
-        test_codes = ["603985", "000001", "300033"]
+        test_codes = ["603985", "002115", "300033"]
         
         for code in test_codes:
             print(f"\n📊 查找股票: {code}")

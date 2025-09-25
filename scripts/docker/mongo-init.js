@@ -116,7 +116,7 @@ db.stock_data.insertOne({
 });
 
 db.stock_data.insertOne({
-    "symbol": "000001",
+    "symbol": "002115",
     "market_type": "china",
     "data": {
         "company_name": "平安银行",

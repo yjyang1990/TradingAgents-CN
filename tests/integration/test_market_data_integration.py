@@ -44,7 +44,7 @@ class TestMarketDataIntegration:
     def setup_test_data(self):
         """设置测试数据"""
         return {
-            'test_stocks': ['000001', '000002', '600000', '600519'],
+            'test_stocks': ['002115', '000002', '600000', '600519'],
             'test_concepts': ['人工智能', '新能源汽车', '半导体', '医药生物'],
             'test_date_range': {
                 'start_date': (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'),

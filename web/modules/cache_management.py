@@ -182,7 +182,7 @@ def main():
 
         with test_col2:
             st.markdown("**测试A股数据缓存**")
-            china_symbol = st.text_input("A股代码", value="000001", key="china_test")
+            china_symbol = st.text_input("A股代码", value="002115", key="china_test")
             if st.button("测试A股缓存", key="test_china"):
                 if china_symbol:
                     with st.spinner(f"测试 {china_symbol} 缓存..."):

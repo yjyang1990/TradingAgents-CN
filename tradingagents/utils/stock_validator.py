@@ -121,7 +121,7 @@ class StockDataPreparer:
                     stock_code=stock_code,
                     market_type="A股",
                     error_message="A股代码格式错误，应为6位数字",
-                    suggestion="请输入6位数字的A股代码，如：000001、600519"
+                    suggestion="请输入6位数字的A股代码，如：002115、600519"
                 )
         elif market_type == "港股":
             stock_code_upper = stock_code.upper()

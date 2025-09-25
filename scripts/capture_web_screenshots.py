@@ -200,7 +200,7 @@ docker-compose up -d
 
 #### 🏠 主界面 (web-interface-main.png)
 - 显示完整的分析配置表单
-- 输入示例股票代码: AAPL 或 000001
+- 输入示例股票代码: AAPL 或 002115
 - 选择标准分析深度 (3级)
 
 #### 📊 分析进度 (web-interface-progress.png)  

@@ -156,7 +156,7 @@ class TushareProvider:
         获取股票日线数据
         
         Args:
-            symbol: 股票代码（如：000001.SZ）
+            symbol: 股票代码（如：002115.SZ）
             start_date: 开始日期（YYYYMMDD）
             end_date: 结束日期（YYYYMMDD）
             

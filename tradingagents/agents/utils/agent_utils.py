@@ -153,7 +153,7 @@ class Toolkit:
     @staticmethod
     # @tool  # 已移除：请使用 get_stock_fundamentals_unified 或 get_stock_market_data_unified
     def get_china_stock_data(
-        stock_code: Annotated[str, "中国股票代码，如 000001(平安银行), 600519(贵州茅台)"],
+        stock_code: Annotated[str, "中国股票代码，如 002115(平安银行), 600519(贵州茅台)"],
         start_date: Annotated[str, "开始日期，格式 yyyy-mm-dd"],
         end_date: Annotated[str, "结束日期，格式 yyyy-mm-dd"],
     ) -> str:
@@ -161,7 +161,7 @@ class Toolkit:
         获取中国A股实时和历史数据，通过Tushare等高质量数据源提供专业的股票数据。
         支持实时行情、历史K线、技术指标等全面数据，自动使用最佳数据源。
         Args:
-            stock_code (str): 中国股票代码，如 000001(平安银行), 600519(贵州茅台)
+            stock_code (str): 中国股票代码，如 002115(平安银行), 600519(贵州茅台)
             start_date (str): 开始日期，格式 yyyy-mm-dd
             end_date (str): 结束日期，格式 yyyy-mm-dd
         Returns:
@@ -601,7 +601,7 @@ class Toolkit:
         """
         获取中国A股股票的基本面信息，使用中国股票数据源。
         Args:
-            ticker (str): 中国A股股票代码，如600036, 000001
+            ticker (str): 中国A股股票代码，如600036, 002115
             curr_date (str): 当前日期，格式为yyyy-mm-dd
         Returns:
             str: 包含股票基本面信息的格式化字符串
@@ -707,7 +707,7 @@ class Toolkit:
         自动识别股票类型（A股、港股、美股）并调用相应的数据源
 
         Args:
-            ticker: 股票代码（如：000001、0700.HK、AAPL）
+            ticker: 股票代码（如：002115、0700.HK、AAPL）
             start_date: 开始日期（可选，格式：YYYY-MM-DD）
             end_date: 结束日期（可选，格式：YYYY-MM-DD）
             curr_date: 当前日期（可选，格式：YYYY-MM-DD）
@@ -907,7 +907,7 @@ class Toolkit:
         自动识别股票类型（A股、港股、美股）并调用相应的数据源获取价格和技术指标数据
 
         Args:
-            ticker: 股票代码（如：000001、0700.HK、AAPL）
+            ticker: 股票代码（如：002115、0700.HK、AAPL）
             start_date: 开始日期（格式：YYYY-MM-DD）
             end_date: 结束日期（格式：YYYY-MM-DD）
 
@@ -996,7 +996,7 @@ class Toolkit:
         自动识别股票类型（A股、港股、美股）并调用相应的新闻数据源
 
         Args:
-            ticker: 股票代码（如：000001、0700.HK、AAPL）
+            ticker: 股票代码（如：002115、0700.HK、AAPL）
             curr_date: 当前日期（格式：YYYY-MM-DD）
 
         Returns:
@@ -1127,7 +1127,7 @@ class Toolkit:
         自动识别股票类型（A股、港股、美股）并调用相应的情绪数据源
 
         Args:
-            ticker: 股票代码（如：000001、0700.HK、AAPL）
+            ticker: 股票代码（如：002115、0700.HK、AAPL）
             curr_date: 当前日期（格式：YYYY-MM-DD）
 
         Returns:

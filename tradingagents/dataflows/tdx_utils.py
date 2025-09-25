@@ -417,7 +417,7 @@ class TongDaXinDataProvider:
             
             # 常见股票代码映射
             stock_mapping = {
-                '平安银行': '000001',
+                '平安银行': '002115',
                 '万科A': '000002', 
                 '中国平安': '601318',
                 '贵州茅台': '600519',
@@ -474,7 +474,7 @@ class TongDaXinDataProvider:
         try:
             # 获取主要指数数据
             indices = {
-                '上证指数': ('1', '000001'),
+                '上证指数': ('1', '002115'),
                 '深证成指': ('0', '399001'),
                 '创业板指': ('0', '399006'),
                 '科创50': ('1', '000688')
@@ -575,7 +575,7 @@ def _get_stock_name_from_mongodb(stock_code: str) -> Optional[str]:
 # 精简的常用股票名称映射（仅包含最常见的股票）
 _common_stock_names = {
     # 深圳主板
-    '000001': '平安银行',
+    '002115': '平安银行',
     '000002': '万科A',
     '000858': '五粮液',
     '000895': '双汇发展',
@@ -627,7 +627,7 @@ def get_china_stock_data(stock_code: str, start_date: str, end_date: str) -> str
     """
     获取中国股票数据的主要接口函数（支持缓存）
     Args:
-        stock_code: 股票代码 (如 '000001')
+        stock_code: 股票代码 (如 '002115')
         start_date: 开始日期 'YYYY-MM-DD'
         end_date: 结束日期 'YYYY-MM-DD'
     Returns:
@@ -797,7 +797,7 @@ def get_china_stock_data(stock_code: str, start_date: str, end_date: str) -> str
 
 💡 解决建议:
 1. 检查pytdx库是否已安装: pip install pytdx
-2. 确认股票代码格式正确 (如: 000001, 600519)
+2. 确认股票代码格式正确 (如: 002115, 600519)
 3. 检查网络连接是否正常
 4. 尝试重新连接数据服务器
 
@@ -840,7 +840,7 @@ def get_china_stock_data_enhanced(stock_code: str, start_date: str, end_date: st
     这是get_china_stock_data的增强版本
     
     Args:
-        stock_code: 股票代码 (如 '000001')
+        stock_code: 股票代码 (如 '002115')
         start_date: 开始日期 'YYYY-MM-DD'
         end_date: 结束日期 'YYYY-MM-DD'
     Returns:

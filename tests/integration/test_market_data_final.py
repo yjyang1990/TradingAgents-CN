@@ -36,7 +36,7 @@ def test_integration_suite():
     # Test 1: 资金流向接口测试
     print("\n📊 测试1: 资金流向数据接口")
     try:
-        test_stock = '000001'
+        test_stock = '002115'
 
         # 实时资金流向
         result1 = get_capital_flow_realtime(ticker=test_stock)
@@ -108,7 +108,7 @@ def test_integration_suite():
     # Test 5: 批量操作测试
     print("\n🔄 测试5: 批量数据获取")
     try:
-        test_stocks = ['000001', '000002', '600000']
+        test_stocks = ['002115', '000002', '600000']
         results = []
 
         for stock in test_stocks:

@@ -73,7 +73,7 @@ def test_specific_sources(manager):
     print("\n🎯 测试特定数据源...")
     print("=" * 60)
     
-    test_symbol = "000001"  # 平安银行 - 更常见的股票
+    test_symbol = "002115"  # 平安银行 - 更常见的股票
     start_date = "2025-01-10"
     end_date = "2025-01-17"
     

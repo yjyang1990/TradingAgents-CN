@@ -420,7 +420,7 @@ class OptimizedChinaDataProvider:
 
         # 特殊股票的详细信息
         special_stocks = {
-            "000001": {
+            "002115": {
                 "industry": "银行业",
                 "analysis": "平安银行是中国领先的股份制商业银行，在零售银行业务方面具有显著优势。",
                 "market_share": "股份制银行前列",
@@ -931,7 +931,7 @@ class OptimizedChinaDataProvider:
     def _get_estimated_financial_metrics(self, symbol: str, price_value: float) -> dict:
         """获取估算财务指标（原有的分类方法）"""
         # 根据股票代码和价格估算指标
-        if symbol.startswith(('000001', '600036')):  # 银行股
+        if symbol.startswith(('002115', '600036')):  # 银行股
             return {
                 "pe": "5.2倍（银行业平均水平）",
                 "pb": "0.65倍（破净状态，银行业常见）",
@@ -1002,7 +1002,7 @@ class OptimizedChinaDataProvider:
 
     def _analyze_growth_potential(self, symbol: str, industry_info: dict) -> str:
         """分析成长潜力"""
-        if symbol.startswith(('000001', '600036')):
+        if symbol.startswith(('002115', '600036')):
             return "银行业整体增长稳定，受益于经济发展和金融深化。数字化转型和财富管理业务是主要增长点。"
         elif symbol.startswith('300'):
             return "创业板公司通常具有较高的成长潜力，但也伴随着较高的风险。需要关注技术创新和市场拓展能力。"
@@ -1015,7 +1015,7 @@ class OptimizedChinaDataProvider:
 
         risk_analysis = f"**风险等级**: {risk_level}\n\n"
 
-        if symbol.startswith(('000001', '600036')):
+        if symbol.startswith(('002115', '600036')):
             risk_analysis += """**主要风险**:
 - 利率环境变化对净息差的影响
 - 信贷资产质量风险

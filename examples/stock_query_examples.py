@@ -63,7 +63,7 @@ def demo_single_stock_query():
     """
     logger.info(f"\n=== 单个股票查询示例 ===")
     
-    stock_codes = ['000001', '000002', '600000', '300001']
+    stock_codes = ['002115', '000002', '600000', '300001']
     
     for stock_code in stock_codes:
         logger.debug(f"\n🔍 查询股票 {stock_code}:")
@@ -110,7 +110,7 @@ def demo_stock_search():
         logger.error(f"❌ 新API不可用，跳过搜索演示")
         return
     
-    keywords = ['平安', '银行', '科技', '000001']
+    keywords = ['平安', '银行', '科技', '002115']
     
     for keyword in keywords:
         logger.debug(f"\n🔍 搜索关键词: '{keyword}'")
@@ -167,7 +167,7 @@ def demo_stock_data_query():
         logger.error(f"❌ 新API不可用，跳过历史数据查询")
         return
     
-    stock_code = '000001'
+    stock_code = '002115'
     logger.info(f"📊 获取股票 {stock_code} 的历史数据...")
     
     # 获取最近30天的数据

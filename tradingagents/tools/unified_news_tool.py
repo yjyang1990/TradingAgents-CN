@@ -337,7 +337,7 @@ def create_unified_news_tool(toolkit):
         统一新闻获取工具
         
         Args:
-            stock_code (str): 股票代码 (支持A股如000001、港股如0700.HK、美股如AAPL)
+            stock_code (str): 股票代码 (支持A股如002115、港股如0700.HK、美股如AAPL)
             max_news (int): 最大新闻数量，默认100
             model_info (str): 当前使用的模型信息，用于特殊处理
         

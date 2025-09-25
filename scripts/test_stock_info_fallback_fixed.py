@@ -47,7 +47,7 @@ def test_real_stock_fallback():
     print("=" * 50)
     
     # 测试真实股票代码
-    real_codes = ["603985", "000001", "300033"]
+    real_codes = ["603985", "002115", "300033"]
     
     for code in real_codes:
         print(f"\n📊 测试股票代码: {code}")

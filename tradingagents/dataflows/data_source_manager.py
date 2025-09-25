@@ -862,7 +862,7 @@ class DataSourceManager:
         获取个股实时资金流向数据，支持多数据源降级
 
         Args:
-            symbol: 股票代码，如 '000001'
+            symbol: 股票代码，如 '002115'
             use_cache: 是否使用缓存
 
         Returns:
@@ -925,7 +925,7 @@ class DataSourceManager:
         获取个股日度资金流向数据，支持多数据源降级
 
         Args:
-            symbol: 股票代码，如 '000001'
+            symbol: 股票代码，如 '002115'
             start_date: 开始日期，格式 'YYYY-MM-DD'
             end_date: 结束日期，格式 'YYYY-MM-DD'
             use_cache: 是否使用缓存

@@ -33,7 +33,7 @@ class TestMarketDataIntegration:
 
     def test_capital_flow_interface(self):
         """测试资金流向接口"""
-        test_stock = '000001'
+        test_stock = '002115'
 
         # 测试实时资金流向
         result = get_capital_flow_realtime(ticker=test_stock)
@@ -124,7 +124,7 @@ class TestMarketDataIntegration:
         """测试缓存功能"""
         import time
 
-        test_stock = '000001'
+        test_stock = '002115'
 
         # 第一次调用（无缓存）
         start_time = time.time()
@@ -144,7 +144,7 @@ class TestMarketDataIntegration:
 
     def test_batch_operations(self):
         """测试批量操作"""
-        test_stocks = ['000001', '000002', '600000']
+        test_stocks = ['002115', '000002', '600000']
         results = []
 
         for stock in test_stocks:
@@ -158,7 +158,7 @@ class TestMarketDataIntegration:
 
     def test_data_consistency(self):
         """测试数据一致性"""
-        test_stock = '000001'
+        test_stock = '002115'
 
         # 多次获取相同数据
         results = []

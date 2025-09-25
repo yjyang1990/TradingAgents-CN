@@ -86,8 +86,8 @@ def render_analysis_form():
                 stock_symbol = st.text_input(
                     "股票代码 📈",
                     value=cached_stock if (cached_config and cached_config.get('market_type') == 'A股') else '',
-                    placeholder="输入A股代码，如 000001, 600519，然后按回车确认",
-                    help="输入要分析的A股代码，如 000001(平安银行), 600519(贵州茅台)，输入完成后请按回车键确认",
+                    placeholder="输入A股代码，如 002115, 600519，然后按回车确认",
+                    help="输入要分析的A股代码，如 002115(平安银行), 600519(贵州茅台)，输入完成后请按回车键确认",
                     key="cn_stock_input",
                     autocomplete="off"  # 修复autocomplete警告
                 ).strip()

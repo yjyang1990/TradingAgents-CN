@@ -23,7 +23,7 @@ def test_stock_data_preparation():
         # 测试用例
         test_cases = [
             # A股测试
-            {"code": "000001", "market": "A股", "name": "平安银行", "should_exist": True},
+            {"code": "002115", "market": "A股", "name": "平安银行", "should_exist": True},
             {"code": "603985", "market": "A股", "name": "恒润股份", "should_exist": True},
             {"code": "999999", "market": "A股", "name": "不存在的股票", "should_exist": False},
             
@@ -119,7 +119,7 @@ def test_format_validation():
         
         format_tests = [
             # 格式正确的测试
-            {"code": "000001", "market": "A股", "should_pass": True},
+            {"code": "002115", "market": "A股", "should_pass": True},
             {"code": "0700.HK", "market": "港股", "should_pass": True},
             {"code": "AAPL", "market": "美股", "should_pass": True},
             
@@ -163,7 +163,7 @@ def test_performance():
         
         # 测试真实股票的性能
         performance_tests = [
-            {"code": "000001", "market": "A股"},
+            {"code": "002115", "market": "A股"},
             {"code": "0700.HK", "market": "港股"},
             {"code": "AAPL", "market": "美股"},
         ]

@@ -656,8 +656,8 @@ def select_market():
             "name": "A股",
             "name_en": "China A-Share",
             "default": "600036",
-            "examples": ["000001 (平安银行)", "600036 (招商银行)", "000858 (五粮液)"],
-            "format": "6位数字代码 (如: 600036, 000001)",
+            "examples": ["002115 (平安银行)", "600036 (招商银行)", "000858 (五粮液)"],
+            "format": "6位数字代码 (如: 600036, 002115)",
             "pattern": r'^\d{6}$',
             "data_source": "china_stock"
         },

@@ -205,7 +205,7 @@ class CapitalFlowProvider:
         """获取实时资金流向数据
 
         Args:
-            stock_code: 股票代码，如 '000001'
+            stock_code: 股票代码，如 '002115'
             use_cache: 是否使用缓存
 
         Returns:
@@ -237,7 +237,7 @@ class CapitalFlowProvider:
         """获取日度资金流向数据
 
         Args:
-            stock_code: 股票代码，如 '000001'
+            stock_code: 股票代码，如 '002115'
             start_date: 开始日期，格式 'YYYY-MM-DD'
             end_date: 结束日期，格式 'YYYY-MM-DD'
             use_cache: 是否使用缓存
@@ -310,14 +310,14 @@ if __name__ == '__main__':
 
     # 测试实时数据
     print("=== 测试实时资金流向数据 ===")
-    df_realtime = provider.get_capital_flow_realtime('000001')
+    df_realtime = provider.get_capital_flow_realtime('002115')
     print(f"实时数据条数: {len(df_realtime)}")
     if not df_realtime.empty:
         print(df_realtime.head())
 
     # 测试日度数据
     print("\n=== 测试日度资金流向数据 ===")
-    df_daily = provider.get_capital_flow_daily('000001', start_date='2024-01-01')
+    df_daily = provider.get_capital_flow_daily('002115', start_date='2024-01-01')
     print(f"日度数据条数: {len(df_daily)}")
     if not df_daily.empty:
         print(df_daily.head())
@@ -327,5 +327,5 @@ if __name__ == '__main__':
     df_realtime_func = get_stock_capital_flow_realtime('300059')
     print(f"300059实时数据条数: {len(df_realtime_func)}")
 
-    df_daily_func = get_stock_capital_flow_daily('000001', start_date='2024-12-01')
-    print(f"000001日度数据条数: {len(df_daily_func)}")
+    df_daily_func = get_stock_capital_flow_daily('002115', start_date='2024-12-01')
+    print(f"002115日度数据条数: {len(df_daily_func)}")

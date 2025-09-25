@@ -32,12 +32,12 @@ def test_web_integration():
                 print(f"📊 {message}")
         
         # 测试有效股票代码
-        print("\n🧪 测试有效股票代码: 000001 (A股)")
+        print("\n🧪 测试有效股票代码: 002115 (A股)")
         start_time = time.time()
         
         try:
             result = run_stock_analysis(
-                stock_symbol="000001",
+                stock_symbol="002115",
                 market_type="A股",
                 analysts=["fundamentals"],
                 research_depth="快速",
@@ -78,9 +78,9 @@ def test_cli_integration():
         a_stock_market = {
             "name": "A股",
             "name_en": "A-Share",
-            "default": "000001",
-            "examples": ["000001 (平安银行)", "600519 (贵州茅台)", "000858 (五粮液)"],
-            "format": "6位数字 (如: 000001)",
+            "default": "002115",
+            "examples": ["002115 (平安银行)", "600519 (贵州茅台)", "000858 (五粮液)"],
+            "format": "6位数字 (如: 002115)",
             "pattern": r'^\d{6}$',
             "data_source": "china_stock"
         }
@@ -90,7 +90,7 @@ def test_cli_integration():
         import re
         
         test_codes = [
-            ("000001", True, "平安银行"),
+            ("002115", True, "平安银行"),
             ("600519", True, "贵州茅台"),
             ("999999", True, "格式正确但不存在"),
             ("00001", False, "位数不足"),
@@ -112,7 +112,7 @@ def test_cli_integration():
         print("\n🧪 测试CLI数据预获取功能")
         from tradingagents.utils.stock_validator import prepare_stock_data
         
-        result = prepare_stock_data("000001", "A股", 7)  # 测试7天数据
+        result = prepare_stock_data("002115", "A股", 7)  # 测试7天数据
         
         if result.is_valid:
             print(f"✅ CLI数据预获取成功: {result.stock_name}")
@@ -175,7 +175,7 @@ def test_performance():
         
         # 测试多个股票的性能
         performance_tests = [
-            ("000001", "A股", "平安银行"),
+            ("002115", "A股", "平安银行"),
             ("600519", "A股", "贵州茅台"),
             ("AAPL", "美股", "苹果公司")
         ]

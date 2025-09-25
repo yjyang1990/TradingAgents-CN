@@ -38,7 +38,7 @@ def demo_basic_usage():
         logger.info(f"\n📊 获取股票基本信息")
         logger.info(f"-")
         
-        stock_info = adapter.get_stock_info("000001")
+        stock_info = adapter.get_stock_info("002115")
         if stock_info:
             logger.info(f"股票代码: {stock_info.get('symbol')}")
             logger.info(f"股票名称: {stock_info.get('name')}")
@@ -52,7 +52,7 @@ def demo_basic_usage():
         end_date = datetime.now().strftime('%Y-%m-%d')
         start_date = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
         
-        stock_data = adapter.get_stock_data("000001", start_date, end_date)
+        stock_data = adapter.get_stock_data("002115", start_date, end_date)
         if not stock_data.empty:
             logger.info(f"数据期间: {start_date} 至 {end_date}")
             logger.info(f"数据条数: {len(stock_data)}条")
@@ -96,7 +96,7 @@ def demo_interface_functions():
         end_date = datetime.now().strftime('%Y-%m-%d')
         start_date = (datetime.now() - timedelta(days=10)).strftime('%Y-%m-%d')
         
-        data_result = get_china_stock_data_tushare("000001", start_date, end_date)
+        data_result = get_china_stock_data_tushare("002115", start_date, end_date)
         print(data_result[:500] + "..." if len(data_result) > 500 else data_result)
         
         # 2. 搜索股票
@@ -110,14 +110,14 @@ def demo_interface_functions():
         logger.info(f"\n📋 获取股票信息")
         logger.info(f"-")
         
-        info_result = get_china_stock_info_tushare("000001")
+        info_result = get_china_stock_info_tushare("002115")
         print(info_result)
         
         # 4. 获取基本面数据
         logger.info(f"\n💰 获取基本面数据")
         logger.info(f"-")
         
-        fundamentals_result = get_china_stock_fundamentals_tushare("000001")
+        fundamentals_result = get_china_stock_fundamentals_tushare("002115")
         print(fundamentals_result[:800] + "..." if len(fundamentals_result) > 800 else fundamentals_result)
         
     except Exception as e:
@@ -142,7 +142,7 @@ def demo_batch_operations():
             return
         
         # 批量获取多只股票信息
-        symbols = ["000001", "000002", "600036", "600519", "000858"]
+        symbols = ["002115", "000002", "600036", "600519", "000858"]
         
         logger.info(f"📊 批量获取 {len(symbols)} 只股票信息")
         logger.info(f"-")
@@ -189,7 +189,7 @@ def demo_cache_performance():
             logger.warning(f"⚠️ 缓存未启用，无法演示缓存性能")
             return
         
-        symbol = "000001"
+        symbol = "002115"
         end_date = datetime.now().strftime('%Y-%m-%d')
         start_date = (datetime.now() - timedelta(days=10)).strftime('%Y-%m-%d')
         

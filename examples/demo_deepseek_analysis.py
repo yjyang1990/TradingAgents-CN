@@ -134,7 +134,7 @@ def demo_stock_analysis_with_tools():
                 "AAPL": "苹果公司 - 科技股，主营iPhone、Mac等产品，市值约3万亿美元，P/E: 28.5",
                 "TSLA": "特斯拉 - 电动汽车制造商，由马斯克领导，专注新能源汽车，P/E: 65.2",
                 "MSFT": "微软 - 软件巨头，主营Windows、Office、Azure云服务，P/E: 32.1",
-                "000001": "平安银行 - 中国股份制银行，总部深圳，金融服务业，P/E: 5.8",
+                "002115": "平安银行 - 中国股份制银行，总部深圳，金融服务业，P/E: 5.8",
                 "600036": "招商银行 - 中国领先银行，零售银行业务突出，P/E: 6.2"
             }
             return stock_data.get(symbol, f"股票{symbol}的基本信息")
@@ -157,7 +157,7 @@ def demo_stock_analysis_with_tools():
         # 测试股票分析
         test_queries = [
             "请全面分析苹果公司(AAPL)的投资价值，包括基本面、财务状况和市场情绪",
-            "对比分析招商银行(600036)和平安银行(000001)，哪个更值得投资？"
+            "对比分析招商银行(600036)和平安银行(002115)，哪个更值得投资？"
         ]
         
         for query in test_queries:
@@ -170,9 +170,9 @@ def demo_stock_analysis_with_tools():
                 financial_info = get_financial_metrics("AAPL")
                 sentiment_info = get_market_sentiment("AAPL")
                 context = f"股票信息: {stock_info}\n财务指标: {financial_info}\n市场情绪: {sentiment_info}"
-            elif "600036" in query and "000001" in query:
+            elif "600036" in query and "002115" in query:
                 stock_info_1 = get_stock_info("600036")
-                stock_info_2 = get_stock_info("000001")
+                stock_info_2 = get_stock_info("002115")
                 context = f"招商银行信息: {stock_info_1}\n平安银行信息: {stock_info_2}"
             else:
                 context = "基于一般股票分析原则"

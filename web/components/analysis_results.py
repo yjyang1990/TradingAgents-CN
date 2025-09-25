@@ -377,7 +377,7 @@ def render_analysis_results():
             start_date = (datetime.now() - timedelta(days=days)).date()
         
         # 股票代码过滤
-        stock_filter = st.text_input("📈 股票代码", placeholder="如: 000001, AAPL")
+        stock_filter = st.text_input("📈 股票代码", placeholder="如: 002115, AAPL")
         
         # 分析师类型过滤
         analyst_filter = st.selectbox(

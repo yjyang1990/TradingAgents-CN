@@ -51,7 +51,7 @@ def test_akshare_stock_info():
     print("\n🔍 测试AKShare股票基本信息获取能力")
     print("=" * 50)
     
-    test_codes = ["603985", "000001", "300033"]
+    test_codes = ["603985", "002115", "300033"]
     
     for code in test_codes:
         print(f"\n📊 测试股票代码: {code}")
@@ -88,7 +88,7 @@ def test_baostock_stock_info():
     print("\n🔍 测试BaoStock股票基本信息获取能力")
     print("=" * 50)
     
-    test_codes = ["sh.603985", "sz.000001", "sz.300033"]
+    test_codes = ["sh.603985", "sz.002115", "sz.300033"]
     
     try:
         import baostock as bs

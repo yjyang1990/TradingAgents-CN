@@ -82,7 +82,7 @@ def test_stock_codes():
     # 测试不同类型的股票
     test_symbols = [
         {"code": "300033", "name": "同花顺", "market": "创业板"},
-        {"code": "000001", "name": "平安银行", "market": "深圳主板"},
+        {"code": "002115", "name": "平安银行", "market": "深圳主板"},
         {"code": "600036", "name": "招商银行", "market": "上海主板"},
         {"code": "688001", "name": "华兴源创", "market": "科创板"},
         {"code": "002415", "name": "海康威视", "market": "深圳中小板"},
@@ -151,7 +151,7 @@ def test_api_limits():
         
         # 测试连续调用（检查频率限制）
         print("\n⏱️ 测试API调用频率...")
-        symbol = "000001"
+        symbol = "002115"
         end_date = datetime.now().strftime('%Y-%m-%d')
         start_date = (datetime.now() - timedelta(days=5)).strftime('%Y-%m-%d')
         
@@ -198,7 +198,7 @@ def test_date_formats():
             print("❌ Tushare未连接")
             return
         
-        symbol = "000001"
+        symbol = "002115"
         
         for fmt in date_formats:
             print(f"\n📝 测试格式 {fmt['format']}: {fmt['start']} 到 {fmt['end']}")

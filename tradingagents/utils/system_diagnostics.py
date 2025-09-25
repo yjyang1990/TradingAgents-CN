@@ -124,7 +124,7 @@ class SystemDiagnostics:
         try:
             import akshare as ak
             # 尝试获取一个简单的数据
-            df = ak.stock_zh_a_hist(symbol="000001", start_date="20240101", end_date="20240102", adjust="")
+            df = ak.stock_zh_a_hist(symbol="002115", start_date="20240101", end_date="20240102", adjust="")
             data_sources_status["sources"]["akshare"] = {
                 "available": True,
                 "error": None,

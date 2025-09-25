@@ -463,7 +463,7 @@ if __name__ == '__main__':
 
     # 测试历史分红数据便捷函数
     print("测试 get_dividend_history 便捷函数")
-    df_convenient = get_dividend_history('000001', start_year=2020, end_year=2024)
+    df_convenient = get_dividend_history('002115', start_year=2020, end_year=2024)
     print(f"便捷函数获取数据条数: {len(df_convenient)}")
 
     # 测试分红汇总便捷函数

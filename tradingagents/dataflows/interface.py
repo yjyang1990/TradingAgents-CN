@@ -1103,7 +1103,7 @@ def get_fundamentals_openai(ticker, curr_date):
 # ==================== Tushare数据接口 ====================
 
 def get_china_stock_data_tushare(
-    ticker: Annotated[str, "中国股票代码，如：000001、600036等"],
+    ticker: Annotated[str, "中国股票代码，如：002115、600036等"],
     start_date: Annotated[str, "开始日期，格式：YYYY-MM-DD"],
     end_date: Annotated[str, "结束日期，格式：YYYY-MM-DD"]
 ) -> str:
@@ -1164,7 +1164,7 @@ def search_china_stocks_tushare(
 
 
 def get_china_stock_fundamentals_tushare(
-    ticker: Annotated[str, "中国股票代码，如：000001、600036等"]
+    ticker: Annotated[str, "中国股票代码，如：002115、600036等"]
 ) -> str:
     """
     使用Tushare获取中国A股基本面数据
@@ -1191,7 +1191,7 @@ def get_china_stock_fundamentals_tushare(
 
 
 def get_china_stock_info_tushare(
-    ticker: Annotated[str, "中国股票代码，如：000001、600036等"]
+    ticker: Annotated[str, "中国股票代码，如：002115、600036等"]
 ) -> str:
     """
     使用Tushare获取中国A股基本信息
@@ -1220,7 +1220,7 @@ def get_china_stock_info_tushare(
 # ==================== 统一数据源接口 ====================
 
 def get_china_stock_data_unified(
-    ticker: Annotated[str, "中国股票代码，如：000001、600036等"],
+    ticker: Annotated[str, "中国股票代码，如：002115、600036等"],
     start_date: Annotated[str, "开始日期，格式：YYYY-MM-DD"],
     end_date: Annotated[str, "结束日期，格式：YYYY-MM-DD"]
 ) -> str:
@@ -1320,7 +1320,7 @@ def get_china_stock_data_unified(
 
 
 def get_china_stock_info_unified(
-    ticker: Annotated[str, "中国股票代码，如：000001、600036等"]
+    ticker: Annotated[str, "中国股票代码，如：002115、600036等"]
 ) -> str:
     """
     统一的中国A股基本信息获取接口
@@ -1424,7 +1424,7 @@ def get_current_china_data_source() -> str:
 # ==================== 资金流向数据接口 ====================
 
 def get_capital_flow_data(
-    ticker: Annotated[str, "股票代码，如：000001、600036等"],
+    ticker: Annotated[str, "股票代码，如：002115、600036等"],
     start_date: Annotated[str, "开始日期，格式：YYYY-MM-DD，可选"],
     end_date: Annotated[str, "结束日期，格式：YYYY-MM-DD，可选"]
 ) -> str:
@@ -1435,7 +1435,7 @@ def get_capital_flow_data(
     支持多数据源（东方财富、百度等）和智能降级机制。
 
     Args:
-        ticker: 股票代码，支持深市（如000001）和沪市（如600036）
+        ticker: 股票代码，支持深市（如002115）和沪市（如600036）
         start_date: 开始日期，可选，格式 'YYYY-MM-DD'
         end_date: 结束日期，可选，格式 'YYYY-MM-DD'
 
@@ -1490,7 +1490,7 @@ def get_capital_flow_data(
 
 
 def get_capital_flow_realtime(
-    ticker: Annotated[str, "股票代码，如：000001、600036等"]
+    ticker: Annotated[str, "股票代码，如：002115、600036等"]
 ) -> str:
     """
     获取个股实时资金流向数据
@@ -1499,7 +1499,7 @@ def get_capital_flow_realtime(
     数据更新频率较高，适合短期交易决策参考。
 
     Args:
-        ticker: 股票代码，支持深市（如000001）和沪市（如600036）
+        ticker: 股票代码，支持深市（如002115）和沪市（如600036）
 
     Returns:
         str: 格式化的实时资金流向分析报告

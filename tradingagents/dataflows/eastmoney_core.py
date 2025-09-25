@@ -439,7 +439,7 @@ def generate_stock_analysis_report(stock_code: str) -> str:
 
 if __name__ == "__main__":
     # 测试代码
-    test_codes = ["002115", "300059", "000001"]
+    test_codes = ["002115", "300059", "002115"]
 
     for code in test_codes:
         print(f"\n{'='*60}")

@@ -259,7 +259,7 @@ class TestCacheIntegration(unittest.TestCase):
         us_key = self.cache.find_cached_stock_data("AAPL")
         
         # Test Chinese stock TTL (if applicable)
-        china_key = self.cache.find_cached_stock_data("000001")
+        china_key = self.cache.find_cached_stock_data("002115")
         
         # TTL should be automatically determined
         self.assertTrue(True, "TTL management test completed")
@@ -276,7 +276,7 @@ class TestCacheIntegration(unittest.TestCase):
         
         # Test Chinese stock classification
         china_cache_key = self.cache.save_stock_data(
-            symbol="000001",
+            symbol="002115",
             data="Chinese stock data",
             data_source="test"
         )

@@ -35,13 +35,13 @@ def get_stock_info(stock_code: str) -> Dict[str, Any]:
     获取单个股票的基础信息
     
     Args:
-        stock_code: 股票代码（如 '000001'）
+        stock_code: 股票代码（如 '002115'）
     
     Returns:
         Dict: 股票基础信息
     
     Example:
-        >>> info = get_stock_info('000001')
+        >>> info = get_stock_info('002115')
         >>> print(info['name'])  # 平安银行
     """
     if not SERVICE_AVAILABLE:
@@ -104,7 +104,7 @@ def get_stock_data(stock_code: str, start_date: str = None, end_date: str = None
         str: 股票数据的字符串表示或错误信息
     
     Example:
-        >>> data = get_stock_data('000001', '2024-01-01', '2024-01-31')
+        >>> data = get_stock_data('002115', '2024-01-01', '2024-01-31')
         >>> print(data)
     """
     if not SERVICE_AVAILABLE:
@@ -238,8 +238,8 @@ def check_service_status() -> Dict[str, Any]:
     if service.tdx_provider:
         try:
             # 尝试获取一个股票名称来测试API
-            test_name = service.tdx_provider._get_stock_name('000001')
-            if test_name and test_name != '000001':
+            test_name = service.tdx_provider._get_stock_name('002115')
+            if test_name and test_name != '002115':
                 tdx_status = 'available'
             else:
                 tdx_status = 'limited'
@@ -274,7 +274,7 @@ if __name__ == '__main__':
     
     # 测试获取单个股票信息
     logger.info(f"\n🏢 获取平安银行信息:")
-    stock_info = get_stock_info('000001')
+    stock_info = get_stock_info('002115')
     if 'error' not in stock_info:
         logger.info(f"  代码: {stock_info.get('code')}")
         logger.info(f"  名称: {stock_info.get('name')}")

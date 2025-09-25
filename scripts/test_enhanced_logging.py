@@ -23,10 +23,10 @@ def test_enhanced_logging():
         manager = DataSourceManager()
         
         # 测试用例1: 正常股票代码
-        print("\n📊 测试用例1: 正常股票代码 (000001)")
+        print("\n📊 测试用例1: 正常股票代码 (002115)")
         print("-" * 60)
         
-        symbol = "000001"
+        symbol = "002115"
         start_date = "2025-01-10"
         end_date = "2025-01-17"
         
@@ -65,7 +65,7 @@ def test_enhanced_logging():
         print("\n📊 测试用例4: 未来日期范围")
         print("-" * 60)
         
-        symbol = "000001"
+        symbol = "002115"
         start_date = "2025-12-01"
         end_date = "2025-12-31"
         

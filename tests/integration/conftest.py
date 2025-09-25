@@ -29,7 +29,7 @@ def integration_test_config():
 @pytest.fixture
 def test_stocks():
     """测试用股票代码"""
-    return ['000001', '000002', '600000', '600519', '000858', '002415']
+    return ['002115', '000002', '600000', '600519', '000858', '002415']
 
 
 @pytest.fixture

@@ -761,7 +761,7 @@ def validate_analysis_params(stock_symbol, analysis_date, analysts, research_dep
             # A股：6位数字
             import re
             if not re.match(r'^\d{6}$', symbol):
-                errors.append("A股代码格式错误，应为6位数字（如：000001）")
+                errors.append("A股代码格式错误，应为6位数字（如：002115）")
         elif market_type == "港股":
             # 港股：4-5位数字.HK 或 纯4-5位数字
             import re
