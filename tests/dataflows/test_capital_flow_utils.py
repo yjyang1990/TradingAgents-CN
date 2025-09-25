@@ -25,7 +25,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from tradingagents.dataflows.market_data_capital_flow_utils import (
     CapitalFlowProvider,
     EastMoneyCapitalFlow,
-    BaiduCapitalFlow,
     CapitalFlowData,
     get_capital_flow_provider,
     get_stock_capital_flow_realtime,
@@ -94,10 +93,10 @@ class TestEastMoneyCapitalFlow(unittest.TestCase):
 
         self.assertIsInstance(result, pd.DataFrame)
         self.assertEqual(len(result), 2)
-        self.assertIn('symbol', result.columns)
+        self.assertIn('stock_code', result.columns)
         self.assertIn('trade_time', result.columns)
         self.assertIn('main_net_inflow', result.columns)
-        self.assertEqual(result.iloc[0]['symbol'], '000001')
+        self.assertEqual(result.iloc[0]['stock_code'], '000001')
 
     @patch('requests.Session.get')
     def test_get_capital_flow_realtime_empty_response(self, mock_get):
@@ -141,9 +140,9 @@ class TestEastMoneyCapitalFlow(unittest.TestCase):
 
         self.assertIsInstance(result, pd.DataFrame)
         self.assertEqual(len(result), 2)
-        self.assertIn('symbol', result.columns)
+        self.assertIn('stock_code', result.columns)
         self.assertIn('trade_date', result.columns)
-        self.assertEqual(result.iloc[0]['symbol'], '000001')
+        self.assertEqual(result.iloc[0]['stock_code'], '000001')
 
     def test_market_code_detection(self):
         """测试市场代码检测（沪市/深市）"""
@@ -151,29 +150,6 @@ class TestEastMoneyCapitalFlow(unittest.TestCase):
         self.assertTrue("000001".startswith('6') == False)  # 深市
         self.assertTrue("600036".startswith('6') == True)   # 沪市
 
-
-class TestBaiduCapitalFlow(unittest.TestCase):
-    """测试百度资金流向数据源"""
-
-    def setUp(self):
-        """设置测试环境"""
-        self.source = BaiduCapitalFlow()
-
-    def test_source_initialization(self):
-        """测试百度数据源初始化"""
-        self.assertEqual(self.source.source_name, "baidu")
-
-    def test_get_capital_flow_realtime_not_implemented(self):
-        """测试百度实时数据（暂未实现）"""
-        result = self.source.get_capital_flow_realtime("000001")
-        self.assertIsInstance(result, pd.DataFrame)
-        self.assertEqual(len(result), 0)
-
-    def test_get_capital_flow_daily_not_implemented(self):
-        """测试百度日度数据（暂未实现）"""
-        result = self.source.get_capital_flow_daily("000001")
-        self.assertIsInstance(result, pd.DataFrame)
-        self.assertEqual(len(result), 0)
 
 
 class TestCapitalFlowProvider(unittest.TestCase):
@@ -188,7 +164,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
     def test_provider_initialization(self):
         """测试提供器初始化"""
         self.assertIsInstance(self.provider.data_sources, list)
-        self.assertTrue(len(self.provider.data_sources) > 0)
+        self.assertEqual(len(self.provider.data_sources), 1)  # 只有东方财富数据源
         self.assertIsInstance(self.provider.data_sources[0], EastMoneyCapitalFlow)
 
     def test_cache_key_generation(self):
@@ -206,13 +182,13 @@ class TestCapitalFlowProvider(unittest.TestCase):
         """测试获取实时资金流向成功"""
         # 模拟成功的数据响应
         test_data = pd.DataFrame([{
-            'symbol': '000001',
+            'stock_code': '000001',
             'trade_time': '2024-01-01 09:30',
             'main_net_inflow': -1943532.0,
-            'small_net_inflow': 2710159.0,
-            'medium_net_inflow': -766627.0,
-            'large_net_inflow': -5901648.0,
-            'super_large_net_inflow': 3958116.0
+            'sm_net_inflow': 2710159.0,
+            'mid_net_inflow': -766627.0,
+            'lg_net_inflow': -5901648.0,
+            'max_net_inflow': 3958116.0
         }])
         mock_get.return_value = test_data
 
@@ -227,7 +203,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_realtime')
     def test_get_capital_flow_realtime_cache_hit(self, mock_get):
         """测试实时资金流向缓存命中"""
-        cached_data = pd.DataFrame([{'symbol': '000001', 'data': 'cached'}])
+        cached_data = pd.DataFrame([{'stock_code': '000001', 'data': 'cached'}])
         self.mock_cache_manager.get.return_value = cached_data
 
         result = self.provider.get_capital_flow_realtime('000001')
@@ -236,29 +212,25 @@ class TestCapitalFlowProvider(unittest.TestCase):
         mock_get.assert_not_called()  # 缓存命中时不应调用数据源
 
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_realtime')
-    @patch.object(BaiduCapitalFlow, 'get_capital_flow_realtime')
-    def test_data_source_fallback(self, mock_baidu_get, mock_east_get):
-        """测试数据源降级机制"""
+    def test_data_source_failure(self, mock_east_get):
+        """测试数据源失败情况"""
         # 东方财富失败
         mock_east_get.side_effect = Exception("API Error")
-
-        # 百度成功
-        fallback_data = pd.DataFrame([{'symbol': '000001', 'data': 'from_baidu'}])
-        mock_baidu_get.return_value = fallback_data
 
         self.mock_cache_manager.get.return_value = None
 
         result = self.provider.get_capital_flow_realtime('000001')
 
-        pd.testing.assert_frame_equal(result, fallback_data)
+        # 应该返回空 DataFrame
+        self.assertIsInstance(result, pd.DataFrame)
+        self.assertEqual(len(result), 0)
         mock_east_get.assert_called_once()
-        mock_baidu_get.assert_called_once()
 
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_daily')
     def test_get_capital_flow_daily_with_date_filter(self, mock_get):
         """测试带日期过滤的日度资金流向获取"""
         test_data = pd.DataFrame([{
-            'symbol': '000001',
+            'stock_code': '000001',
             'trade_date': '2024-01-01',
             'main_net_inflow': -1000000.0
         }])
@@ -319,10 +291,10 @@ class TestDataValidation(unittest.TestCase):
         source = EastMoneyCapitalFlow()
 
         # 验证列名常量
-        expected_realtime_columns = ['symbol', 'trade_time', 'main_net_inflow', 'small_net_inflow',
-                                    'medium_net_inflow', 'large_net_inflow', 'super_large_net_inflow']
-        expected_daily_columns = ['symbol', 'trade_date', 'main_net_inflow', 'small_net_inflow',
-                                 'medium_net_inflow', 'large_net_inflow', 'super_large_net_inflow']
+        expected_realtime_columns = ['stock_code', 'trade_time', 'main_net_inflow', 'sm_net_inflow',
+                                    'mid_net_inflow', 'lg_net_inflow', 'max_net_inflow']
+        expected_daily_columns = ['stock_code', 'trade_date', 'main_net_inflow', 'sm_net_inflow',
+                                 'mid_net_inflow', 'lg_net_inflow', 'max_net_inflow']
 
         self.assertEqual(source.FLOW_MIN_COLUMNS, expected_realtime_columns)
         self.assertEqual(source.FLOW_DAILY_COLUMNS, expected_daily_columns)
@@ -343,21 +315,21 @@ class TestDataValidation(unittest.TestCase):
         result = source.get_capital_flow_realtime("000001")
 
         # 验证数值列类型
-        numeric_columns = ['main_net_inflow', 'small_net_inflow', 'medium_net_inflow',
-                          'large_net_inflow', 'super_large_net_inflow']
+        numeric_columns = ['main_net_inflow', 'sm_net_inflow', 'mid_net_inflow',
+                          'lg_net_inflow', 'max_net_inflow']
         for col in numeric_columns:
             self.assertTrue(pd.api.types.is_numeric_dtype(result[col]))
 
-    def test_symbol_validation(self):
+    def test_stock_code_validation(self):
         """测试股票代码验证"""
         # 测试有效的股票代码格式
-        valid_symbols = ['000001', '600036', '300001', '002001']
-        invalid_symbols = ['', '12345', 'AAPL', '00001']  # 长度不正确或格式错误
+        valid_stock_codes = ['000001', '600036', '300001', '002001']
+        invalid_stock_codes = ['', '12345', 'AAPL', '00001']  # 长度不正确或格式错误
 
         # 这里可以添加股票代码格式验证逻辑的测试
-        for symbol in valid_symbols:
-            self.assertEqual(len(symbol), 6)
-            self.assertTrue(symbol.isdigit())
+        for stock_code in valid_stock_codes:
+            self.assertEqual(len(stock_code), 6)
+            self.assertTrue(stock_code.isdigit())
 
 
 class TestErrorHandling(unittest.TestCase):
@@ -368,11 +340,9 @@ class TestErrorHandling(unittest.TestCase):
         self.provider = CapitalFlowProvider(cache_manager=Mock())
 
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_realtime')
-    @patch.object(BaiduCapitalFlow, 'get_capital_flow_realtime')
-    def test_all_sources_fail(self, mock_baidu_get, mock_east_get):
-        """测试所有数据源都失败的情况"""
+    def test_all_sources_fail(self, mock_east_get):
+        """测试数据源失败的情况"""
         mock_east_get.side_effect = Exception("East API Error")
-        mock_baidu_get.side_effect = Exception("Baidu API Error")
 
         result = self.provider.get_capital_flow_realtime('000001', use_cache=False)
 
