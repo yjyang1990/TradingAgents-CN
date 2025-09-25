@@ -101,7 +101,7 @@ def extract_risk_assessment(state):
         logger.info(f"提取风险评估数据时出错，数值解析失败: {e}")
         return None
 
-def run_stock_analysis(stock_symbol, analysis_date, analysts, research_depth, llm_provider, llm_model, market_type="美股", progress_callback=None):
+def run_stock_analysis(stock_symbol, analysis_date, analysts, research_depth, llm_provider, llm_model, market_type="A股", progress_callback=None):
     """执行股票分析
 
     Args:
@@ -756,7 +756,7 @@ def format_analysis_results(results):
         }
     }
 
-def validate_analysis_params(stock_symbol, analysis_date, analysts, research_depth, market_type="美股"):
+def validate_analysis_params(stock_symbol, analysis_date, analysts, research_depth, market_type="A股"):
     """验证分析参数"""
 
     errors = []
@@ -785,7 +785,7 @@ def validate_analysis_params(stock_symbol, analysis_date, analysts, research_dep
 
             if not (hk_format or digit_format):
                 errors.append("港股代码格式错误，应为4位数字.HK（如：0700.HK）或4位数字（如：0700）")
-        elif market_type == "美股":
+        elif market_type == "A股":
             # 美股：1-5位字母
             import re
             if not re.match(r'^[A-Z]{1,5}$', symbol.upper()):

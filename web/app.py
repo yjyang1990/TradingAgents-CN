@@ -1130,7 +1130,7 @@ def main():
                 analysis_date=form_data['analysis_date'],
                 analysts=form_data['analysts'],
                 research_depth=form_data['research_depth'],
-                market_type=form_data.get('market_type', '美股')
+                market_type=form_data.get('market_type', 'A股')
             )
 
             if not is_valid:
@@ -1160,7 +1160,7 @@ def main():
                     analysis_id=analysis_id,
                     status="running",
                     stock_symbol=form_data['stock_symbol'],
-                    market_type=form_data.get('market_type', '美股'),
+                    market_type=form_data.get('market_type', 'A股'),
                     form_config=form_config
                 )
 
@@ -1183,7 +1183,7 @@ def main():
                 with st.spinner("🔄 正在初始化分析..."):
                     time.sleep(1.5)  # 让用户看到反馈
 
-                st.info(f"📊 正在分析: {form_data.get('market_type', '美股')} {form_data['stock_symbol']}")
+                st.info(f"📊 正在分析: {form_data.get('market_type', 'A股')} {form_data['stock_symbol']}")
                 st.info("""
                 ⏱️ 页面将在6秒后自动刷新...
 
@@ -1198,7 +1198,7 @@ def main():
                 st.session_state.analysis_running = True
                 st.session_state.current_analysis_id = analysis_id
                 st.session_state.last_stock_symbol = form_data['stock_symbol']
-                st.session_state.last_market_type = form_data.get('market_type', '美股')
+                st.session_state.last_market_type = form_data.get('market_type', 'A股')
 
                 # 自动启用自动刷新选项（设置所有可能的key）
                 auto_refresh_keys = [
@@ -1221,7 +1221,7 @@ def main():
                             analysts=form_data['analysts'],
                             research_depth=form_data['research_depth'],
                             llm_provider=config['llm_provider'],
-                            market_type=form_data.get('market_type', '美股'),
+                            market_type=form_data.get('market_type', 'A股'),
                             llm_model=config['llm_model'],
                             progress_callback=progress_callback
                         )
