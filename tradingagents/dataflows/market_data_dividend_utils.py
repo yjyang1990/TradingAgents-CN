@@ -150,12 +150,12 @@ class EastMoneyDividendData:
                 'total_dividend_amount': float(total_dividend_amount),
                 'avg_dividend_ratio': float(avg_dividend_ratio),
                 'latest_dividend': {
-                    'notice_date': latest_dividend.get('notice_date', ''),
-                    'ex_dividend_date': latest_dividend.get('ex_dividend_date', ''),
-                    'dividend_ratio': latest_dividend.get('dividend_ratio', 0),
-                    'plan_explain': latest_dividend.get('plan_explain', ''),
-                    'progress': latest_dividend.get('progress', '')
-                } if latest_dividend else {},
+                    'notice_date': latest_dividend.get('notice_date', '') if not latest_dividend.empty else '',
+                    'ex_dividend_date': latest_dividend.get('ex_dividend_date', '') if not latest_dividend.empty else '',
+                    'dividend_ratio': latest_dividend.get('dividend_ratio', 0) if not latest_dividend.empty else 0,
+                    'plan_explain': latest_dividend.get('plan_explain', '') if not latest_dividend.empty else '',
+                    'progress': latest_dividend.get('progress', '') if not latest_dividend.empty else ''
+                } if not latest_dividend.empty else {},
                 'yearly_dividends': yearly_dividends,
                 'dividend_stability': len(yearly_dividends) / 3.0 if yearly_dividends else 0  # 分红稳定性指标
             }

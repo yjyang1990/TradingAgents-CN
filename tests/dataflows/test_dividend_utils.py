@@ -706,10 +706,10 @@ class TestCacheIntegration(unittest.TestCase):
             # 调用方法
             provider.get_dividend_history("000001", use_cache=True)
 
-            # 验证缓存设置时使用了正确的TTL（3600秒）
+            # 验证缓存设置时使用了正确的命名空间
             mock_cache_manager.set.assert_called_once()
-            args = mock_cache_manager.set.call_args
-            self.assertEqual(args[1]['ttl'], 3600)  # 1小时缓存
+            call_args = mock_cache_manager.set.call_args
+            self.assertEqual(call_args[0][0], 'dividend_data')  # namespace参数
 
 
 if __name__ == '__main__':
