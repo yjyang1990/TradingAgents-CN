@@ -703,6 +703,34 @@ def get_concept_capital_flow_summary(days_type: int = 1) -> dict:
     return summary
 
 
+class ConceptDataProvider:
+    """概念数据提供器类"""
+
+    def __init__(self):
+        self.logger = logger
+
+    def get_concept_list(self, use_cache: bool = True) -> pd.DataFrame:
+        """获取概念板块列表"""
+        return get_concept_list(use_cache=use_cache)
+
+    def get_concept_stocks(self, concept_code: str, use_cache: bool = True) -> pd.DataFrame:
+        """获取概念成分股"""
+        return get_concept_stocks(concept_code=concept_code, use_cache=use_cache)
+
+    def get_top_concepts(self, sort_by: str = "change_pct", ascending: bool = False, limit: int = 20) -> pd.DataFrame:
+        """获取概念排行榜"""
+        return get_top_concepts(sort_by=sort_by, ascending=ascending, limit=limit)
+
+    def get_concept_capital_flow(self, days_type: int = 1, use_cache: bool = True) -> pd.DataFrame:
+        """获取概念资金流向"""
+        return get_concept_capital_flow(days_type=days_type, use_cache=use_cache)
+
+
+def get_concept_provider() -> ConceptDataProvider:
+    """获取概念数据提供器实例"""
+    return ConceptDataProvider()
+
+
 if __name__ == '__main__':
     # 测试概念市场行情功能（基于AData实现）
     print("=== 测试概念市场行情功能（基于AData架构）===")
