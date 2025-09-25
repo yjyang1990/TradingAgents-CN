@@ -54,15 +54,15 @@ def load_config_from_env() -> Dict[str, Any]:
 
     # 定义环境变量映射
     env_mappings = {
-        'TA_LLM_PROVIDER': 'llm_provider',
-        'TA_BACKEND_URL': 'backend_url',
-        'TA_DEEP_THINK_LLM': 'deep_think_llm',
-        'TA_QUICK_THINK_LLM': 'quick_think_llm',
-        'TA_MAX_DEBATE_ROUNDS': 'max_debate_rounds',
-        'TA_ONLINE_TOOLS': 'online_tools',
-        'TA_PARALLEL_ANALYSTS': 'parallel_analysts',
-        'TA_MAX_PARALLEL_WORKERS': 'max_parallel_workers',
-        'TA_ANALYST_TIMEOUT': 'analyst_timeout'
+        'LLM_PROVIDER': 'llm_provider',
+        'BACKEND_URL': 'backend_url',
+        'DEEP_THINK_LLM': 'deep_think_llm',
+        'QUICK_THINK_LLM': 'quick_think_llm',
+        'MAX_DEBATE_ROUNDS': 'max_debate_rounds',
+        'ONLINE_TOOLS': 'online_tools',
+        'PARALLEL_ANALYSTS': 'parallel_analysts',
+        'MAX_PARALLEL_WORKERS': 'max_parallel_workers',
+        'ANALYST_TIMEOUT': 'analyst_timeout'
     }
 
     for env_var, config_key in env_mappings.items():

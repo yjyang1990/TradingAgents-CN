@@ -91,7 +91,7 @@ class TradingAgentsLogger:
         return {
             'level': log_level,
             'format': {
-                'console': '%(asctime)s | %(name)-20s | %(levelname)-8s | %(message)s',
+                'console': '%(asctime)s | %(name)-20s | %(levelname)-8s | %(filename)s:%(lineno)d | %(message)s',
                 'file': '%(asctime)s | %(name)-20s | %(levelname)-8s | %(module)s:%(funcName)s:%(lineno)d | %(message)s',
                 'structured': 'json'
             },

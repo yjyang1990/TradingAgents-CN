@@ -62,7 +62,7 @@ class ModelPersistence:
         
         # 返回默认配置
         default_config = {
-            'provider': 'dashscope',
+            'provider': 'openai',
             'category': 'openai',
             'model': ''
         }
