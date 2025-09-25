@@ -1209,12 +1209,9 @@ class Toolkit:
             logger.error(f"❌ [统一情绪工具] {error_msg}")
             return error_msg
 
-
-    # ============ 资金流向分析工具 ============
-
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_capital_flow_analysis", log_args=True)
     def get_capital_flow_analysis(
         symbol: Annotated[str, "股票代码"],
         analysis_days: Annotated[int, "分析天数"] = 5
@@ -1289,7 +1286,7 @@ class Toolkit:
 
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_concept_capital_flow_analysis", log_args=True)
     def get_concept_capital_flow_analysis(
         concept_code: Annotated[str, "概念板块代码"],
     ) -> str:
@@ -1353,7 +1350,7 @@ class Toolkit:
 
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_market_capital_flow_overview", log_args=True)
     def get_market_capital_flow_overview() -> str:
         """
         获取市场整体资金流向概览，为技术分析师提供市场资金面的宏观视角
@@ -1408,7 +1405,7 @@ class Toolkit:
 
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_concept_fundamentals_analysis", log_args=True)
     def get_concept_fundamentals_analysis(
         concept_code: Annotated[str, "概念板块代码"]
     ) -> str:
@@ -1477,7 +1474,7 @@ class Toolkit:
 
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_dividend_investment_analysis", log_args=True)
     def get_dividend_investment_analysis(
         symbol: Annotated[str, "股票代码"],
         current_price: Annotated[float, "当前股价"] = None
@@ -1562,7 +1559,7 @@ class Toolkit:
 
     @staticmethod
     @tool
-    @log_tool_call
+    @log_tool_call(tool_name="get_sector_rotation_analysis", log_args=True)
     def get_sector_rotation_analysis() -> str:
         """
         获取行业板块轮动分析，帮助基本面分析师把握市场轮动机会
