@@ -221,7 +221,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
 
         result = self.provider.get_capital_flow_realtime('000001')
 
-        self.assertEqual(result, test_data)
+        pd.testing.assert_frame_equal(result, test_data)
         self.mock_cache_manager.set.assert_called_once()
 
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_realtime')
@@ -232,7 +232,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
 
         result = self.provider.get_capital_flow_realtime('000001')
 
-        self.assertEqual(result, cached_data)
+        pd.testing.assert_frame_equal(result, cached_data)
         mock_get.assert_not_called()  # 缓存命中时不应调用数据源
 
     @patch.object(EastMoneyCapitalFlow, 'get_capital_flow_realtime')
@@ -250,7 +250,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
 
         result = self.provider.get_capital_flow_realtime('000001')
 
-        self.assertEqual(result, fallback_data)
+        pd.testing.assert_frame_equal(result, fallback_data)
         mock_east_get.assert_called_once()
         mock_baidu_get.assert_called_once()
 
@@ -267,7 +267,7 @@ class TestCapitalFlowProvider(unittest.TestCase):
 
         result = self.provider.get_capital_flow_daily('000001', start_date='2024-01-01', end_date='2024-01-01')
 
-        self.assertEqual(result, test_data)
+        pd.testing.assert_frame_equal(result, test_data)
         mock_get.assert_called_with('000001', start_date='2024-01-01', end_date='2024-01-01')
 
     def test_get_concept_capital_flow_not_implemented(self):
@@ -436,9 +436,9 @@ class TestCacheIntegration(unittest.TestCase):
 
             self.provider.get_capital_flow_realtime('000001')
 
-            # 验证实时数据使用短TTL（300秒）
+            # 验证缓存调用使用了正确的namespace
             call_args = self.mock_cache_manager.set.call_args
-            self.assertEqual(call_args[1]['ttl'], 300)
+            self.assertEqual(call_args[0][0], 'capital_flow')  # namespace参数
 
 
 if __name__ == '__main__':

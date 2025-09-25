@@ -296,7 +296,7 @@ class CapitalFlowProvider:
         # 检查缓存
         cache_key = self._generate_cache_key('realtime', symbol)
         if use_cache:
-            cached_data = self.cache_manager.get(cache_key)
+            cached_data = self.cache_manager.get('capital_flow', cache_key)
             if cached_data is not None:
                 logger.info(f"✅ 从缓存获取{symbol}实时资金流向数据")
                 return cached_data
@@ -307,10 +307,9 @@ class CapitalFlowProvider:
         # 缓存结果
         if use_cache and not df.empty:
             self.cache_manager.set(
+                'capital_flow',
                 cache_key,
-                df,
-                ttl=self.cache_config['realtime_ttl'],
-                metadata={'symbol': symbol, 'type': 'realtime'}
+                df
             )
 
         return df
@@ -331,7 +330,7 @@ class CapitalFlowProvider:
         # 检查缓存
         cache_key = self._generate_cache_key('daily', symbol, start_date=start_date, end_date=end_date)
         if use_cache:
-            cached_data = self.cache_manager.get(cache_key)
+            cached_data = self.cache_manager.get('capital_flow', cache_key)
             if cached_data is not None:
                 logger.info(f"✅ 从缓存获取{symbol}日度资金流向数据")
                 return cached_data
@@ -342,10 +341,9 @@ class CapitalFlowProvider:
         # 缓存结果
         if use_cache and not df.empty:
             self.cache_manager.set(
+                'capital_flow',
                 cache_key,
-                df,
-                ttl=self.cache_config['daily_ttl'],
-                metadata={'symbol': symbol, 'type': 'daily', 'start_date': start_date, 'end_date': end_date}
+                df
             )
 
         return df

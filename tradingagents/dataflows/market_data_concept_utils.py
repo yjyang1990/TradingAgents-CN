@@ -227,7 +227,7 @@ class ConceptProvider:
 
         # 检查缓存
         if use_cache and cache_manager:
-            cached_data = cache_manager.get(cache_key)
+            cached_data = cache_manager.get('concept_data', cache_key)
             if cached_data is not None:
                 if logger:
                     logger.info("从缓存获取概念板块列表")
@@ -238,7 +238,7 @@ class ConceptProvider:
             data = self.primary_source.get_concept_list()
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)  # 5分钟缓存
+                    cache_manager.set('concept_data', cache_key, data)
                 if logger:
                     logger.info(f"从东方财富获取到 {len(data)} 个概念板块")
                 return data
@@ -251,7 +251,7 @@ class ConceptProvider:
             data = self.fallback_source.get_concept_list()
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)
+                    cache_manager.set('concept_data', cache_key, data)
                 if logger:
                     logger.info(f"从备用数据源获取到 {len(data)} 个概念板块")
                 return data
@@ -268,7 +268,7 @@ class ConceptProvider:
 
         # 检查缓存
         if use_cache and cache_manager:
-            cached_data = cache_manager.get(cache_key)
+            cached_data = cache_manager.get('concept_data', cache_key)
             if cached_data is not None:
                 if logger:
                     logger.info(f"从缓存获取概念成分股: {concept_code}")
@@ -279,7 +279,7 @@ class ConceptProvider:
             data = self.primary_source.get_concept_stocks(concept_code)
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)  # 5分钟缓存
+                    cache_manager.set('concept_data', cache_key, data)
                 if logger:
                     logger.info(f"从东方财富获取到概念 {concept_code} 的 {len(data)} 只成分股")
                 return data
@@ -292,7 +292,7 @@ class ConceptProvider:
             data = self.fallback_source.get_concept_stocks(concept_code)
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)
+                    cache_manager.set('concept_data', cache_key, data)
                 if logger:
                     logger.info(f"从备用数据源获取到概念 {concept_code} 的 {len(data)} 只成分股")
                 return data

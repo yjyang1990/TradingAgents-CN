@@ -263,7 +263,7 @@ class DividendProvider:
 
         # 检查缓存
         if use_cache and cache_manager:
-            cached_data = cache_manager.get(cache_key)
+            cached_data = cache_manager.get('dividend_data', cache_key)
             if cached_data is not None:
                 if logger:
                     logger.info(f"从缓存获取{symbol}分红历史数据")
@@ -274,7 +274,7 @@ class DividendProvider:
             data = self.primary_source.get_dividend_history(symbol, start_year, end_year)
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=3600)  # 1小时缓存
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从东方财富获取到{symbol}的{len(data)}条分红记录")
                 return data
@@ -287,7 +287,7 @@ class DividendProvider:
             data = self.fallback_source.get_dividend_history(symbol, start_year, end_year)
             if not data.empty:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=3600)
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从备用数据源获取到{symbol}的{len(data)}条分红记录")
                 return data
@@ -304,7 +304,7 @@ class DividendProvider:
 
         # 检查缓存
         if use_cache and cache_manager:
-            cached_data = cache_manager.get(cache_key)
+            cached_data = cache_manager.get('dividend_data', cache_key)
             if cached_data is not None:
                 if logger:
                     logger.info(f"从缓存获取{symbol}分红汇总数据")
@@ -315,7 +315,7 @@ class DividendProvider:
             data = self.primary_source.get_dividend_summary(symbol)
             if data:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=1800)  # 30分钟缓存
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从东方财富获取到{symbol}分红汇总数据")
                 return data
@@ -328,7 +328,7 @@ class DividendProvider:
             data = self.fallback_source.get_dividend_summary(symbol)
             if data:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=1800)
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从备用数据源获取到{symbol}分红汇总数据")
                 return data
@@ -345,7 +345,7 @@ class DividendProvider:
 
         # 检查缓存（股息率缓存时间较短，因为依赖股价变化）
         if use_cache and cache_manager:
-            cached_data = cache_manager.get(cache_key)
+            cached_data = cache_manager.get('dividend_data', cache_key)
             if cached_data is not None:
                 if logger:
                     logger.info(f"从缓存获取{symbol}股息率数据")
@@ -356,7 +356,7 @@ class DividendProvider:
             data = self.primary_source.calculate_dividend_yield(symbol, current_price)
             if data and 'dividend_yield' in data:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)  # 5分钟缓存
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从东方财富计算{symbol}股息率: {data.get('dividend_yield', 0):.2f}%")
                 return data
@@ -369,7 +369,7 @@ class DividendProvider:
             data = self.fallback_source.calculate_dividend_yield(symbol, current_price)
             if data:
                 if use_cache and cache_manager:
-                    cache_manager.set(cache_key, data, ttl=300)
+                    cache_manager.set('dividend_data', cache_key, data)
                 if logger:
                     logger.info(f"从备用数据源计算{symbol}股息率")
                 return data
