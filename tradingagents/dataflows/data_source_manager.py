@@ -26,7 +26,7 @@ class ChinaDataSource(Enum):
     TUSHARE = "tushare"
     AKSHARE = "akshare"
     BAOSTOCK = "baostock"
-    TDX = "tdx"  # 中国股票数据，将被逐步淘汰
+    TDX = "tdx"  # 已弃用：建议使用Tushare替代
 
 
 
@@ -120,9 +120,18 @@ class DataSourceManager:
             else:
                 return f"❌ 未找到匹配'{keyword}'的股票"
 
-        except Exception as e:
-            logger.error(f"❌ [Tushare] 搜索股票失败: {e}")
-            return f"❌ 搜索股票失败: {e}"
+        except ImportError as e:
+            logger.error(f"❌ [Tushare] 模块导入失败: {e}")
+            return f"❌ Tushare模块未安装或导入失败: {e}"
+        except ConnectionError as e:
+            logger.error(f"❌ [Tushare] 网络连接失败: {e}")
+            return f"❌ Tushare网络连接失败，请检查网络: {e}"
+        except KeyError as e:
+            logger.error(f"❌ [Tushare] 数据字段缺失: {e}")
+            return f"❌ Tushare数据格式异常: {e}"
+        except ValueError as e:
+            logger.error(f"❌ [Tushare] 参数错误: {e}")
+            return f"❌ 搜索参数错误: {e}"
 
     def get_china_stock_fundamentals_tushare(self, symbol: str) -> str:
         """
@@ -147,9 +156,15 @@ class DataSourceManager:
             else:
                 return f"❌ 未获取到{symbol}的基本面数据"
 
-        except Exception as e:
-            logger.error(f"❌ [Tushare] 获取基本面数据失败: {e}")
-            return f"❌ 获取{symbol}基本面数据失败: {e}"
+        except ImportError as e:
+            logger.error(f"❌ [Tushare] 模块导入失败: {e}")
+            return f"❌ Tushare模块未安装: {e}"
+        except ConnectionError as e:
+            logger.error(f"❌ [Tushare] 网络连接失败: {e}")
+            return f"❌ 网络连接失败，请检查网络: {e}"
+        except KeyError as e:
+            logger.error(f"❌ [Tushare] 数据字段缺失: {e}")
+            return f"❌ 基本面数据格式异常: {e}"
 
     def get_china_stock_info_tushare(self, symbol: str) -> str:
         """
@@ -184,9 +199,15 @@ class DataSourceManager:
             else:
                 return f"❌ 未获取到{symbol}的股票信息"
 
-        except Exception as e:
-            logger.error(f"❌ [Tushare] 获取股票信息失败: {e}", exc_info=True)
-            return f"❌ 获取{symbol}股票信息失败: {e}"
+        except ImportError as e:
+            logger.error(f"❌ [Tushare] 模块导入失败: {e}")
+            return f"❌ Tushare模块未安装: {e}"
+        except ConnectionError as e:
+            logger.error(f"❌ [Tushare] 网络连接失败: {e}")
+            return f"❌ 网络连接失败，请检查网络: {e}"
+        except KeyError as e:
+            logger.error(f"❌ [Tushare] 数据字段缺失: {e}")
+            return f"❌ 股票信息数据格式异常: {e}"
     
     def _check_available_sources(self) -> List[ChinaDataSource]:
         """检查可用的数据源"""
@@ -286,7 +307,7 @@ class DataSourceManager:
     
     def _get_tdx_adapter(self):
         """获取TDX适配器 (已弃用)"""
-        logger.warning(f"⚠️ 警告: TDX数据源已弃用，建议使用Tushare")
+        logger.warning(f"⚠️ 警告: TDX数据源已弃用，将在未来版本中移除，建议迁移至Tushare数据源")
         try:
             from .tdx_utils import get_tdx_provider
             return get_tdx_provider()
@@ -378,9 +399,13 @@ class DataSourceManager:
                     logger.error(f"❌ [数据获取] 所有数据源都无法获取有效数据")
                     return result  # 返回原始结果（包含错误信息）
 
-        except Exception as e:
+        except ImportError as e:
             duration = time.time() - start_time
-            logger.error(f"❌ [数据获取] 异常失败: {e}",
+            logger.error(f"❌ [数据获取] 模块导入失败: {e}")
+            return f"❌ 数据源模块未安装: {e}"
+        except ConnectionError as e:
+            duration = time.time() - start_time
+            logger.error(f"❌ [数据获取] 网络连接失败: {e}",
                         extra={
                             'symbol': symbol,
                             'start_date': start_date,
@@ -455,10 +480,18 @@ class DataSourceManager:
             logger.debug(f"📊 [Tushare] 调用完成: 耗时={duration:.2f}s, 结果长度={len(result) if result else 0}")
 
             return result
-        except Exception as e:
+        except ImportError as e:
             duration = time.time() - start_time
-            logger.error(f"❌ [Tushare] 调用失败: {e}, 耗时={duration:.2f}s", exc_info=True)
-            logger.error(f"❌ [DataSourceManager详细日志] 异常类型: {type(e).__name__}")
+            logger.error(f"❌ [Tushare] 模块导入失败: {e}, 耗时={duration:.2f}s")
+            return f"❌ Tushare模块未安装: {e}"
+        except ConnectionError as e:
+            duration = time.time() - start_time
+            logger.error(f"❌ [Tushare] 网络连接失败: {e}, 耗时={duration:.2f}s", exc_info=True)
+            return f"❌ Tushare网络连接失败: {e}"
+        except KeyError as e:
+            duration = time.time() - start_time
+            logger.error(f"❌ [Tushare] 数据字段缺失: {e}, 耗时={duration:.2f}s")
+            return f"❌ Tushare数据格式异常: {e}"
             logger.error(f"❌ [DataSourceManager详细日志] 异常信息: {str(e)}")
             import traceback
             logger.error(f"❌ [DataSourceManager详细日志] 异常堆栈: {traceback.format_exc()}")
@@ -515,10 +548,18 @@ class DataSourceManager:
                 logger.warning(f"⚠️ [AKShare] 数据为空: 耗时={duration:.2f}s")
                 return result
 
-        except Exception as e:
+        except ImportError as e:
             duration = time.time() - start_time
-            logger.error(f"❌ [AKShare] 调用失败: {e}, 耗时={duration:.2f}s", exc_info=True)
-            return f"❌ AKShare获取{symbol}数据失败: {e}"
+            logger.error(f"❌ [AKShare] 模块导入失败: {e}, 耗时={duration:.2f}s")
+            return f"❌ AKShare模块未安装: {e}"
+        except ConnectionError as e:
+            duration = time.time() - start_time
+            logger.error(f"❌ [AKShare] 网络连接失败: {e}, 耗时={duration:.2f}s", exc_info=True)
+            return f"❌ AKShare网络连接失败: {e}"
+        except KeyError as e:
+            duration = time.time() - start_time
+            logger.error(f"❌ [AKShare] 数据字段缺失: {e}, 耗时={duration:.2f}s")
+            return f"❌ AKShare数据格式异常: {e}"
     
     def _get_baostock_data(self, symbol: str, start_date: str, end_date: str) -> str:
         """使用BaoStock获取数据"""
@@ -548,7 +589,7 @@ class DataSourceManager:
     
     def _get_tdx_data(self, symbol: str, start_date: str, end_date: str) -> str:
         """使用TDX获取数据 (已弃用)"""
-        logger.warning(f"⚠️ 警告: 正在使用已弃用的TDX数据源")
+        logger.warning(f"⚠️ 警告: 正在使用已弃用的TDX数据源，建议切换至Tushare以获得更好的稳定性和性能")
         from .tdx_utils import get_china_stock_data
         return get_china_stock_data(symbol, start_date, end_date)
     

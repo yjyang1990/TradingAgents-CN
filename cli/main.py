@@ -1086,9 +1086,17 @@ def run_analysis():
         ui.show_error(f"配置参数错误 | Configuration error: {str(e)}")
         ui.show_warning("💡 请检查配置参数 | Please check configuration parameters")
         return
-    except Exception as e:
-        ui.show_error(f"初始化失败 | Initialization failed: {str(e)}")
-        ui.show_warning("💡 请检查API密钥配置 | Please check API key configuration")
+    except ImportError as e:
+        ui.show_error(f"模块导入失败 | Module import failed: {str(e)}")
+        ui.show_warning("💡 请检查依赖模块是否正确安装 | Please check if dependencies are installed")
+        return
+    except ConnectionError as e:
+        ui.show_error(f"网络连接失败 | Network connection failed: {str(e)}")
+        ui.show_warning("💡 请检查网络连接和API端点 | Please check network connection and API endpoint")
+        return
+    except KeyError as e:
+        ui.show_error(f"配置键缺失 | Configuration key missing: {str(e)}")
+        ui.show_warning("💡 请检查配置文件或环境变量 | Please check config file or environment variables")
         return
 
     # Create result directory

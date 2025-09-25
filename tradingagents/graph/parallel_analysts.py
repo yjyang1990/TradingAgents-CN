@@ -84,8 +84,17 @@ class ParallelAnalystsExecutor:
                 try:
                     result = future.result(timeout=10)  # 短超时，因为任务应该已完成
                     results[analyst_type] = result
-                except Exception as e:
-                    logger.error(f"❌ [并行执行器] {analyst_type} 分析师执行失败: {str(e)}")
+                except asyncio.TimeoutError as e:
+                    logger.error(f"❌ [并行执行器] {analyst_type} 分析师执行超时: {str(e)}")
+                    results[analyst_type] = None
+                except RuntimeError as e:
+                    logger.error(f"❌ [并行执行器] {analyst_type} 分析师运行时错误: {str(e)}")
+                    results[analyst_type] = None
+                except ValueError as e:
+                    logger.error(f"❌ [并行执行器] {analyst_type} 分析师参数错误: {str(e)}")
+                    results[analyst_type] = None
+                except ImportError as e:
+                    logger.error(f"❌ [并行执行器] {analyst_type} 分析师依赖模块缺失: {str(e)}")
                     results[analyst_type] = None
 
         # 合并结果
@@ -114,12 +123,11 @@ class ParallelAnalystsExecutor:
 
             end_time = time.time()
 
-            # 提取报告长度
+            # 提取报告长度（支持更多报告类型）
             report_length = 0
             if result:
-                for key in ['market_report', 'sentiment_report', 'news_report',
-                           'fundamentals_report', 'china_market_report']:
-                    if key in result and result[key]:
+                for key in result.keys():
+                    if key.endswith('_report') and result[key]:
                         report_length = len(str(result[key]))
                         break
 
@@ -137,9 +145,21 @@ class ParallelAnalystsExecutor:
             logger.info(f"✅ [{analyst_type.capitalize()} Analyst] 并行执行完成，耗时 {end_time - start_time:.2f}秒，报告长度 {report_length}")
             return result
 
-        except Exception as e:
+        except asyncio.TimeoutError as e:
             end_time = time.time()
-            error_msg = str(e)
+            error_msg = f"执行超时: {str(e)}"
+            logger.error(f"❌ [{analyst_type.capitalize()} Analyst] 执行超时: {error_msg}")
+        except RuntimeError as e:
+            end_time = time.time()
+            error_msg = f"运行时错误: {str(e)}"
+            logger.error(f"❌ [{analyst_type.capitalize()} Analyst] 运行时错误: {error_msg}")
+        except ValueError as e:
+            end_time = time.time()
+            error_msg = f"参数错误: {str(e)}"
+            logger.error(f"❌ [{analyst_type.capitalize()} Analyst] 参数错误: {error_msg}")
+        except ImportError as e:
+            end_time = time.time()
+            error_msg = f"依赖模块缺失: {str(e)}"
 
             # 记录失败性能
             perf = AnalystPerformance(
@@ -159,7 +179,7 @@ class ParallelAnalystsExecutor:
         """深拷贝状态，避免并发修改冲突"""
         try:
             return copy.deepcopy(state)
-        except Exception as e:
+        except (TypeError, AttributeError, RecursionError) as e:
             logger.warning(f"⚠️ [并行执行器] 深拷贝状态失败，使用浅拷贝: {e}")
             return copy.copy(state)
 
@@ -171,7 +191,7 @@ class ParallelAnalystsExecutor:
         # 收集所有消息
         all_messages = list(merged_state.get("messages", []))
 
-        # 合并各分析师的报告
+        # 合并各分析师的报告（通用方式）
         for analyst_type, result in results.items():
             if result is None:
                 continue
@@ -180,21 +200,15 @@ class ParallelAnalystsExecutor:
             if "messages" in result:
                 all_messages.extend(result["messages"])
 
-            # 根据分析师类型更新对应的报告字段
-            if analyst_type == "market" and "market_report" in result:
-                merged_state["market_report"] = result["market_report"]
-            elif analyst_type == "social" and "sentiment_report" in result:
-                merged_state["sentiment_report"] = result["sentiment_report"]
-            elif analyst_type == "news" and "news_report" in result:
-                merged_state["news_report"] = result["news_report"]
-            elif analyst_type == "fundamentals" and "fundamentals_report" in result:
-                merged_state["fundamentals_report"] = result["fundamentals_report"]
-            elif analyst_type == "china_market" and "china_market_report" in result:
-                merged_state["china_market_report"] = result["china_market_report"]
+            # 合并所有报告字段（以_report结尾的字段）
+            for key, value in result.items():
+                if key.endswith('_report') and value:
+                    merged_state[key] = value
 
-            # 更新发送者信息
-            if "sender" in result:
-                merged_state["sender"] = result["sender"]
+            # 更新其他重要字段
+            for key in ["sender", "last_update", "analysis_timestamp"]:
+                if key in result:
+                    merged_state[key] = result[key]
 
         # 更新消息列表
         merged_state["messages"] = all_messages

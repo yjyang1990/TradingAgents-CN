@@ -6,6 +6,7 @@
 
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 # 导入日志模块
@@ -25,27 +26,34 @@ load_dotenv()
 
 def analyze_my_stock():
     """分析您感兴趣的股票"""
-    
-    # 🎯 在这里修改您要分析的股票
-    STOCK_SYMBOL = "NVDA"  # 修改为您想分析的股票代码
-    ANALYSIS_FOCUS = "AI芯片和数据中心业务前景"  # 修改分析重点
-    
+
+    # 从环境变量或配置文件获取股票分析配置
+    STOCK_SYMBOL = os.getenv("STOCK_SYMBOL", "NVDA")  # 可通过环境变量设置
+    ANALYSIS_FOCUS = os.getenv("ANALYSIS_FOCUS", "AI芯片和数据中心业务前景")
+
+    # 模型配置，支持环境变量覆盖
+    model_name = os.getenv("ANALYSIS_MODEL", "qwen-plus-latest")
+    temperature = float(os.getenv("ANALYSIS_TEMPERATURE", "0.1"))
+    max_tokens = int(os.getenv("ANALYSIS_MAX_TOKENS", "4000"))
+
     logger.info(f"🚀 开始分析股票: {STOCK_SYMBOL}")
     logger.info(f"🎯 分析重点: {ANALYSIS_FOCUS}")
-    logger.info(f"=")
-    
+    logger.info(f"🤖 使用模型: {model_name}")
+    logger.info("=" * 60)
+
     # 检查API密钥
     api_key = os.getenv("DASHSCOPE_API_KEY")
     if not api_key:
-        logger.error(f"❌ 请设置 DASHSCOPE_API_KEY 环境变量")
+        logger.error("❌ 请设置 DASHSCOPE_API_KEY 环境变量")
+        logger.info("💡 提示: export DASHSCOPE_API_KEY=your_api_key")
         return
-    
+
     try:
-        # 初始化模型
+        # 初始化模型（支持配置）
         llm = ChatDashScope(
-            model="qwen-plus-latest",  # 可选: qwen-turbo, qwen-plus-latest, qwen3-max
-            temperature=0.1,
-            max_tokens=4000
+            model=model_name,
+            temperature=temperature,
+            max_tokens=max_tokens
         )
         
         # 构建分析提示
@@ -99,9 +107,9 @@ def analyze_my_stock():
         response = llm.invoke(messages)
         
         logger.info(f"\n📊 {STOCK_SYMBOL} 投资分析报告:")
-        logger.info(f"=")
-        print(response.content)
-        logger.info(f"=")
+        logger.info(f"=" * 60)
+        logger.info(f"\n{response.content}")
+        logger.info(f"=" * 60)
         
         # 保存报告
         filename = f"{STOCK_SYMBOL}_analysis_report.txt"
@@ -114,10 +122,21 @@ def analyze_my_stock():
         
         logger.info(f"✅ 分析报告已保存到: {filename}")
         
-    except Exception as e:
-        logger.error(f"❌ 分析失败: {e}")
+    except ImportError as e:
+        logger.error(f"❌ 模块导入失败: {e}")
+        logger.info("💡 请检查是否正确安装了所需依赖")
+    except ConnectionError as e:
+        logger.error(f"❌ 网络连接失败: {e}")
+        logger.info("💡 请检查网络连接和API端点配置")
+    except KeyError as e:
+        logger.error(f"❌ API响应格式异常: {e}")
+        logger.info("💡 请检查API密钥和模型名称是否正确")
+    except ValueError as e:
+        logger.error(f"❌ 参数错误: {e}")
+        logger.info("💡 请检查模型参数配置")
+    except OSError as e:
+        logger.error(f"❌ 文件操作失败: {e}")
+        logger.info("💡 请检查文件权限和磁盘空间")
 
 if __name__ == "__main__":
-    import datetime
-
     analyze_my_stock()

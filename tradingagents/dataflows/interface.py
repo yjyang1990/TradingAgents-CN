@@ -3,7 +3,7 @@ import time
 import os
 from .reddit_utils import fetch_top_from_category
 from .chinese_finance_utils import get_chinese_social_sentiment
-from .googlenews_utils import *
+from .googlenews_utils import getNewsData
 from .finnhub_utils import get_data_in_range
 
 # 导入统一日志系统
@@ -13,6 +13,17 @@ from tradingagents.utils.logging_init import setup_dataflow_logging
 from tradingagents.utils.logging_manager import get_logger
 logger = get_logger('agents')
 logger = setup_dataflow_logging()
+
+# 导入统一缓存管理器
+try:
+    from tradingagents.utils.unified_cache_manager import get_unified_cache_manager, cache_decorator
+    cache_manager = get_unified_cache_manager()
+    UNIFIED_CACHE_AVAILABLE = True
+    logger.info("✅ 统一缓存管理器已启用")
+except ImportError as e:
+    cache_manager = None
+    UNIFIED_CACHE_AVAILABLE = False
+    logger.warning(f"⚠️ 统一缓存管理器不可用: {e}")
 
 # 导入港股工具
 try:
@@ -32,14 +43,14 @@ except ImportError as e:
 
 # 尝试导入yfinance相关模块，如果失败则跳过
 try:
-    from .yfin_utils import *
+    from .yfin_utils import YFinanceUtils
     YFIN_AVAILABLE = True
 except ImportError as e:
     logger.warning(f"⚠️ yfinance工具不可用: {e}")
     YFIN_AVAILABLE = False
 
 try:
-    from .stockstats_utils import *
+    from .stockstats_utils import StockstatsUtils
     STOCKSTATS_AVAILABLE = True
 except ImportError as e:
     logger.warning(f"⚠️ stockstats工具不可用: {e}")
@@ -342,6 +353,13 @@ def get_google_news(
     curr_date: Annotated[str, "Curr date in yyyy-mm-dd format"],
     look_back_days: Annotated[int, "how many days to look back"] = 7,
 ) -> str:
+    # 检查统一缓存
+    if UNIFIED_CACHE_AVAILABLE and cache_manager:
+        cache_key = f"{query}_{curr_date}_{look_back_days}"
+        cached_data = cache_manager.get("news_data", cache_key)
+        if cached_data:
+            logger.info(f"🚀 [缓存命中] Google新闻数据: {query}")
+            return cached_data
     # 判断是否为A股查询
     is_china_stock = False
     if any(code in query for code in ['SH', 'SZ', 'XSHE', 'XSHG']) or query.isdigit() or (len(query) == 6 and query[:6].isdigit()):
@@ -1218,6 +1236,14 @@ def get_china_stock_data_unified(
     Returns:
         str: 格式化的股票数据报告
     """
+    # 检查统一缓存
+    if UNIFIED_CACHE_AVAILABLE and cache_manager:
+        cache_key = f"{ticker}_{start_date}_{end_date}"
+        cached_data = cache_manager.get("china_stock_data", cache_key)
+        if cached_data:
+            logger.info(f"🚀 [缓存命中] 中国股票数据: {ticker}")
+            return cached_data
+
     # 记录详细的输入参数
     logger.info(f"📊 [统一接口] 开始获取中国股票数据",
                extra={
@@ -1269,6 +1295,12 @@ def get_china_stock_data_unified(
                               'result_preview': result[:300] + '...' if result_length > 300 else result,
                               'event_type': 'unified_data_call_warning'
                           })
+
+        # 设置统一缓存（只缓存成功的结果）
+        if UNIFIED_CACHE_AVAILABLE and cache_manager and is_success:
+            cache_key = f"{ticker}_{start_date}_{end_date}"
+            cache_manager.set("china_stock_data", cache_key, result, "stock_data", ttl_seconds=3600)
+            logger.debug(f"💾 [缓存设置] 中国股票数据: {ticker}")
 
         return result
 
