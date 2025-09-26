@@ -116,15 +116,23 @@ def create_fundamentals_analyst(llm, toolkit):
 
         # 选择工具 - 增强的基本面分析工具组合
         if toolkit.config["online_tools"]:
-            # 使用统一基本面工具 + 高级分析工具
-            logger.info(f"📊 [基本面分析师] 使用统一基本面分析工具和高级分析工具")
+            # 使用完整的基本面分析工具集，与ToolNode同步
+            logger.info(f"📊 [基本面分析师] 使用完整基本面分析工具集，包含所有财务数据和高级分析工具")
             tools = [
-                toolkit.get_stock_fundamentals_unified,        # 核心统一基本面工具
-                toolkit.get_dividend_investment_analysis,      # 股息投资分析（新增）
-                toolkit.get_concept_fundamentals_analysis,     # 概念板块基本面分析（新增）
-                toolkit.get_sector_rotation_analysis,          # 行业板块轮动分析（新增）
+                # 核心统一基本面工具
+                toolkit.get_stock_fundamentals_unified,
+                # 高级基本面分析工具（新增）
+                toolkit.get_dividend_investment_analysis,
+                toolkit.get_concept_fundamentals_analysis,
+                toolkit.get_sector_rotation_analysis,
+                # 财务数据工具（与ToolNode同步）
+                toolkit.get_finnhub_company_insider_sentiment,
+                toolkit.get_finnhub_company_insider_transactions,
+                toolkit.get_simfin_balance_sheet,
+                toolkit.get_simfin_cashflow,
+                toolkit.get_simfin_income_stmt,
             ]
-            logger.debug(f"📊 [DEBUG] 已加载 {len(tools)} 个基本面分析工具（包含高级分析功能）")
+            logger.debug(f"📊 [DEBUG] 已绑定 {len(tools)} 个基本面分析工具，与ToolNode完全同步")
         else:
             # 离线模式：保持原有逻辑，但可以选择性使用高级工具
             is_china = market_info['is_china']

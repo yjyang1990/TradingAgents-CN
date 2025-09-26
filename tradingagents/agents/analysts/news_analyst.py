@@ -93,14 +93,17 @@ def create_news_analyst(llm, toolkit):
         logger.info(f"[新闻分析师] 使用统一新闻工具和实时新闻工具，提供全面的新闻分析")
 
         if toolkit.config["online_tools"]:
-            # 在线模式：使用统一工具 + 实时新闻工具
+            # 在线模式：使用完整的新闻分析工具集，与ToolNode同步
             tools = [
                 toolkit.get_stock_news_unified,    # 统一新闻工具（主要选择）
                 toolkit.get_realtime_stock_news,   # 实时新闻工具（新增）
                 toolkit.get_global_news_openai,    # 全球宏观新闻（备用）
+                toolkit.get_google_news,           # Google新闻（备用）
+                toolkit.get_finnhub_news,          # Finnhub新闻（备用）
+                toolkit.get_reddit_news,           # Reddit新闻（备用）
             ]
         else:
-            # 离线模式：创建统一新闻工具
+            # 离线模式：创建统一新闻工具 + 备用工具
             unified_news_tool = create_unified_news_tool(toolkit)
             unified_news_tool.name = "get_stock_news_unified"
 
@@ -108,6 +111,7 @@ def create_news_analyst(llm, toolkit):
                 unified_news_tool,                 # 统一新闻工具
                 toolkit.get_finnhub_news,          # Finnhub新闻（备用）
                 toolkit.get_google_news,           # Google新闻（备用）
+                toolkit.get_reddit_news,           # Reddit新闻（备用）
             ]
 
         logger.info(f"[新闻分析师] 已加载 {len(tools)} 个新闻分析工具")

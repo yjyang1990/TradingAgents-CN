@@ -287,25 +287,42 @@ def create_market_analyst(llm, toolkit):
         logger.debug(f"📈 [DEBUG] 公司名称: {ticker} -> {company_name}")
 
         if toolkit.config["online_tools"]:
-            # 使用统一的市场数据工具，工具内部会自动识别股票类型
-            logger.info(f"📊 [市场分析师] 使用统一市场数据工具，自动识别股票类型")
-            tools = [toolkit.get_stock_market_data_unified]
-            # 安全地获取工具名称用于调试
-            tool_names_debug = []
-            for tool in tools:
-                if hasattr(tool, 'name'):
-                    tool_names_debug.append(tool.name)
-                elif hasattr(tool, '__name__'):
-                    tool_names_debug.append(tool.__name__)
-                else:
-                    tool_names_debug.append(str(tool))
-            logger.debug(f"📊 [DEBUG] 选择的工具: {tool_names_debug}")
-            logger.debug(f"📊 [DEBUG] 🔧 统一工具将自动处理: {market_info['market_name']}")
+            # 使用完整的市场分析工具集，与ToolNode保持同步
+            logger.info(f"📊 [市场分析师] 使用完整市场分析工具集，包含资金流向分析能力")
+            tools = [
+                # 统一市场数据工具（核心）
+                toolkit.get_stock_market_data_unified,
+                # 资金流向分析工具（新增，与ToolNode同步）
+                toolkit.get_capital_flow_analysis,
+                toolkit.get_concept_capital_flow_analysis,
+                toolkit.get_market_capital_flow_overview,
+                # 中国市场专用工具（新增）
+                toolkit.get_china_market_overview,
+                # 原有在线工具（备用）
+                toolkit.get_YFin_data_online,
+                toolkit.get_stockstats_indicators_report_online,
+            ]
         else:
+            # 离线模式：保持原有工具 + 可选的高级分析工具
             tools = [
                 toolkit.get_YFin_data,
                 toolkit.get_stockstats_indicators_report,
+                # 可以添加离线版本的资金流向工具
+                toolkit.get_capital_flow_analysis,  # 如果支持离线模式
             ]
+
+        # 调试信息
+        tool_names_debug = []
+        for tool in tools:
+            if hasattr(tool, 'name'):
+                tool_names_debug.append(tool.name)
+            elif hasattr(tool, '__name__'):
+                tool_names_debug.append(tool.__name__)
+            else:
+                tool_names_debug.append(str(tool))
+        logger.debug(f"📊 [DEBUG] 绑定的工具数量: {len(tools)}")
+        logger.debug(f"📊 [DEBUG] 工具列表: {tool_names_debug}")
+        logger.info(f"📊 [市场分析师] 已与ToolNode同步，LLM现在可以访问所有{len(tools)}个工具")
 
         # 增强的技术分析系统提示，包含资金流向分析能力
         system_message = f"""你是一位专业的股票技术分析师，专门进行全面的市场技术分析。

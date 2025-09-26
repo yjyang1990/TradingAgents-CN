@@ -90,18 +90,22 @@ def create_social_media_analyst(llm, toolkit):
         logger.info(f"[社交媒体分析师] 公司名称: {company_name}")
 
         if toolkit.config["online_tools"]:
-            # 在线模式：优先使用统一情绪分析工具
+            # 在线模式：使用完整的情绪分析工具集，与ToolNode同步
             tools = [
-                toolkit.get_stock_sentiment_unified,  # 统一情绪分析工具（新增，优先选择）
-                toolkit.get_stock_news_openai,       # 备用新闻工具
+                toolkit.get_stock_sentiment_unified,   # 统一情绪分析工具（主要选择）
+                toolkit.get_chinese_social_sentiment,  # 中国社交媒体情绪（地区化增强）
+                toolkit.get_stock_news_openai,         # 在线新闻工具（备用）
+                toolkit.get_reddit_stock_info,         # Reddit数据（备用）
             ]
         else:
             # 离线模式：使用统一工具和地区化工具
             tools = [
-                toolkit.get_stock_sentiment_unified,   # 统一情绪分析工具（新增，主要选择）
-                toolkit.get_chinese_social_sentiment,  # 中国社交媒体情绪（新增，地区化）
+                toolkit.get_stock_sentiment_unified,   # 统一情绪分析工具（主要选择）
+                toolkit.get_chinese_social_sentiment,  # 中国社交媒体情绪（地区化）
                 toolkit.get_reddit_stock_info,         # Reddit数据（备用）
             ]
+
+        logger.info(f"[社交媒体分析师] 已绑定 {len(tools)} 个工具，与ToolNode同步完成")
 
         system_message = f"""您是一位专业的跨市场社交媒体和投资情绪分析师。
 
