@@ -182,7 +182,7 @@ class DailyStockReporter:
             f"🕕 生成时间: {datetime.datetime.now().strftime('%H:%M')}",
             f"📈 分析股票数量: {len(self.watchlist)}",
             "",
-            "=" * 40,
+            "=" * 20,
             ""
         ]
 
@@ -237,7 +237,7 @@ class DailyStockReporter:
 
         # 添加总结
         report_lines.extend([
-            "=" * 40,
+            "=" * 20,
             "📊 分析总结:",
             f"✅ 成功分析: {success_count}/{len(self.watchlist)} 只股票",
             f"🟢 买入建议: {buy_count} 只",
