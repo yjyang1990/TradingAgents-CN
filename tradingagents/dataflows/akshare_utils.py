@@ -7,7 +7,7 @@ AKShare数据源工具
 import pandas as pd
 from typing import Optional, Dict, Any
 import warnings
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # 导入日志模块
 from tradingagents.utils.logging_manager import get_logger
@@ -554,7 +554,7 @@ def get_stock_news_em(symbol: str, max_news: int = 10) -> pd.DataFrame:
     """
     start_time = datetime.now()
     logger.info(f"[东方财富新闻] 开始获取股票 {symbol} 的东方财富新闻数据")
-    
+
     try:
         provider = get_akshare_provider()
         if not provider.connected:
@@ -610,14 +610,14 @@ def get_stock_news_em(symbol: str, max_news: int = 10) -> pd.DataFrame:
             if len(news_df) > max_news:
                 news_df = news_df.head(max_news)
                 logger.info(f"[东方财富新闻] 📰 新闻数量限制: 从{len(news_df)}条限制为{max_news}条最新新闻")
-            
+
             news_count = len(news_df)
             elapsed_time = (datetime.now() - start_time).total_seconds()
-            
+
             # 记录一些新闻标题示例
             sample_titles = [row.get('标题', '无标题') for _, row in news_df.head(3).iterrows()]
             logger.info(f"[东方财富新闻] 新闻标题示例: {', '.join(sample_titles)}")
-            
+
             logger.info(f"[东方财富新闻] ✅ 获取成功: {symbol}, 共{news_count}条记录，耗时: {elapsed_time:.2f}秒")
             return news_df
         else:
@@ -629,3 +629,145 @@ def get_stock_news_em(symbol: str, max_news: int = 10) -> pd.DataFrame:
         elapsed_time = (datetime.now() - start_time).total_seconds()
         logger.error(f"[东方财富新闻] ❌ 获取失败: {symbol}, 错误: {e}, 耗时: {elapsed_time:.2f}秒")
         return pd.DataFrame()
+
+
+def main():
+    """测试AKShare工具的各个方法"""
+    print("=" * 80)
+    print("🚀 AKShare 工具测试程序")
+    print("=" * 80)
+
+    # 初始化提供器
+    print("\n1. 初始化AKShare提供器")
+    provider = get_akshare_provider()
+
+    if not provider.connected:
+        print("❌ AKShare未连接，请确保已安装akshare包")
+        return
+
+    print("✅ AKShare连接成功")
+
+    # 测试用的股票代码
+    test_symbols = {
+        'A股': ['002115'],
+        '港股': ['00700']
+    }
+
+    # 2. 测试A股股票数据获取
+    print("\n2. 测试A股股票数据获取")
+    print("-" * 40)
+    for symbol in test_symbols['A股'][:1]:  # 只测试一个，避免过多API调用
+        print(f"\n正在测试A股: {symbol}")
+
+        # 获取股票基本信息
+        stock_info = provider.get_stock_info(symbol)
+        print(f"股票信息: {stock_info}")
+
+        # 获取历史数据 - 使用当前时间范围
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=30)  # 最近30天
+
+        stock_data = provider.get_stock_data(
+            symbol,
+            start_date=start_date.strftime('%Y-%m-%d'),
+            end_date=end_date.strftime('%Y-%m-%d')
+        )
+        if stock_data is not None and not stock_data.empty:
+            print(f"历史数据: {len(stock_data)}条记录")
+            print("最近5天数据:")
+            print(stock_data.tail().to_string())
+        else:
+            print("❌ 历史数据获取失败")
+
+        # 获取财务数据
+        financial_data = provider.get_financial_data(symbol)
+        if financial_data:
+            print(f"财务数据: 包含{len(financial_data)}个数据集")
+            for key, value in financial_data.items():
+                if hasattr(value, '__len__'):
+                    print(f"  - {key}: {len(value)}条记录")
+        else:
+            print("❌ 财务数据获取失败")
+
+    # 3. 测试港股数据获取
+    print("\n3. 测试港股数据获取")
+    print("-" * 40)
+    for symbol in test_symbols['港股'][:1]:  # 只测试一个，避免过多API调用
+        print(f"\n正在测试港股: {symbol}")
+
+        # 获取港股基本信息
+        hk_info = provider.get_hk_stock_info(symbol)
+        print(f"港股信息: {hk_info}")
+
+        # 获取港股历史数据 - 使用当前时间范围
+        hk_data = provider.get_hk_stock_data(
+            symbol,
+            start_date=start_date.strftime('%Y-%m-%d'),
+            end_date=end_date.strftime('%Y-%m-%d')
+        )
+        if hk_data is not None and not hk_data.empty:
+            print(f"港股历史数据: {len(hk_data)}条记录")
+            print("最近5天数据:")
+            print(hk_data.tail().to_string())
+        else:
+            print("❌ 港股历史数据获取失败")
+
+    # 4. 测试便捷函数
+    print("\n4. 测试便捷函数")
+    print("-" * 40)
+
+    # 测试港股便捷函数
+    hk_symbol = '00700'
+    print(f"\n测试港股便捷函数: {hk_symbol}")
+
+    # 获取港股信息
+    hk_info_conv = get_hk_stock_info_akshare(hk_symbol)
+    print(f"港股信息便捷函数结果: {hk_info_conv}")
+
+    # 获取港股数据（格式化输出）- 使用当前时间范围
+    recent_end_date = datetime.now()
+    recent_start_date = recent_end_date - timedelta(days=10)  # 最近10天
+
+    hk_data_formatted = get_hk_stock_data_akshare(
+        hk_symbol,
+        start_date=recent_start_date.strftime('%Y-%m-%d'),
+        end_date=recent_end_date.strftime('%Y-%m-%d')
+    )
+    print("港股数据便捷函数结果:")
+    print(hk_data_formatted)
+
+    # 5. 测试新闻获取
+    print("\n5. 测试新闻获取")
+    print("-" * 40)
+
+    news_symbol = '002115'
+    print(f"测试获取 {news_symbol} 的新闻")
+    news_data = get_stock_news_em(news_symbol, max_news=3)
+
+    if not news_data.empty:
+        print(f"新闻数据: {len(news_data)}条记录")
+        print("新闻标题:")
+        for _, row in news_data.head(3).iterrows():
+            title = row.get('标题', '无标题')
+            date = row.get('发布时间', '无日期')
+            print(f"  - {title} ({date})")
+    else:
+        print("❌ 新闻数据获取失败")
+
+    # 6. 测试辅助方法
+    print("\n6. 测试辅助方法")
+    print("-" * 40)
+
+    # 测试港股代码标准化
+    test_hk_symbols = ['700', '0700', '00700', '0700.HK', '700.HK']
+    for test_symbol in test_hk_symbols:
+        normalized = provider._normalize_hk_symbol_for_akshare(test_symbol)
+        print(f"港股代码标准化: {test_symbol} -> {normalized}")
+
+    print("\n=" * 80)
+    print("🎉 AKShare 工具测试完成!")
+    print("=" * 80)
+
+
+if __name__ == "__main__":
+    main()

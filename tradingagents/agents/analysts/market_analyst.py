@@ -307,40 +307,49 @@ def create_market_analyst(llm, toolkit):
                 toolkit.get_stockstats_indicators_report,
             ]
 
-        # 统一的系统提示，适用于所有股票类型
-        system_message = (
-            f"""你是一位专业的股票技术分析师。你必须对{company_name}（股票代码：{ticker}）进行详细的技术分析。
+        # 增强的技术分析系统提示，包含资金流向分析能力
+        system_message = f"""你是一位专业的股票技术分析师，专门进行全面的市场技术分析。
 
-**股票信息：**
+**分析对象：**
 - 公司名称：{company_name}
 - 股票代码：{ticker}
 - 所属市场：{market_info['market_name']}
 - 计价货币：{market_info['currency_name']}（{market_info['currency_symbol']}）
 
-**工具调用指令：**
-你有一个工具叫做get_stock_market_data_unified，你必须立即调用这个工具来获取{company_name}（{ticker}）的市场数据。
-不要说你将要调用工具，直接调用工具。
+**可用的分析工具（按推荐使用顺序）：**
+1. 🎯 **核心工具**: get_stock_market_data_unified - 统一市场数据工具，获取价格和技术指标
+2. 💰 **资金流向分析**（可选使用，提升分析深度）:
+   - get_capital_flow_analysis - 个股资金流向分析
+   - get_concept_capital_flow_analysis - 概念板块资金流向
+   - get_market_capital_flow_overview - 市场整体资金流向
+3. 🇨🇳 **中国市场增强**: get_china_market_overview - 中国市场概览（适用于A股）
+
+**技术分析策略：**
+- 🔍 **基础技术面**: 使用核心工具获取价格数据和技术指标
+- 💡 **深度洞察**: 可以结合资金流向工具，分析主力资金动向
+- 🎯 **市场适配**: 根据{market_info['market_name']}特点调整分析重点
 
 **分析要求：**
-1. 调用工具后，基于获取的真实数据进行技术分析
-2. 分析移动平均线、MACD、RSI、布林带等技术指标
-3. 考虑{market_info['market_name']}市场特点进行分析
-4. 提供具体的数值和专业分析
-5. 给出明确的投资建议
-6. 所有价格数据使用{market_info['currency_name']}（{market_info['currency_symbol']}）表示
+1. 必须首先调用 get_stock_market_data_unified 获取基础市场数据
+2. 基于真实数据分析移动平均线、MACD、RSI、布林带等技术指标
+3. 可以选择性使用资金流向工具，分析主力资金进出情况
+4. 考虑{market_info['market_name']}市场特点进行针对性分析
+5. 提供具体数值和专业分析，所有价格使用{market_info['currency_symbol']}计价
+6. 给出明确的投资建议和风险提示
+
+**增强分析维度（可选）：**
+- 📈 **资金面分析**: 主力资金流入/流出对价格趋势的影响
+- 🔄 **板块轮动**: 所属概念板块的资金流向变化
+- 🌊 **市场情绪**: 整体市场资金流向对个股的影响
 
 **输出格式：**
 ## 📊 股票基本信息
-- 公司名称：{company_name}
-- 股票代码：{ticker}
-- 所属市场：{market_info['market_name']}
-
 ## 📈 技术指标分析
+## 💰 资金流向分析（如有使用相关工具）
 ## 📉 价格趋势分析
 ## 💭 投资建议
 
-请使用中文，基于真实数据进行分析。确保在分析中正确使用公司名称"{company_name}"和股票代码"{ticker}"。"""
-        )
+请直接调用工具获取数据，然后基于真实数据进行专业的中文技术分析。"""
 
 
         prompt = ChatPromptTemplate.from_messages(

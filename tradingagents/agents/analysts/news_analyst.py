@@ -89,56 +89,74 @@ def create_news_analyst(llm, toolkit):
         company_name = _get_company_name(ticker, market_info)
         logger.info(f"[新闻分析师] 公司名称: {company_name}")
         
-        # 🔧 使用统一新闻工具，简化工具调用
-        logger.info(f"[新闻分析师] 使用统一新闻工具，自动识别股票类型并获取相应新闻")
-   # 创建统一新闻工具
-        unified_news_tool = create_unified_news_tool(toolkit)
-        unified_news_tool.name = "get_stock_news_unified"
-        
-        tools = [unified_news_tool]
-        logger.info(f"[新闻分析师] 已加载统一新闻工具: get_stock_news_unified")
+        # 🔧 使用增强的新闻工具组合，包括统一工具和实时新闻
+        logger.info(f"[新闻分析师] 使用统一新闻工具和实时新闻工具，提供全面的新闻分析")
 
-        system_message = (
-            """您是一位专业的财经新闻分析师，负责分析最新的市场新闻和事件对股票价格的潜在影响。
+        if toolkit.config["online_tools"]:
+            # 在线模式：使用统一工具 + 实时新闻工具
+            tools = [
+                toolkit.get_stock_news_unified,    # 统一新闻工具（主要选择）
+                toolkit.get_realtime_stock_news,   # 实时新闻工具（新增）
+                toolkit.get_global_news_openai,    # 全球宏观新闻（备用）
+            ]
+        else:
+            # 离线模式：创建统一新闻工具
+            unified_news_tool = create_unified_news_tool(toolkit)
+            unified_news_tool.name = "get_stock_news_unified"
 
-您的主要职责包括：
-1. 获取和分析最新的实时新闻（优先15-30分钟内的新闻）
-2. 评估新闻事件的紧急程度和市场影响
-3. 识别可能影响股价的关键信息
-4. 分析新闻的时效性和可靠性
-5. 提供基于新闻的交易建议和价格影响评估
+            tools = [
+                unified_news_tool,                 # 统一新闻工具
+                toolkit.get_finnhub_news,          # Finnhub新闻（备用）
+                toolkit.get_google_news,           # Google新闻（备用）
+            ]
 
-重点关注的新闻类型：
-- 财报发布和业绩指导
-- 重大合作和并购消息
-- 政策变化和监管动态
-- 突发事件和危机管理
-- 行业趋势和技术突破
-- 管理层变动和战略调整
+        logger.info(f"[新闻分析师] 已加载 {len(tools)} 个新闻分析工具")
 
-分析要点：
-- 新闻的时效性（发布时间距离现在多久）
-- 新闻的可信度（来源权威性）
-- 市场影响程度（对股价的潜在影响）
-- 投资者情绪变化（正面/负面/中性）
-- 与历史类似事件的对比
+        system_message = f"""您是一位专业的跨市场财经新闻分析师，专门分析市场新闻对股票价格的影响。
 
-📊 价格影响分析要求：
-- 评估新闻对股价的短期影响（1-3天）
-- 分析可能的价格波动幅度（百分比）
-- 提供基于新闻的价格调整建议
-- 识别关键价格支撑位和阻力位
-- 评估新闻对长期投资价值的影响
-- 不允许回复'无法评估价格影响'或'需要更多信息'
+**分析对象**：
+- 公司名称：{company_name}
+- 股票代码：{ticker}
+- 所属市场：{market_info['market_name']}
+- 计价货币：{market_info['currency_name']} ({market_info['currency_symbol']})
 
-请特别注意：
-⚠️ 如果新闻数据存在滞后（超过2小时），请在分析中明确说明时效性限制
-✅ 优先分析最新的、高相关性的新闻事件
-📊 提供新闻对股价影响的量化评估和具体价格预期
-💰 必须包含基于新闻的价格影响分析和调整建议
+**工具使用策略**（按优先级排序）：
+1. 🎯 **主要工具**: get_stock_news_unified - 统一新闻工具，自动适配{market_info['market_name']}新闻源
+2. ⚡ **实时增强**: get_realtime_stock_news - 获取15-30分钟内最新消息，解决传统新闻滞后性
+3. 🌍 **宏观视角**: get_global_news_openai - 全球宏观经济新闻和政策动态
+4. 🔍 **备用数据源**: get_finnhub_news, get_google_news - 多源交叉验证
 
-请撰写详细的中文分析报告，并在报告末尾附上Markdown表格总结关键发现。"""
-        )
+**智能分析策略**：
+- 🕒 **时效性优先**: 优先使用实时新闻工具，获取最新市场动态
+- 🎭 **多源整合**: 结合统一工具和实时工具，提供全面新闻覆盖
+- 🎯 **市场适配**: 根据{market_info['market_name']}特点，重点关注相关新闻源
+
+**核心职责**：
+1. 📰 **实时新闻监控**: 优先获取15-30分钟内的最新新闻
+2. 🔍 **关键事件识别**: 筛选出对{ticker}有重大影响的新闻事件
+3. ⚖️ **影响评估**: 量化分析新闻对股价的潜在影响
+4. ⏱️ **时效性分析**: 评估新闻的时间敏感性和紧急程度
+5. 💡 **投资建议**: 基于新闻分析提供具体的交易时机建议
+
+**市场特定关注点**：
+- **A股市场**: 政策动态、监管变化、财报季、中美关系
+- **港股市场**: 国际资金流向、汇率变化、中概股动态
+- **美股市场**: 美联储政策、财报季、行业轮动、地缘政治
+
+**必须输出**：
+- 新闻时效性评估（发布时间 vs 当前时间）
+- 价格影响程度（1-10分，10为极高影响）
+- 预期价格波动幅度（以{market_info['currency_symbol']}计价）
+- 基于新闻的具体交易建议和时机
+- 新闻风险等级评估
+
+**分析要求**：
+- 优先使用实时新闻工具获取最新消息
+- 如新闻滞后超过2小时，必须在分析中明确标注时效性限制
+- 提供量化的价格影响评估和具体预期
+- 结合多个新闻源进行交叉验证
+
+请使用可用工具获取新闻数据，然后生成详细的中文分析报告。"""
 
         prompt = ChatPromptTemplate.from_messages(
             [

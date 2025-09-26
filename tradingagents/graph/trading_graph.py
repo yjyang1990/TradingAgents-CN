@@ -317,39 +317,57 @@ class TradingAgentsGraph:
         return {
             "market": ToolNode(
                 [
-                    # 统一工具
+                    # 统一市场数据工具
                     self.toolkit.get_stock_market_data_unified,
-                    # online tools
+                    # 资金流向分析工具（新增）
+                    self.toolkit.get_capital_flow_analysis,
+                    self.toolkit.get_concept_capital_flow_analysis,
+                    self.toolkit.get_market_capital_flow_overview,
+                    # 中国市场专用工具（新增）
+                    self.toolkit.get_china_market_overview,
+                    # 原有在线工具（保留作为备用）
                     self.toolkit.get_YFin_data_online,
                     self.toolkit.get_stockstats_indicators_report_online,
-                    # offline tools
+                    # 原有离线工具（保留作为备用）
                     self.toolkit.get_YFin_data,
                     self.toolkit.get_stockstats_indicators_report,
                 ]
             ),
             "social": ToolNode(
                 [
-                    # online tools
+                    # 统一情绪分析工具（新增，作为主要选择）
+                    self.toolkit.get_stock_sentiment_unified,
+                    # 中国社交媒体情绪工具（新增）
+                    self.toolkit.get_chinese_social_sentiment,
+                    # 原有在线工具（保留作为备用）
                     self.toolkit.get_stock_news_openai,
-                    # offline tools
+                    # 原有离线工具（保留作为备用）
                     self.toolkit.get_reddit_stock_info,
                 ]
             ),
             "news": ToolNode(
                 [
-                    # online tools
+                    # 统一新闻工具（新增，作为主要选择）
+                    self.toolkit.get_stock_news_unified,
+                    # 实时股票新闻工具（新增）
+                    self.toolkit.get_realtime_stock_news,
+                    # 原有在线工具（保留作为备用）
                     self.toolkit.get_global_news_openai,
                     self.toolkit.get_google_news,
-                    # offline tools
+                    # 原有离线工具（保留作为备用）
                     self.toolkit.get_finnhub_news,
                     self.toolkit.get_reddit_news,
                 ]
             ),
             "fundamentals": ToolNode(
                 [
-                    # 统一工具
+                    # 统一基本面分析工具（保留）
                     self.toolkit.get_stock_fundamentals_unified,
-                    # offline tools
+                    # 高级基本面分析工具（新增）
+                    self.toolkit.get_dividend_investment_analysis,
+                    self.toolkit.get_concept_fundamentals_analysis,
+                    self.toolkit.get_sector_rotation_analysis,
+                    # 原有财务数据工具（保留作为备用）
                     self.toolkit.get_finnhub_company_insider_sentiment,
                     self.toolkit.get_finnhub_company_insider_transactions,
                     self.toolkit.get_simfin_balance_sheet,
