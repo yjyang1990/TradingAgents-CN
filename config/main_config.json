@@ -1,0 +1,37 @@
+{
+  "_comment": "TradingAgents 主配置文件 - 用于覆盖DEFAULT_CONFIG中的设置",
+  "_note": "环境变量会覆盖此文件中的配置",
+
+  "llm_provider": "openai",
+  "backend_url": "https://hk-api.gptbest.vip/v1",
+  "deep_think_llm": "gpt-4.1",
+  "quick_think_llm": "gpt-4.1",
+  "max_debate_rounds": 1,
+  "online_tools": true,
+
+  "parallel_analysts": true,
+  "max_parallel_workers": 6,
+  "analyst_timeout": 240,
+
+  "backends": {
+    "redis": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 6379,
+      "password": "",
+      "db": 0
+    }
+  },
+  "_env_vars": {
+    "_comment": "可以通过以下环境变量覆盖配置",
+    "llm_provider": "LLM_PROVIDER",
+    "backend_url": "BACKEND_URL",
+    "deep_think_llm": "DEEP_THINK_LLM",
+    "quick_think_llm": "QUICK_THINK_LLM",
+    "max_debate_rounds": "MAX_DEBATE_ROUNDS",
+    "online_tools": "ONLINE_TOOLS",
+    "parallel_analysts": "PARALLEL_ANALYSTS",
+    "max_parallel_workers": "MAX_PARALLEL_WORKERS",
+    "analyst_timeout": "ANALYST_TIMEOUT"
+  }
+}

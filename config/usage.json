@@ -1,0 +1,162 @@
+[
+  {
+    "timestamp": "2025-09-24T22:22:46.242333",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_3f61797c_20250924_221458",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-24T22:35:00.791100",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_fc0c7ce2_20250924_222830",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-24T23:00:24.875846",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_9b1ecbd1_20250924_225507",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T09:06:25.071779",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_211d9ffa_20250925_090419",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T10:45:03.155329",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_451e0666_20250925_104319",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T10:49:24.272904",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_a2d341b6_20250925_104718",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T11:01:06.626022",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_3ad1a9d9_20250925_105854",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T21:46:13.377930",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_b1b12725_20250925_214327",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T21:58:55.430913",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_1a75f8cb_20250925_215625",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T23:13:51.726401",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 8000,
+    "output_tokens": 4000,
+    "cost": 0.0,
+    "session_id": "analysis_580d98e4_20250925_231050",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-25T23:24:04.120585",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 8000,
+    "output_tokens": 4000,
+    "cost": 0.0,
+    "session_id": "analysis_54545cce_20250925_232103",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-26T09:33:18.721167",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_8ea6709b_20250926_093138",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-26T10:38:30.145896",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_b6e5ecaa_20250926_103640",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-26T11:01:05.735651",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_21f906ac_20250926_105847",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-26T11:17:22.125135",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_a98626f7_20250926_111531",
+    "analysis_type": "A股_analysis"
+  },
+  {
+    "timestamp": "2025-09-26T11:21:08.192246",
+    "provider": "custom_openai",
+    "model_name": "gpt-4o",
+    "input_tokens": 12000,
+    "output_tokens": 6000,
+    "cost": 0.0,
+    "session_id": "analysis_c9d6646c_20250926_111917",
+    "analysis_type": "A股_analysis"
+  }
+]

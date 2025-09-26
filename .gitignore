@@ -22,7 +22,7 @@ Thumbs.db
 
 # 数据文件
 *.csv
-*.json
+# *.json
 *.xlsx
 *.xls
 
@@ -120,3 +120,5 @@ COMMIT_SUMMARY.md
 *.temp
 *.pyc.*
 *.pyo.*
+
+.spec-workflow
