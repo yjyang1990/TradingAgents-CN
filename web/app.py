@@ -16,16 +16,22 @@ from dotenv import load_dotenv
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-# 导入日志模块
+# 导入并初始化日志系统
 try:
-    from tradingagents.utils.logging_manager import get_logger
+    from tradingagents.utils.logging_manager import get_logger, setup_logging
+    from tradingagents.utils.logging_init import init_logging
+
+    # 初始化完整的日志系统（包括AI调用日志等）
+    init_logging()
     logger = get_logger('web')
+    logger.info("🚀 Web应用日志系统初始化完成，包含AI调用日志记录功能")
 except ImportError:
     # 如果无法导入，使用标准logging，从环境变量获取日志级别
     import logging
     log_level = os.getenv('TRADINGAGENTS_LOG_LEVEL', 'DEBUG').upper()
     logging.basicConfig(level=getattr(logging, log_level))
     logger = logging.getLogger('web')
+    logger.warning("⚠️ 使用标准logging，AI调用日志功能可能不可用")
 
 # 加载环境变量
 load_dotenv(project_root / ".env", override=True)

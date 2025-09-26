@@ -18,6 +18,9 @@ from tradingagents.utils.logging_manager import get_logger, get_logger_manager
 logger = get_logger('agents')
 logger = setup_llm_logging()
 
+# 导入AI调用详细日志记录器
+from tradingagents.utils.ai_call_logger import log_ai_call
+
 # 导入token跟踪器
 try:
     from tradingagents.config.config_manager import token_tracker
@@ -74,6 +77,7 @@ class ChatDeepSeek(ChatOpenAI):
         
         self.model_name = model
         
+    @log_ai_call(provider="deepseek", model=None, log_input=True, log_output=True, log_tokens=True)
     def _generate(
         self,
         messages: List[BaseMessage],
@@ -198,6 +202,7 @@ class ChatDeepSeek(ChatOpenAI):
         estimated_tokens = max(1, total_chars // 2)
         return estimated_tokens
     
+    @log_ai_call(provider="deepseek", model=None, log_input=True, log_output=True, log_tokens=True)
     def invoke(
         self,
         input: Union[str, List[BaseMessage]],
@@ -206,12 +211,12 @@ class ChatDeepSeek(ChatOpenAI):
     ) -> AIMessage:
         """
         调用模型生成响应
-        
+
         Args:
             input: 输入消息
             config: 配置参数
             **kwargs: 其他参数（包括session_id和analysis_type）
-            
+
         Returns:
             AI消息响应
         """

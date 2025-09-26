@@ -24,6 +24,9 @@ from tradingagents.utils.logging_init import get_logger
 # 导入日志模块
 from tradingagents.utils.logging_manager import get_logger
 logger = get_logger('agents')
+
+# 导入LLM增强器
+from tradingagents.utils.llm_enhancer import enhance_llm_with_logging
 from tradingagents.agents.utils.agent_states import (
     AgentState,
     InvestDebateState,
@@ -233,7 +236,26 @@ class TradingAgentsGraph:
             logger.info("✅ [千帆] 文心一言适配器已配置成功")
         else:
             raise ValueError(f"Unsupported LLM provider: {self.config['llm_provider']}")
-        
+
+        # 增强LLM实例，添加详细的AI调用日志记录
+        logger.info(f"🔧 [LLM增强器] 正在为 {self.config['llm_provider']} LLM实例添加详细日志记录...")
+
+        self.deep_thinking_llm = enhance_llm_with_logging(
+            llm_instance=self.deep_thinking_llm,
+            provider=self.config["llm_provider"],
+            model=self.config["deep_think_llm"],
+            enable_detailed_logging=True
+        )
+
+        self.quick_thinking_llm = enhance_llm_with_logging(
+            llm_instance=self.quick_thinking_llm,
+            provider=self.config["llm_provider"],
+            model=self.config["quick_think_llm"],
+            enable_detailed_logging=True
+        )
+
+        logger.info(f"✅ [LLM增强器] {self.config['llm_provider']} LLM实例增强完成")
+
         self.toolkit = Toolkit(config=self.config)
 
         # Initialize memories (如果启用)

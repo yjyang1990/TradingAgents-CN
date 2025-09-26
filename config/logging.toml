@@ -53,6 +53,18 @@ level = "DEBUG"
 [logging.loggers.llm_adapters]
 level = "DEBUG"
 
+# AI调用详细日志
+[logging.loggers.ai_calls]
+level = "DEBUG"
+
+# 工具调用日志
+[logging.loggers.tools]
+level = "DEBUG"
+
+# LLM增强器日志
+[logging.loggers.llm_enhancer]
+level = "DEBUG"
+
 # 第三方库日志（通常设置为WARNING减少噪音）
 [logging.loggers.streamlit]
 level = "WARNING"
